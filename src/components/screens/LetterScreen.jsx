@@ -14,7 +14,7 @@ Even when we are miles apart, I carry you in my heart everywhere I go. I miss yo
 Thank you for being the best part of my life. I promise the wait will be worth it when I finally get to see you again.
 
 Forever Yours,
-Me :)`;
+Me :Rafee)`;
 
 export default function LetterScreen({ onNext }) {
 
