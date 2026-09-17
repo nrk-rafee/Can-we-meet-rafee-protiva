@@ -22,68 +22,278 @@ const memories = [
 const floatingHearts = [
   {
     left: "calc(50% - 170px)",
-    top: "48%",
+    top: "42%",
     size: 15,
     delay: 0,
     duration: 4,
   },
   {
     left: "calc(50% + 155px)",
-    top: "43%",
+    top: "40%",
     size: 17,
     delay: 1,
     duration: 4.5,
   },
   {
-    left: "calc(50% - 180px)",
-    top: "65%",
+    left: "calc(50% - 185px)",
+    top: "64%",
     size: 12,
     delay: 1.8,
     duration: 3.8,
   },
   {
-    left: "calc(50% + 165px)",
-    top: "67%",
+    left: "calc(50% + 175px)",
+    top: "66%",
     size: 14,
     delay: 0.7,
     duration: 4.2,
+  },
+  {
+    left: "calc(50% - 215px)",
+    top: "52%",
+    size: 10,
+    delay: 2.2,
+    duration: 4.8,
+  },
+  {
+    left: "calc(50% + 210px)",
+    top: "57%",
+    size: 11,
+    delay: 1.4,
+    duration: 4.4,
   },
 ];
 
 const sparkles = [
   {
     left: "calc(50% - 145px)",
-    top: "40%",
+    top: "38%",
     delay: 0,
   },
   {
     left: "calc(50% + 145px)",
-    top: "54%",
+    top: "50%",
     delay: 0.8,
   },
   {
-    left: "calc(50% - 150px)",
-    top: "72%",
+    left: "calc(50% - 155px)",
+    top: "71%",
     delay: 1.5,
   },
   {
-    left: "calc(50% + 140px)",
-    top: "72%",
+    left: "calc(50% + 150px)",
+    top: "73%",
     delay: 0.4,
+  },
+  {
+    left: "calc(50% - 215px)",
+    top: "47%",
+    delay: 1.1,
+  },
+  {
+    left: "calc(50% + 210px)",
+    top: "44%",
+    delay: 2,
   },
 ];
 
-const tapSymbols = ["♡", "♥", "🌸", "✿", "✨", "♡", "♥"];
+function Butterfly({ x, y, id, delay = 0 }) {
+  return (
+    <motion.div
+      key={id}
+      className="absolute z-[70] pointer-events-none"
+      style={{
+        left: `${x}%`,
+        top: `${y}%`,
+      }}
+      initial={{
+        opacity: 0,
+        scale: 0.4,
+        x: -30,
+        y: 20,
+      }}
+      animate={{
+        opacity: [0, 1, 1, 0],
+        scale: [0.4, 1, 1.05, 0.8],
+        x: [-30, 40, 110, 190],
+        y: [20, -15, 12, -25],
+        rotate: [-8, 8, -5, 10],
+      }}
+      transition={{
+        duration: 6,
+        delay,
+        ease: "easeInOut",
+      }}
+    >
+      <motion.div
+        animate={{
+          scaleX: [1, 0.68, 1, 0.7, 1],
+        }}
+        transition={{
+          duration: 0.45,
+          repeat: 12,
+          ease: "easeInOut",
+        }}
+        className="relative w-9 h-7"
+      >
+        {/* left wing */}
+        <div className="absolute left-0 top-0 w-5 h-6 rounded-[80%_25%_70%_35%] bg-gradient-to-br from-pink-300 via-purple-300 to-pink-400 rotate-[-28deg] shadow-sm" />
+
+        {/* right wing */}
+        <div className="absolute right-0 top-0 w-5 h-6 rounded-[25%_80%_35%_70%] bg-gradient-to-bl from-purple-300 via-pink-300 to-purple-400 rotate-[28deg] shadow-sm" />
+
+        {/* wing dots */}
+        <div className="absolute left-[5px] top-[7px] w-[4px] h-[4px] rounded-full bg-white/80" />
+        <div className="absolute right-[5px] top-[7px] w-[4px] h-[4px] rounded-full bg-white/80" />
+
+        {/* body */}
+        <div className="absolute left-1/2 top-[4px] -translate-x-1/2 w-[4px] h-6 rounded-full bg-slate-500/70" />
+
+        {/* antenna */}
+        <div className="absolute left-[15px] top-[-2px] w-3 h-2 border-t border-slate-500/50 rounded-full rotate-[-18deg]" />
+        <div className="absolute left-[17px] top-[-2px] w-3 h-2 border-t border-slate-500/50 rounded-full rotate-[18deg]" />
+      </motion.div>
+    </motion.div>
+  );
+}
+
+function Bird({ x, y, id, delay = 0 }) {
+  return (
+    <motion.div
+      key={id}
+      className="absolute z-[65] pointer-events-none"
+      style={{
+        left: `${x}%`,
+        top: `${y}%`,
+      }}
+      initial={{
+        opacity: 0,
+        x: -50,
+        y: 15,
+        scale: 0.65,
+      }}
+      animate={{
+        opacity: [0, 0.7, 0.8, 0],
+        x: [-50, 60, 170, 290],
+        y: [15, -8, 8, -18],
+        scale: [0.65, 0.8, 0.85, 0.65],
+      }}
+      transition={{
+        duration: 7,
+        delay,
+        ease: "easeInOut",
+      }}
+    >
+      <svg
+        width="38"
+        height="24"
+        viewBox="0 0 38 24"
+        fill="none"
+      >
+        <path
+          d="M2 12C6 7 10 7 17 12C20 14 22 14 25 12C30 8 34 8 37 12"
+          stroke="rgba(100,116,139,0.6)"
+          strokeWidth="2"
+          strokeLinecap="round"
+        />
+        <path
+          d="M2 12C6 17 10 17 17 12"
+          stroke="rgba(100,116,139,0.6)"
+          strokeWidth="2"
+          strokeLinecap="round"
+        />
+      </svg>
+    </motion.div>
+  );
+}
+
+function SnowfallBurst({ burst }) {
+  const flakes = Array.from({ length: 34 }, (_, index) => {
+    const spread = (Math.random() - 0.5) * 90;
+    const startX = burst.x + spread;
+
+    return {
+      id: `${burst.id}-${index}`,
+      left: startX,
+      size: 3 + Math.random() * 7,
+      delay: Math.random() * 0.7,
+      duration: 3.2 + Math.random() * 3.5,
+      drift: (Math.random() - 0.5) * 130,
+      opacity: 0.45 + Math.random() * 0.5,
+      blur: Math.random() > 0.75 ? 1 : 0,
+    };
+  });
+
+  return (
+    <div className="absolute inset-0 pointer-events-none z-[60] overflow-hidden">
+      {flakes.map((flake) => (
+        <motion.div
+          key={flake.id}
+          className="absolute top-[-18px] rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.8)]"
+          style={{
+            left: `${flake.left}%`,
+            width: `${flake.size}px`,
+            height: `${flake.size}px`,
+            opacity: flake.opacity,
+            filter: `blur(${flake.blur}px)`,
+          }}
+          initial={{
+            y: -20,
+            x: 0,
+            rotate: 0,
+            opacity: 0,
+          }}
+          animate={{
+            y: "110vh",
+            x: flake.drift,
+            rotate: 360,
+            opacity: [0, flake.opacity, flake.opacity, 0],
+          }}
+          transition={{
+            duration: flake.duration,
+            delay: flake.delay,
+            ease: "linear",
+          }}
+        />
+      ))}
+
+      {/* soft snowfall mist */}
+      <motion.div
+        className="absolute rounded-full bg-white/40 blur-2xl"
+        style={{
+          left: `${burst.x}%`,
+          top: `${burst.y}%`,
+          width: 90,
+          height: 90,
+          transform: "translate(-50%, -50%)",
+        }}
+        initial={{
+          scale: 0.2,
+          opacity: 0,
+        }}
+        animate={{
+          scale: [0.2, 1.5, 2],
+          opacity: [0, 0.35, 0],
+        }}
+        transition={{
+          duration: 1.2,
+          ease: "easeOut",
+        }}
+      />
+    </div>
+  );
+}
 
 function MemoriesScreen({ onNext }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(1);
 
-  const [tapEffects, setTapEffects] = useState([]);
-  const [snowflakes, setSnowflakes] = useState([]);
+  const [snowBursts, setSnowBursts] = useState([]);
+  const [butterflies, setButterflies] = useState([]);
+  const [birds, setBirds] = useState([]);
 
-  const snowTimerRef = useRef(null);
-  const effectCounterRef = useRef(0);
+  const screenRef = useRef(null);
+  const burstCounter = useRef(0);
 
   const currentPhoto = memories[currentIndex];
 
@@ -95,214 +305,138 @@ function MemoriesScreen({ onNext }) {
     );
   };
 
-  /*
-   * Every touch/click creates a little romantic shower
-   * exactly from the place where the user touched.
-   */
-  const handleScreenTouch = (event) => {
-    const target = event.currentTarget;
-    const rect = target.getBoundingClientRect();
-
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
-
-    const newEffects = Array.from({ length: 9 }).map((_, index) => {
-      effectCounterRef.current += 1;
-
-      return {
-        id: `${Date.now()}-${effectCounterRef.current}-${index}`,
-        x: x + (Math.random() - 0.5) * 35,
-        y: y + (Math.random() - 0.5) * 20,
-        symbol:
-          tapSymbols[Math.floor(Math.random() * tapSymbols.length)],
-        size:
-          Math.floor(Math.random() * 9) + 15,
-        drift:
-          (Math.random() - 0.5) * 130,
-        fall:
-          Math.floor(Math.random() * 180) + 260,
-        rotate:
-          Math.random() * 50 - 25,
-        duration:
-          Math.random() * 1.2 + 2.2,
-        delay:
-          index * 0.035,
-      };
-    });
-
-    setTapEffects((prev) => [...prev, ...newEffects]);
-
-    /*
-     * Remove only the effects from this tap after animation.
-     */
-    setTimeout(() => {
-      const ids = new Set(newEffects.map((item) => item.id));
-
-      setTapEffects((prev) =>
-        prev.filter((item) => !ids.has(item.id))
-      );
-    }, 4200);
-  };
-
-  /*
-   * Soft snowfall.
-   * It appears every few seconds instead of running constantly.
-   */
-  const createSnowfall = () => {
-    const batch = Array.from({ length: 13 }).map((_, index) => {
-      effectCounterRef.current += 1;
-
-      return {
-        id: `snow-${Date.now()}-${effectCounterRef.current}-${index}`,
-        x: Math.random() * 100,
-        size: Math.random() * 5 + 5,
-        drift:
-          (Math.random() - 0.5) * 100,
-        duration:
-          Math.random() * 3 + 4,
-        delay:
-          Math.random() * 1.5,
-        opacity:
-          Math.random() * 0.45 + 0.35,
-      };
-    });
-
-    setSnowflakes(batch);
-
-    setTimeout(() => {
-      const ids = new Set(batch.map((item) => item.id));
-
-      setSnowflakes((prev) =>
-        prev.filter((item) => !ids.has(item.id))
-      );
-    }, 9000);
-  };
-
   useEffect(() => {
-    /*
-     * First snowfall comes after a few seconds.
-     */
-    const firstSnow = setTimeout(() => {
-      createSnowfall();
-    }, 3500);
+    const screen = screenRef.current;
 
-    /*
-     * Then snowfall appears occasionally.
-     */
-    snowTimerRef.current = setInterval(() => {
-      createSnowfall();
-    }, 8500);
+    if (!screen) return;
+
+    const handlePointerDown = (event) => {
+      const rect = screen.getBoundingClientRect();
+
+      const x = ((event.clientX - rect.left) / rect.width) * 100;
+      const y = ((event.clientY - rect.top) / rect.height) * 100;
+
+      const safeX = Math.max(4, Math.min(96, x));
+      const safeY = Math.max(4, Math.min(88, y));
+
+      const id = ++burstCounter.current;
+
+      // Every single touch creates snowfall.
+      setSnowBursts((prev) => [
+        ...prev,
+        {
+          id,
+          x: safeX,
+          y: safeY,
+        },
+      ]);
+
+      // Sometimes butterfly appears.
+      const butterflyChance = Math.random();
+
+      if (butterflyChance < 0.48) {
+        const butterflyId = `${id}-butterfly`;
+
+        setButterflies((prev) => [
+          ...prev,
+          {
+            id: butterflyId,
+            x: Math.max(5, safeX - 10),
+            y: Math.max(12, safeY - 5),
+            delay: 0.15,
+          },
+        ]);
+
+        setTimeout(() => {
+          setButterflies((prev) =>
+            prev.filter((item) => item.id !== butterflyId)
+          );
+        }, 7000);
+      }
+
+      // Sometimes a little bird also flies through the sky.
+      if (Math.random() < 0.3) {
+        const birdId = `${id}-bird`;
+
+        setBirds((prev) => [
+          ...prev,
+          {
+            id: birdId,
+            x: Math.max(2, safeX - 25),
+            y: Math.max(8, safeY - 18),
+            delay: 0.5,
+          },
+        ]);
+
+        setTimeout(() => {
+          setBirds((prev) =>
+            prev.filter((item) => item.id !== birdId)
+          );
+        }, 8000);
+      }
+
+      // Remove old snowfall after animation finishes.
+      setTimeout(() => {
+        setSnowBursts((prev) =>
+          prev.filter((item) => item.id !== id)
+        );
+      }, 8500);
+    };
+
+    screen.addEventListener("pointerdown", handlePointerDown);
 
     return () => {
-      clearTimeout(firstSnow);
-
-      if (snowTimerRef.current) {
-        clearInterval(snowTimerRef.current);
-      }
+      screen.removeEventListener("pointerdown", handlePointerDown);
     };
   }, []);
 
   return (
     <div
+      ref={screenRef}
       className="relative flex flex-col justify-center items-center w-full min-h-screen h-full overflow-visible select-none"
-      onPointerDown={handleScreenTouch}
     >
-
       {/* =========================================================
-          TOUCH FALLING EFFECTS
+          INTERACTIVE WEATHER LAYER
          ========================================================= */}
 
-      <div className="absolute inset-0 pointer-events-none z-[80] overflow-visible">
-        <AnimatePresence>
-          {tapEffects.map((effect) => (
-            <motion.div
-              key={effect.id}
-              className="absolute font-serif pointer-events-none"
-              style={{
-                left: effect.x,
-                top: effect.y,
-                fontSize: effect.size,
-                lineHeight: 1,
-              }}
-              initial={{
-                opacity: 0,
-                scale: 0.25,
-                y: -10,
-                x: 0,
-                rotate: 0,
-              }}
-              animate={{
-                opacity: [0, 1, 1, 0],
-                scale: [0.25, 1.15, 1, 0.8],
-                y: effect.fall,
-                x: effect.drift,
-                rotate: effect.rotate,
-              }}
-              transition={{
-                duration: effect.duration,
-                delay: effect.delay,
-                ease: "easeOut",
-                times: [0, 0.15, 0.65, 1],
-              }}
-              exit={{
-                opacity: 0,
-              }}
-            >
-              {effect.symbol}
-            </motion.div>
-          ))}
-        </AnimatePresence>
-      </div>
+      <AnimatePresence>
+        {snowBursts.map((burst) => (
+          <SnowfallBurst
+            key={burst.id}
+            burst={burst}
+          />
+        ))}
+      </AnimatePresence>
+
+      {butterflies.map((butterfly) => (
+        <Butterfly
+          key={butterfly.id}
+          id={butterfly.id}
+          x={butterfly.x}
+          y={butterfly.y}
+          delay={butterfly.delay}
+        />
+      ))}
+
+      {birds.map((bird) => (
+        <Bird
+          key={bird.id}
+          id={bird.id}
+          x={bird.x}
+          y={bird.y}
+          delay={bird.delay}
+        />
+      ))}
 
       {/* =========================================================
-          SOFT SNOWFALL
-         ========================================================= */}
-
-      <div className="absolute inset-0 pointer-events-none z-[70] overflow-hidden">
-        <AnimatePresence>
-          {snowflakes.map((snow) => (
-            <motion.div
-              key={snow.id}
-              className="absolute rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.9)]"
-              style={{
-                left: `${snow.x}%`,
-                top: "-12px",
-                width: snow.size,
-                height: snow.size,
-                opacity: snow.opacity,
-              }}
-              initial={{
-                y: -15,
-                x: 0,
-                opacity: 0,
-              }}
-              animate={{
-                y: "105vh",
-                x: snow.drift,
-                opacity: [0, snow.opacity, snow.opacity, 0],
-              }}
-              transition={{
-                duration: snow.duration,
-                delay: snow.delay,
-                ease: "linear",
-              }}
-              exit={{
-                opacity: 0,
-              }}
-            />
-          ))}
-        </AnimatePresence>
-      </div>
-
-      {/* =========================================================
-          SOFT BACKGROUND GLOW
+          SOFT BACKGROUND
          ========================================================= */}
 
       <motion.div
-        className="absolute w-[330px] h-[330px] rounded-full bg-pink-200/20 blur-3xl pointer-events-none"
+        className="absolute w-[360px] h-[360px] rounded-full bg-pink-200/20 blur-3xl pointer-events-none"
         animate={{
           scale: [1, 1.08, 1],
-          opacity: [0.35, 0.55, 0.35],
+          opacity: [0.3, 0.5, 0.3],
         }}
         transition={{
           duration: 5,
@@ -312,10 +446,10 @@ function MemoriesScreen({ onNext }) {
       />
 
       <motion.div
-        className="absolute w-[230px] h-[230px] rounded-full bg-purple-200/15 blur-3xl pointer-events-none"
+        className="absolute w-[250px] h-[250px] rounded-full bg-purple-200/15 blur-3xl pointer-events-none"
         animate={{
           scale: [1.08, 1, 1.08],
-          opacity: [0.25, 0.45, 0.25],
+          opacity: [0.2, 0.4, 0.2],
         }}
         transition={{
           duration: 4.5,
@@ -326,7 +460,7 @@ function MemoriesScreen({ onNext }) {
       />
 
       {/* =========================================================
-          FLOATING HEARTS
+          DECORATIVE HEARTS
          ========================================================= */}
 
       {floatingHearts.map((heart, index) => (
@@ -339,12 +473,8 @@ function MemoriesScreen({ onNext }) {
           }}
           animate={{
             y: [0, -13, 0],
-            x: [
-              0,
-              index % 2 === 0 ? 5 : -5,
-              0,
-            ],
-            opacity: [0.25, 0.75, 0.25],
+            x: [0, index % 2 === 0 ? 5 : -5, 0],
+            opacity: [0.2, 0.65, 0.2],
             rotate: [-8, 8, -8],
           }}
           transition={{
@@ -363,7 +493,7 @@ function MemoriesScreen({ onNext }) {
       ))}
 
       {/* =========================================================
-          SPARKLES
+          DECORATIVE SPARKLES
          ========================================================= */}
 
       {sparkles.map((star, index) => (
@@ -377,7 +507,7 @@ function MemoriesScreen({ onNext }) {
           animate={{
             scale: [0.65, 1.15, 0.65],
             rotate: [0, 90, 180],
-            opacity: [0.2, 0.85, 0.2],
+            opacity: [0.2, 0.8, 0.2],
           }}
           transition={{
             duration: 3,
@@ -394,7 +524,7 @@ function MemoriesScreen({ onNext }) {
       ))}
 
       {/* =========================================================
-          TITLE
+          HEADER
          ========================================================= */}
 
       <motion.div
@@ -413,7 +543,6 @@ function MemoriesScreen({ onNext }) {
         }}
       >
         <div className="flex items-center justify-center gap-2">
-
           <motion.div
             animate={{
               rotate: [-5, 5, -5],
@@ -447,7 +576,6 @@ function MemoriesScreen({ onNext }) {
               className="text-pink-400"
             />
           </motion.div>
-
         </div>
 
         <motion.p
@@ -462,13 +590,29 @@ function MemoriesScreen({ onNext }) {
         >
           Little moments, forever ours ♡
         </motion.p>
+
+        <motion.p
+          className="text-[11px] text-slate-400 mt-1 tracking-wide"
+          initial={{
+            opacity: 0,
+          }}
+          animate={{
+            opacity: [0.35, 0.75, 0.35],
+          }}
+          transition={{
+            duration: 3,
+            repeat: Infinity,
+          }}
+        >
+          touch anywhere for a little magic ✨
+        </motion.p>
       </motion.div>
 
       {/* =========================================================
           PHOTO DOTS
          ========================================================= */}
 
-      <div className="flex items-center justify-center gap-2 mt-5 mb-1 z-20">
+      <div className="flex items-center justify-center gap-2 mt-4 mb-1 z-20">
         {memories.map((_, index) => (
           <motion.span
             key={index}
@@ -500,18 +644,11 @@ function MemoriesScreen({ onNext }) {
 
       <div className="relative w-full max-w-[420px] h-[425px] md:h-[450px] my-2 flex items-center justify-center z-10">
 
-        {/* Album dashed frame */}
-
+        {/* outer album frame */}
         <motion.div
           className="absolute w-[315px] h-[370px] md:w-[350px] md:h-[395px] rounded-[28px] border-2 border-dashed border-pink-200/70"
           animate={{
-            rotate: [
-              0,
-              0.7,
-              0,
-              -0.7,
-              0,
-            ],
+            rotate: [0, 0.7, 0, -0.7, 0],
           }}
           transition={{
             duration: 7,
@@ -520,8 +657,7 @@ function MemoriesScreen({ onNext }) {
           }}
         />
 
-        {/* Glass layer */}
-
+        {/* soft glass layer */}
         <motion.div
           className="absolute w-[300px] h-[355px] md:w-[335px] md:h-[380px] rounded-[26px] bg-white/35 backdrop-blur-sm"
           animate={{
@@ -537,8 +673,7 @@ function MemoriesScreen({ onNext }) {
           }}
         />
 
-        {/* Tape */}
-
+        {/* tape */}
         <motion.div
           className="absolute -top-1 left-1/2 -translate-x-1/2 w-20 h-5 bg-pink-100/80 rounded-sm rotate-[-2deg] z-30"
           animate={{
@@ -550,8 +685,7 @@ function MemoriesScreen({ onNext }) {
           }}
         />
 
-        {/* Photo */}
-
+        {/* photo */}
         <AnimatePresence mode="wait" custom={direction}>
           <motion.div
             key={currentPhoto}
@@ -588,9 +722,7 @@ function MemoriesScreen({ onNext }) {
               scale: 0.975,
             }}
           >
-
             <div className="relative w-full h-full rounded-xl overflow-hidden bg-slate-100 border border-pink-50">
-
               <img
                 src={currentPhoto}
                 alt={`Memory ${currentIndex + 1}`}
@@ -603,10 +735,7 @@ function MemoriesScreen({ onNext }) {
               <motion.div
                 className="absolute inset-y-0 -left-1/2 w-1/3 bg-white/20 skew-x-[-20deg] pointer-events-none"
                 animate={{
-                  left: [
-                    "-50%",
-                    "130%",
-                  ],
+                  left: ["-50%", "130%"],
                 }}
                 transition={{
                   duration: 3.5,
@@ -615,7 +744,6 @@ function MemoriesScreen({ onNext }) {
                   ease: "easeInOut",
                 }}
               />
-
             </div>
 
             <div className="absolute bottom-2 left-0 right-0 text-center">
@@ -623,12 +751,10 @@ function MemoriesScreen({ onNext }) {
                 a little piece of us ♡
               </span>
             </div>
-
           </motion.div>
         </AnimatePresence>
 
-        {/* Next arrow */}
-
+        {/* next arrow */}
         <motion.div
           className="absolute right-[22px] md:right-[25px] top-1/2 -translate-y-1/2 z-40 w-8 h-8 rounded-full bg-white/85 shadow-sm border border-pink-100 flex items-center justify-center pointer-events-none"
           animate={{
@@ -646,8 +772,7 @@ function MemoriesScreen({ onNext }) {
           />
         </motion.div>
 
-        {/* Tap hint */}
-
+        {/* hint */}
         <motion.div
           className="absolute bottom-1 left-1/2 -translate-x-1/2 z-40"
           animate={{
@@ -665,11 +790,10 @@ function MemoriesScreen({ onNext }) {
             </span>
           </div>
         </motion.div>
-
       </div>
 
       {/* =========================================================
-          PHOTO COUNTER
+          COUNTER
          ========================================================= */}
 
       <motion.div
@@ -685,7 +809,6 @@ function MemoriesScreen({ onNext }) {
         }}
       >
         <div className="flex items-center gap-3 text-sm text-slate-400">
-
           <span className="w-9 h-px bg-pink-200" />
 
           <span className="tracking-[0.18em] font-medium">
@@ -697,12 +820,11 @@ function MemoriesScreen({ onNext }) {
           </span>
 
           <span className="w-9 h-px bg-pink-200" />
-
         </div>
       </motion.div>
 
       {/* =========================================================
-          LETTER BUTTON
+          BUTTON
          ========================================================= */}
 
       <motion.div
@@ -727,7 +849,6 @@ function MemoriesScreen({ onNext }) {
           icon={<Mail size={18} />}
         />
       </motion.div>
-
     </div>
   );
 }
