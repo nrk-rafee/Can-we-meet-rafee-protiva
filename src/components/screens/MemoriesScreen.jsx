@@ -8,34 +8,69 @@ import {
   Sparkles,
   Camera,
   ChevronRight,
-  Image as ImageIcon,
 } from "lucide-react";
 import Button from "../Button";
 
 const memories = [
-  "/images/IMG-20260329-WA0002.jpg",
-  "/images/IMG-20260909-WA0019~2.jpg",
+  "/images/file_0000000016dc82078b236eaa37f91e05.png",
+  "/images/file_000000008c448211b1c41b31f3d0250b.png",
   "/images/IMG-20260914-WA0013.jpg",
-
-  // 👇 এখানে তোর ৪ নম্বর ছবির EXACT filename বসা
-  "/images/PUT-YOUR-4TH-FILENAME-HERE.jpg",
-
-  // 👇 এখানে তোর ৫ নম্বর ছবির EXACT filename বসা
-  "/images/PUT-YOUR-5TH-FILENAME-HERE.jpg",
+  "/images/IMG-20260909-WA0019~2.jpg",
+  "/images/IMG-20260329-WA0002.jpg",
 ];
 
-const floatingItems = [
-  { type: "heart", x: "-155px", y: "-90px", delay: 0 },
-  { type: "heart", x: "155px", y: "-55px", delay: 0.8 },
-  { type: "heart", x: "-165px", y: "85px", delay: 1.4 },
-  { type: "heart", x: "165px", y: "105px", delay: 0.5 },
+const floatingHearts = [
+  {
+    left: "calc(50% - 170px)",
+    top: "48%",
+    size: 15,
+    delay: 0,
+    duration: 4,
+  },
+  {
+    left: "calc(50% + 155px)",
+    top: "43%",
+    size: 17,
+    delay: 1,
+    duration: 4.5,
+  },
+  {
+    left: "calc(50% - 180px)",
+    top: "65%",
+    size: 12,
+    delay: 1.8,
+    duration: 3.8,
+  },
+  {
+    left: "calc(50% + 165px)",
+    top: "67%",
+    size: 14,
+    delay: 0.7,
+    duration: 4.2,
+  },
 ];
 
-const stars = [
-  { x: "-130px", y: "-145px", delay: 0 },
-  { x: "135px", y: "-125px", delay: 1 },
-  { x: "-145px", y: "145px", delay: 0.7 },
-  { x: "145px", y: "150px", delay: 1.5 },
+const sparkles = [
+  {
+    left: "calc(50% - 145px)",
+    top: "40%",
+    delay: 0,
+  },
+  {
+    left: "calc(50% + 145px)",
+    top: "54%",
+    delay: 0.8,
+  },
+  {
+    left: "calc(50% - 150px)",
+    top: "72%",
+    delay: 1.5,
+  },
+  {
+    left: "calc(50% + 140px)",
+    top: "72%",
+    delay: 0.4,
+  },
 ];
 
 function MemoriesScreen({ onNext }) {
@@ -52,26 +87,18 @@ function MemoriesScreen({ onNext }) {
     );
   };
 
-  const previousPhoto = () => {
-    setDirection(-1);
-
-    setCurrentIndex((prev) =>
-      prev === 0 ? memories.length - 1 : prev - 1
-    );
-  };
-
   return (
-    <div className="relative flex flex-col items-center justify-center w-full min-h-screen overflow-hidden">
+    <div className="relative flex flex-col justify-center items-center w-full min-h-screen h-full overflow-visible">
 
-      {/* ================================================= */}
-      {/* BACKGROUND */}
-      {/* ================================================= */}
+      {/* =====================================================
+          SOFT BACKGROUND GLOW
+      ====================================================== */}
 
       <motion.div
-        className="absolute w-[330px] h-[330px] rounded-full bg-pink-200/20 blur-[80px] pointer-events-none"
+        className="absolute w-[330px] h-[330px] rounded-full bg-pink-200/20 blur-3xl pointer-events-none"
         animate={{
-          scale: [1, 1.12, 1],
-          opacity: [0.35, 0.6, 0.35],
+          scale: [1, 1.08, 1],
+          opacity: [0.35, 0.55, 0.35],
         }}
         transition={{
           duration: 5,
@@ -81,105 +108,130 @@ function MemoriesScreen({ onNext }) {
       />
 
       <motion.div
-        className="absolute w-[260px] h-[260px] rounded-full bg-purple-200/15 blur-[70px] pointer-events-none"
+        className="absolute w-[230px] h-[230px] rounded-full bg-purple-200/15 blur-3xl pointer-events-none"
         animate={{
-          scale: [1.1, 1, 1.1],
-          opacity: [0.25, 0.5, 0.25],
+          scale: [1.08, 1, 1.08],
+          opacity: [0.25, 0.45, 0.25],
         }}
         transition={{
-          duration: 4,
+          duration: 4.5,
           repeat: Infinity,
           ease: "easeInOut",
+          delay: 1,
         }}
       />
 
-      {/* ================================================= */}
-      {/* FLOATING HEARTS */}
-      {/* ================================================= */}
+      {/* =====================================================
+          FLOATING HEARTS
+      ====================================================== */}
 
-      {floatingItems.map((item, index) => (
+      {floatingHearts.map((heart, index) => (
         <motion.div
           key={index}
           className="absolute pointer-events-none z-0"
           style={{
-            left: `calc(50% + ${item.x})`,
-            top: `calc(50% + ${item.y})`,
+            left: heart.left,
+            top: heart.top,
           }}
           animate={{
-            y: [0, -12, 0],
-            rotate: [-5, 7, -5],
+            y: [0, -13, 0],
+            x: [0, index % 2 === 0 ? 5 : -5, 0],
             opacity: [0.25, 0.75, 0.25],
-            scale: [0.9, 1.1, 0.9],
+            rotate: [-8, 8, -8],
           }}
           transition={{
-            duration: 3.5,
+            duration: heart.duration,
             repeat: Infinity,
-            delay: item.delay,
+            delay: heart.delay,
             ease: "easeInOut",
           }}
         >
           <Heart
-            size={17}
+            size={heart.size}
             fill="currentColor"
             className="text-pink-300"
           />
         </motion.div>
       ))}
 
-      {/* ================================================= */}
-      {/* SPARKLES */}
-      {/* ================================================= */}
+      {/* =====================================================
+          SPARKLES
+      ====================================================== */}
 
-      {stars.map((star, index) => (
+      {sparkles.map((star, index) => (
         <motion.div
           key={index}
           className="absolute pointer-events-none z-0"
           style={{
-            left: `calc(50% + ${star.x})`,
-            top: `calc(50% + ${star.y})`,
+            left: star.left,
+            top: star.top,
           }}
           animate={{
-            scale: [0.6, 1.2, 0.6],
+            scale: [0.65, 1.15, 0.65],
             rotate: [0, 90, 180],
-            opacity: [0.2, 0.8, 0.2],
+            opacity: [0.2, 0.85, 0.2],
           }}
           transition={{
             duration: 3,
             repeat: Infinity,
             delay: star.delay,
+            ease: "easeInOut",
           }}
         >
           <Sparkles
-            size={16}
+            size={15}
             className="text-purple-300"
           />
         </motion.div>
       ))}
 
-      {/* ================================================= */}
-      {/* TITLE */}
-      {/* ================================================= */}
+      {/* =====================================================
+          TITLE
+      ====================================================== */}
 
       <motion.div
-        className="relative z-10 text-center mt-4"
-        initial={{ opacity: 0, y: -25 }}
+        className="text-center z-10 mt-4"
+        initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
+        transition={{
+          duration: 0.8,
+          ease: "easeOut",
+        }}
       >
         <div className="flex items-center justify-center gap-2">
-          <Camera
-            size={20}
-            className="text-pink-400"
-          />
+          <motion.div
+            animate={{
+              rotate: [-5, 5, -5],
+            }}
+            transition={{
+              duration: 3,
+              repeat: Infinity,
+            }}
+          >
+            <Camera
+              size={19}
+              className="text-pink-400"
+            />
+          </motion.div>
 
           <h2 className="text-3xl md:text-5xl font-bold text-slate-700">
             Our Memories
           </h2>
 
-          <Camera
-            size={20}
-            className="text-pink-400 scale-x-[-1]"
-          />
+          <motion.div
+            animate={{
+              rotate: [5, -5, 5],
+            }}
+            transition={{
+              duration: 3,
+              repeat: Infinity,
+            }}
+          >
+            <Camera
+              size={19}
+              className="text-pink-400"
+            />
+          </motion.div>
         </div>
 
         <motion.p
@@ -196,29 +248,58 @@ function MemoriesScreen({ onNext }) {
         </motion.p>
       </motion.div>
 
-      {/* ================================================= */}
-      {/* ALBUM */}
-      {/* ================================================= */}
+      {/* =====================================================
+          ALBUM DOTS
+      ====================================================== */}
 
-      <div className="relative z-10 w-full max-w-[430px] h-[430px] md:h-[455px] mt-3 flex items-center justify-center">
+      <div className="flex items-center justify-center gap-2 mt-5 mb-1 z-20">
+        {memories.map((_, index) => (
+          <motion.span
+            key={index}
+            className={`rounded-full ${
+              index === currentIndex
+                ? "w-3 h-3 bg-pink-400"
+                : "w-2 h-2 bg-pink-200"
+            }`}
+            animate={
+              index === currentIndex
+                ? {
+                    scale: [1, 1.25, 1],
+                  }
+                : {
+                    scale: 1,
+                  }
+            }
+            transition={{
+              duration: 1.4,
+              repeat: Infinity,
+            }}
+          />
+        ))}
+      </div>
 
-        {/* Decorative album frame */}
+      {/* =====================================================
+          ALBUM
+      ====================================================== */}
+
+      <div className="relative w-full max-w-[420px] h-[425px] md:h-[450px] my-2 flex items-center justify-center z-10">
+
+        {/* Outer scrapbook frame */}
         <motion.div
-          className="absolute w-[325px] h-[380px] md:w-[350px] md:h-[400px] rounded-[30px] border-2 border-dashed border-pink-200/80"
+          className="absolute w-[315px] h-[370px] md:w-[350px] md:h-[395px] rounded-[28px] border-2 border-dashed border-pink-200/70"
           animate={{
-            rotate: [0, 0.8, 0, -0.8, 0],
-            scale: [1, 1.015, 1],
+            rotate: [0, 0.7, 0, -0.7, 0],
           }}
           transition={{
-            duration: 6,
+            duration: 7,
             repeat: Infinity,
             ease: "easeInOut",
           }}
         />
 
-        {/* Inner glass */}
+        {/* Inner glow panel */}
         <motion.div
-          className="absolute w-[305px] h-[360px] md:w-[330px] md:h-[385px] rounded-[28px] bg-white/35 backdrop-blur-sm"
+          className="absolute w-[300px] h-[355px] md:w-[335px] md:h-[380px] rounded-[26px] bg-white/35 backdrop-blur-sm"
           animate={{
             boxShadow: [
               "0 15px 45px rgba(236,72,153,0.05)",
@@ -232,41 +313,21 @@ function MemoriesScreen({ onNext }) {
           }}
         />
 
-        {/* ================================================= */}
-        {/* TOP DECORATION */}
-        {/* ================================================= */}
+        {/* Little top tape */}
+        <motion.div
+          className="absolute -top-1 left-1/2 -translate-x-1/2 w-20 h-5 bg-pink-100/80 rounded-sm rotate-[-2deg] z-30"
+          animate={{
+            rotate: [-2, 1, -2],
+          }}
+          transition={{
+            duration: 5,
+            repeat: Infinity,
+          }}
+        />
 
-        <div className="absolute top-0 z-30 flex items-center gap-2">
-          {[...Array(memories.length)].map((_, index) => (
-            <motion.span
-              key={index}
-              className={`rounded-full ${
-                index === currentIndex
-                  ? "bg-pink-400"
-                  : "bg-pink-200"
-              }`}
-              animate={
-                index === currentIndex
-                  ? {
-                      width: [7, 11, 7],
-                      height: [7, 11, 7],
-                    }
-                  : {
-                      width: 7,
-                      height: 7,
-                    }
-              }
-              transition={{
-                duration: 1.2,
-                repeat: Infinity,
-              }}
-            />
-          ))}
-        </div>
-
-        {/* ================================================= */}
-        {/* PHOTO */}
-        {/* ================================================= */}
+        {/* =================================================
+            PHOTO
+        ================================================== */}
 
         <AnimatePresence mode="wait" custom={direction}>
           <motion.div
@@ -274,9 +335,9 @@ function MemoriesScreen({ onNext }) {
             custom={direction}
             initial={{
               opacity: 0,
-              x: direction > 0 ? 150 : -150,
-              rotate: direction > 0 ? 8 : -8,
-              scale: 0.88,
+              x: direction > 0 ? 120 : -120,
+              rotate: direction > 0 ? 5 : -5,
+              scale: 0.94,
             }}
             animate={{
               opacity: 1,
@@ -286,50 +347,51 @@ function MemoriesScreen({ onNext }) {
             }}
             exit={{
               opacity: 0,
-              x: direction > 0 ? -150 : 150,
-              rotate: direction > 0 ? -8 : 8,
-              scale: 0.88,
+              x: direction > 0 ? -120 : 120,
+              rotate: direction > 0 ? -5 : 5,
+              scale: 0.94,
             }}
             transition={{
               duration: 0.55,
-              ease: [0.22, 1, 0.36, 1],
+              ease: "easeInOut",
             }}
-            className="absolute z-20 w-[278px] h-[350px] md:w-[300px] md:h-[370px] bg-[#fffdfd] rounded-[20px] p-3 pb-12 shadow-[0_20px_45px_rgba(0,0,0,0.13)] border border-pink-100"
+            className="absolute top-7 left-1/2 -translate-x-1/2 w-[275px] h-[340px] md:w-[300px] md:h-[365px] bg-[#fffdfd] rounded-2xl p-3 pb-12 shadow-[0_18px_45px_rgba(0,0,0,0.13)] border border-pink-100 cursor-pointer"
+            onClick={nextPhoto}
+            whileHover={{
+              y: -5,
+              scale: 1.015,
+            }}
+            whileTap={{
+              scale: 0.975,
+            }}
           >
 
-            {/* Tape */}
-            <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-20 h-7 bg-pink-100/70 rotate-[-2deg] rounded-sm shadow-sm z-30" />
-
             {/* Image */}
-            <div className="w-full h-full rounded-[14px] overflow-hidden bg-slate-100 border border-pink-50 relative">
+            <div className="relative w-full h-full rounded-xl overflow-hidden bg-slate-100 border border-pink-50">
 
               <img
                 src={currentPhoto}
                 alt={`Memory ${currentIndex + 1}`}
-                className="w-full h-full object-cover select-none pointer-events-none"
+                className="w-full h-full object-cover pointer-events-none select-none"
                 draggable="false"
               />
 
-              {/* subtle gradient */}
+              {/* soft overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-pink-500/10 via-transparent to-white/5 pointer-events-none" />
 
-              {/* little heart */}
+              {/* tiny shine */}
               <motion.div
-                className="absolute right-3 bottom-3"
+                className="absolute inset-y-0 -left-1/2 w-1/3 bg-white/20 skew-x-[-20deg] pointer-events-none"
                 animate={{
-                  scale: [1, 1.15, 1],
+                  left: ["-50%", "130%"],
                 }}
                 transition={{
-                  duration: 2,
+                  duration: 3.5,
                   repeat: Infinity,
+                  repeatDelay: 2,
+                  ease: "easeInOut",
                 }}
-              >
-                <Heart
-                  size={17}
-                  fill="white"
-                  className="text-white drop-shadow-md"
-                />
-              </motion.div>
+              />
             </div>
 
             {/* Caption */}
@@ -338,46 +400,36 @@ function MemoriesScreen({ onNext }) {
                 a little piece of us ♡
               </span>
             </div>
+
           </motion.div>
         </AnimatePresence>
 
-        {/* ================================================= */}
-        {/* LEFT ARROW */}
-        {/* ================================================= */}
-
-        <motion.button
-          onClick={previousPhoto}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          className="absolute z-40 left-[20px] md:left-[28px] w-10 h-10 rounded-full bg-white/85 backdrop-blur-md shadow-md border border-pink-100 flex items-center justify-center text-pink-400"
-        >
-          <ChevronRight
-            size={19}
-            className="rotate-180"
-          />
-        </motion.button>
-
-        {/* ================================================= */}
-        {/* RIGHT ARROW */}
-        {/* ================================================= */}
-
-        <motion.button
-          onClick={nextPhoto}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          className="absolute z-40 right-[20px] md:right-[28px] w-10 h-10 rounded-full bg-white/85 backdrop-blur-md shadow-md border border-pink-100 flex items-center justify-center text-pink-400"
-        >
-          <ChevronRight size={19} />
-        </motion.button>
-
-        {/* ================================================= */}
-        {/* SWIPE HINT */}
-        {/* ================================================= */}
+        {/* =================================================
+            SIDE ARROW
+        ================================================== */}
 
         <motion.div
-          className="absolute bottom-0 z-40"
+          className="absolute right-[22px] md:right-[25px] top-1/2 -translate-y-1/2 z-40 w-8 h-8 rounded-full bg-white/85 shadow-sm border border-pink-100 flex items-center justify-center pointer-events-none"
           animate={{
-            y: [0, 5, 0],
+            x: [0, 4, 0],
+            opacity: [0.5, 1, 0.5],
+          }}
+          transition={{
+            duration: 1.8,
+            repeat: Infinity,
+          }}
+        >
+          <ChevronRight
+            size={17}
+            className="text-pink-400"
+          />
+        </motion.div>
+
+        {/* Bottom hint */}
+        <motion.div
+          className="absolute bottom-1 left-1/2 -translate-x-1/2 z-40"
+          animate={{
+            y: [0, 4, 0],
             opacity: [0.5, 1, 0.5],
           }}
           transition={{
@@ -385,50 +437,61 @@ function MemoriesScreen({ onNext }) {
             repeat: Infinity,
           }}
         >
-          <div className="px-4 py-1.5 rounded-full bg-white/85 backdrop-blur-md border border-pink-100 shadow-sm">
+          <div className="px-4 py-1.5 rounded-full bg-white/85 backdrop-blur-sm shadow-sm border border-pink-100">
             <span className="text-xs text-pink-400">
-              tap or use arrows ♡
+              tap for next memory ♡
             </span>
           </div>
         </motion.div>
+
       </div>
 
-      {/* ================================================= */}
-      {/* COUNTER */}
-      {/* ================================================= */}
+      {/* =====================================================
+          COUNTER
+      ====================================================== */}
 
       <motion.div
-        className="relative z-10 flex items-center gap-3 -mt-1 mb-3"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
+        className="z-20 -mt-1 mb-3"
+        key={currentIndex}
+        initial={{
+          opacity: 0,
+          y: 5,
+        }}
+        animate={{
+          opacity: 1,
+          y: 0,
+        }}
       >
-        <span className="w-9 h-px bg-pink-200" />
+        <div className="flex items-center gap-3 text-sm text-slate-400">
 
-        <div className="flex items-center gap-1.5 text-sm text-slate-400">
-          <ImageIcon size={14} className="text-pink-300" />
+          <span className="w-9 h-px bg-pink-200" />
 
-          <span>
-            {currentIndex + 1}
+          <span className="tracking-[0.18em] font-medium">
+            {String(currentIndex + 1).padStart(2, "0")}
+            {" "}
+            /{" "}
+            {String(memories.length).padStart(2, "0")}
           </span>
 
-          <span>/</span>
+          <span className="w-9 h-px bg-pink-200" />
 
-          <span>
-            {memories.length}
-          </span>
         </div>
-
-        <span className="w-9 h-px bg-pink-200" />
       </motion.div>
 
-      {/* ================================================= */}
-      {/* NEXT */}
-      {/* ================================================= */}
+      {/* =====================================================
+          NEXT BUTTON
+      ====================================================== */}
 
       <motion.div
-        className="relative z-10 mb-5"
-        initial={{ opacity: 0, y: 15 }}
-        animate={{ opacity: 1, y: 0 }}
+        className="shrink-0 z-20 mb-5"
+        initial={{
+          opacity: 0,
+          y: 15,
+        }}
+        animate={{
+          opacity: 1,
+          y: 0,
+        }}
         transition={{
           delay: 0.7,
           duration: 0.6,
