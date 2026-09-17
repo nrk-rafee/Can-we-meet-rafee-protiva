@@ -46,7 +46,7 @@ export default function App() {
           delay: 1,
         }}
         className="fixed bottom-4 right-4 text-sm font-thin text-black/40 pointer-events-none z-50 tracking-wide">
-        anujbuilds.in
+        rafee🫶protiva
       </motion.div>
     </div>
   );
