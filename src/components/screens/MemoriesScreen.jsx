@@ -20,234 +20,78 @@ const memories = [
   "/images/IMG-20260329-WA0002.jpg",
 ];
 
-/* ---------------------------------------------------------
-   REALISTIC STYLE BUTTERFLY
---------------------------------------------------------- */
+/*
+  IMPORTANT:
+  Put a realistic butterfly PNG inside:
+  public/images/butterfly.png
 
-function Butterfly({
-  size = 70,
-  delay = 0,
-  duration = 12,
-  startX,
-  startY,
-  endX,
-  endY,
-  rotate = 0,
-}) {
-  return (
-    <motion.div
-      className="absolute z-[5] pointer-events-none"
-      style={{
-        left: startX,
-        top: startY,
-        width: size,
-        height: size,
-      }}
-      initial={{
-        opacity: 0,
-        x: 0,
-        y: 0,
-        scale: 0.65,
-        rotate,
-      }}
-      animate={{
-        opacity: [0, 0.95, 1, 0.9, 0],
-        x: [0, 35, -20, 45, endX],
-        y: [0, -25, -70, -35, endY],
-        scale: [0.65, 0.9, 1, 0.92, 0.7],
-        rotate: [
-          rotate,
-          rotate + 5,
-          rotate - 7,
-          rotate + 4,
-          rotate,
-        ],
-      }}
-      transition={{
-        duration,
-        delay,
-        repeat: Infinity,
-        repeatDelay: 1.5,
-        ease: "easeInOut",
-      }}
-    >
-      <div
-        className="relative w-full h-full"
-        style={{
-          filter:
-            "drop-shadow(0 5px 8px rgba(91,33,182,0.18))",
-        }}
-      >
-        {/* LEFT WING */}
-        <motion.div
-          className="absolute left-0 top-[8%] w-[53%] h-[68%] origin-bottom-right"
-          animate={{
-            rotateY: [0, 55, 0, -35, 0],
-            rotate: [-5, 4, -7, 3, -5],
-          }}
-          transition={{
-            duration: 0.42,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        >
-          <div
-            className="w-full h-full"
-            style={{
-              clipPath:
-                "polygon(100% 55%, 74% 8%, 43% 0%, 15% 16%, 0% 43%, 9% 70%, 35% 88%, 67% 100%, 91% 83%)",
-              background:
-                "radial-gradient(circle at 70% 55%, #fff0fa 0%, #f8a8d4 22%, #ec72b7 48%, #a855a8 72%, #67366f 100%)",
-              border:
-                "1px solid rgba(255,255,255,0.75)",
-            }}
-          />
+  Transparent background PNG হলে সবচেয়ে সুন্দর দেখাবে।
+*/
 
-          <span
-            className="absolute top-[15%] left-[18%] w-[9px] h-[9px] rounded-full bg-white/80 blur-[1px]"
-          />
-
-          <span
-            className="absolute top-[42%] left-[12%] w-[6px] h-[6px] rounded-full bg-purple-100/80"
-          />
-        </motion.div>
-
-        {/* RIGHT WING */}
-        <motion.div
-          className="absolute right-0 top-[8%] w-[53%] h-[68%] origin-bottom-left"
-          animate={{
-            rotateY: [0, -55, 0, 35, 0],
-            rotate: [5, -4, 7, -3, 5],
-          }}
-          transition={{
-            duration: 0.42,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        >
-          <div
-            className="w-full h-full"
-            style={{
-              clipPath:
-                "polygon(0 55%, 26% 8%, 57% 0%, 85% 16%, 100% 43%, 91% 70%, 65% 88%, 33% 100%, 9% 83%)",
-              background:
-                "radial-gradient(circle at 30% 55%, #fff0fa 0%, #f8a8d4 22%, #ec72b7 48%, #a855a8 72%, #67366f 100%)",
-              border:
-                "1px solid rgba(255,255,255,0.75)",
-            }}
-          />
-
-          <span
-            className="absolute top-[15%] right-[18%] w-[9px] h-[9px] rounded-full bg-white/80 blur-[1px]"
-          />
-
-          <span
-            className="absolute top-[42%] right-[12%] w-[6px] h-[6px] rounded-full bg-purple-100/80"
-          />
-        </motion.div>
-
-        {/* BODY */}
-        <div
-          className="absolute left-1/2 top-[30%] -translate-x-1/2 w-[7%] h-[58%] rounded-full z-10"
-          style={{
-            background:
-              "linear-gradient(to right, #29152f, #8b527d, #29152f)",
-          }}
-        />
-
-        {/* ANTENNA */}
-        <div
-          className="absolute left-1/2 top-[20%] -translate-x-1/2 w-[55%] h-[30%]"
-        >
-          <span
-            className="absolute left-[40%] top-0 w-[1px] h-[20px] bg-purple-800/60 rotate-[-25deg] origin-bottom"
-          />
-          <span
-            className="absolute right-[40%] top-0 w-[1px] h-[20px] bg-purple-800/60 rotate-[25deg] origin-bottom"
-          />
-          <span className="absolute left-[29%] top-[-2px] w-[4px] h-[4px] rounded-full bg-purple-700/70" />
-          <span className="absolute right-[29%] top-[-2px] w-[4px] h-[4px] rounded-full bg-purple-700/70" />
-        </div>
-
-        {/* WING VEINS */}
-        <div className="absolute inset-0 z-20 pointer-events-none opacity-40">
-          <span className="absolute left-[15%] top-[45%] w-[35%] h-px bg-white rotate-[25deg]" />
-          <span className="absolute right-[15%] top-[45%] w-[35%] h-px bg-white rotate-[-25deg]" />
-          <span className="absolute left-[20%] top-[60%] w-[30%] h-px bg-white rotate-[50deg]" />
-          <span className="absolute right-[20%] top-[60%] w-[30%] h-px bg-white rotate-[-50deg]" />
-        </div>
-      </div>
-    </motion.div>
-  );
-}
-
-/* ---------------------------------------------------------
-   FLOATING PARTICLES
---------------------------------------------------------- */
-
-const particles = Array.from({ length: 24 }, (_, i) => ({
-  left: `${4 + ((i * 17) % 92)}%`,
-  top: `${5 + ((i * 29) % 88)}%`,
-  size: 2 + (i % 3),
-  delay: (i % 7) * 0.45,
-}));
-
-/* ---------------------------------------------------------
-   MEMORY DECORATIONS
---------------------------------------------------------- */
-
-const floatingHearts = [
+const butterflies = [
   {
-    left: "calc(50% - 190px)",
-    top: "39%",
-    size: 16,
+    left: "-5%",
+    top: "17%",
+    width: 105,
     delay: 0,
-    duration: 4.2,
+    duration: 8,
+    rotate: -12,
+    opacity: 0.95,
   },
   {
-    left: "calc(50% + 170px)",
-    top: "41%",
-    size: 15,
-    delay: 1,
-    duration: 4.8,
+    right: "-3%",
+    top: "29%",
+    width: 72,
+    delay: 1.5,
+    duration: 7,
+    rotate: 15,
+    opacity: 0.9,
   },
   {
-    left: "calc(50% - 205px)",
+    right: "-4%",
     top: "67%",
-    size: 13,
-    delay: 1.7,
-    duration: 4,
+    width: 105,
+    delay: 0.8,
+    duration: 9,
+    rotate: -8,
+    opacity: 0.92,
   },
   {
-    left: "calc(50% + 190px)",
-    top: "69%",
-    size: 14,
-    delay: 0.7,
-    duration: 4.5,
+    left: "-2%",
+    top: "78%",
+    width: 70,
+    delay: 2.5,
+    duration: 8,
+    rotate: 12,
+    opacity: 0.82,
+  },
+  {
+    left: "7%",
+    top: "43%",
+    width: 42,
+    delay: 3,
+    duration: 6,
+    rotate: -18,
+    opacity: 0.7,
+  },
+  {
+    right: "10%",
+    top: "13%",
+    width: 40,
+    delay: 1,
+    duration: 6.5,
+    rotate: 12,
+    opacity: 0.72,
   },
 ];
 
-const sparkles = [
-  {
-    left: "calc(50% - 155px)",
-    top: "35%",
-    delay: 0,
-  },
-  {
-    left: "calc(50% + 150px)",
-    top: "52%",
-    delay: 0.8,
-  },
-  {
-    left: "calc(50% - 165px)",
-    top: "74%",
-    delay: 1.5,
-  },
-  {
-    left: "calc(50% + 155px)",
-    top: "75%",
-    delay: 0.4,
-  },
+const petals = [
+  { left: "8%", top: "30%", delay: 0 },
+  { left: "85%", top: "40%", delay: 1.5 },
+  { left: "14%", top: "65%", delay: 2 },
+  { left: "77%", top: "75%", delay: 0.8 },
+  { left: "91%", top: "55%", delay: 2.8 },
+  { left: "5%", top: "55%", delay: 1.2 },
 ];
 
 function MemoriesScreen({ onNext }) {
@@ -265,154 +109,226 @@ function MemoriesScreen({ onNext }) {
   };
 
   return (
-    <div className="relative flex flex-col items-center w-full min-h-screen h-full overflow-visible">
+    <div className="relative w-screen min-h-screen overflow-hidden bg-gradient-to-b from-[#ffe9f1] via-[#ffdce9] to-[#fff0f5] flex flex-col items-center">
 
       {/* =====================================================
           DREAMY BACKGROUND
-      ===================================================== */}
+      ====================================================== */}
 
-      <motion.div
-        className="fixed inset-0 pointer-events-none z-0"
-        style={{
-          background:
-            "radial-gradient(circle at 50% 35%, rgba(255,230,242,0.95) 0%, rgba(252,220,237,0.72) 32%, rgba(243,226,250,0.48) 65%, rgba(255,255,255,0.25) 100%)",
-        }}
-        animate={{
-          opacity: [0.75, 1, 0.8],
-        }}
-        transition={{
-          duration: 7,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-      />
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
 
-      {/* Soft center glow */}
-      <motion.div
-        className="fixed left-1/2 top-[48%] -translate-x-1/2 -translate-y-1/2 w-[430px] h-[430px] rounded-full bg-pink-300/20 blur-[80px] pointer-events-none z-0"
-        animate={{
-          scale: [0.95, 1.08, 0.95],
-          opacity: [0.35, 0.6, 0.35],
-        }}
-        transition={{
-          duration: 6,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-      />
-
-      {/* =====================================================
-          BUTTERFLIES — FULL SCREEN
-      ===================================================== */}
-
-      <Butterfly
-        size={72}
-        startX="3%"
-        startY="35%"
-        endX={80}
-        endY={-130}
-        duration={13}
-        delay={0}
-        rotate={-8}
-      />
-
-      <Butterfly
-        size={48}
-        startX="82%"
-        startY="30%"
-        endX={-110}
-        endY={100}
-        duration={11}
-        delay={2}
-        rotate={8}
-      />
-
-      <Butterfly
-        size={58}
-        startX="86%"
-        startY="67%"
-        endX={-100}
-        endY={-170}
-        duration={14}
-        delay={4}
-        rotate={-5}
-      />
-
-      <Butterfly
-        size={42}
-        startX="8%"
-        startY="72%"
-        endX={130}
-        endY={-120}
-        duration={10}
-        delay={5}
-        rotate={7}
-      />
-
-      <Butterfly
-        size={35}
-        startX="53%"
-        startY="18%"
-        endX={-90}
-        endY={150}
-        duration={12}
-        delay={3}
-        rotate={-4}
-      />
-
-      {/* =====================================================
-          FLOATING PARTICLES
-      ===================================================== */}
-
-      {particles.map((particle, index) => (
-        <motion.span
-          key={index}
-          className="fixed rounded-full bg-white/70 blur-[1px] pointer-events-none z-[2]"
-          style={{
-            left: particle.left,
-            top: particle.top,
-            width: particle.size,
-            height: particle.size,
-          }}
+        {/* Main pink glow */}
+        <motion.div
+          className="absolute left-1/2 top-[38%] -translate-x-1/2 w-[650px] h-[650px] rounded-full bg-pink-300/25 blur-[100px]"
           animate={{
-            y: [0, -15, 0],
-            opacity: [0.15, 0.8, 0.15],
-            scale: [0.7, 1.2, 0.7],
+            scale: [1, 1.08, 1],
+            opacity: [0.45, 0.65, 0.45],
           }}
           transition={{
-            duration: 3 + (index % 4),
-            delay: particle.delay,
+            duration: 6,
             repeat: Infinity,
             ease: "easeInOut",
           }}
         />
-      ))}
+
+        <motion.div
+          className="absolute left-[5%] top-[5%] w-[300px] h-[300px] rounded-full bg-white/70 blur-[80px]"
+          animate={{
+            scale: [1, 1.15, 1],
+          }}
+          transition={{
+            duration: 7,
+            repeat: Infinity,
+          }}
+        />
+
+        <motion.div
+          className="absolute right-[-80px] bottom-[5%] w-[350px] h-[350px] rounded-full bg-purple-200/25 blur-[90px]"
+          animate={{
+            scale: [1.1, 1, 1.1],
+          }}
+          transition={{
+            duration: 6,
+            repeat: Infinity,
+          }}
+        />
+
+        {/* Soft bokeh */}
+        {[...Array(18)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute rounded-full bg-white/60 blur-[2px]"
+            style={{
+              width: `${4 + (i % 4) * 3}px`,
+              height: `${4 + (i % 4) * 3}px`,
+              left: `${(i * 37) % 100}%`,
+              top: `${(i * 23) % 100}%`,
+            }}
+            animate={{
+              y: [0, -12, 0],
+              opacity: [0.25, 0.9, 0.25],
+              scale: [0.8, 1.2, 0.8],
+            }}
+            transition={{
+              duration: 3 + (i % 3),
+              repeat: Infinity,
+              delay: i * 0.25,
+              ease: "easeInOut",
+            }}
+          />
+        ))}
+
+        {/* Sparkles */}
+        {[...Array(12)].map((_, i) => (
+          <motion.div
+            key={`spark-${i}`}
+            className="absolute text-white"
+            style={{
+              left: `${(i * 41) % 96}%`,
+              top: `${(i * 29) % 92}%`,
+            }}
+            animate={{
+              scale: [0.4, 1.2, 0.4],
+              opacity: [0.15, 0.9, 0.15],
+              rotate: [0, 90, 180],
+            }}
+            transition={{
+              duration: 3 + (i % 2),
+              repeat: Infinity,
+              delay: i * 0.3,
+            }}
+          >
+            <Sparkles size={14 + (i % 3) * 4} />
+          </motion.div>
+        ))}
+
+        {/* Falling petals */}
+        {petals.map((petal, index) => (
+          <motion.div
+            key={index}
+            className="absolute w-3 h-5 rounded-full bg-pink-300/50"
+            style={{
+              left: petal.left,
+              top: petal.top,
+            }}
+            animate={{
+              y: [0, 80, 160],
+              x: [0, 20, -10],
+              rotate: [0, 90, 180],
+              opacity: [0, 0.65, 0],
+            }}
+            transition={{
+              duration: 7,
+              repeat: Infinity,
+              delay: petal.delay,
+              ease: "easeInOut",
+            }}
+          />
+        ))}
+      </div>
+
+      {/* =====================================================
+          REALISTIC BUTTERFLIES
+      ====================================================== */}
+
+      <div className="absolute inset-0 z-30 pointer-events-none overflow-hidden">
+
+        {butterflies.map((butterfly, index) => (
+          <motion.div
+            key={index}
+            className="absolute"
+            style={{
+              left: butterfly.left,
+              right: butterfly.right,
+              top: butterfly.top,
+              width: butterfly.width,
+              opacity: butterfly.opacity,
+              rotate: butterfly.rotate,
+            }}
+            animate={{
+              x: [0, 35, -20, 25, 0],
+              y: [0, -35, 15, -25, 0],
+              rotate: [
+                butterfly.rotate,
+                butterfly.rotate + 8,
+                butterfly.rotate - 8,
+                butterfly.rotate + 5,
+                butterfly.rotate,
+              ],
+              scale: [1, 1.03, 0.97, 1.04, 1],
+            }}
+            transition={{
+              duration: butterfly.duration,
+              repeat: Infinity,
+              delay: butterfly.delay,
+              ease: "easeInOut",
+            }}
+          >
+            <motion.img
+              src="/images/butterfly.png"
+              alt=""
+              className="w-full h-auto object-contain drop-shadow-[0_8px_12px_rgba(120,50,90,0.25)]"
+              animate={{
+                rotateY: [0, 35, -25, 25, 0],
+              }}
+              transition={{
+                duration: 1.8,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
+          </motion.div>
+        ))}
+
+      </div>
+
+      {/* =====================================================
+          TOP DECORATION
+      ====================================================== */}
+
+      <motion.div
+        className="absolute top-5 left-5 text-pink-300/70"
+        animate={{
+          rotate: [-5, 5, -5],
+          scale: [1, 1.08, 1],
+        }}
+        transition={{
+          duration: 4,
+          repeat: Infinity,
+        }}
+      >
+        <Flower2 size={32} />
+      </motion.div>
+
+      <motion.div
+        className="absolute top-8 right-6 text-pink-300/70"
+        animate={{
+          rotate: [5, -5, 5],
+        }}
+        transition={{
+          duration: 4,
+          repeat: Infinity,
+        }}
+      >
+        <Heart size={25} fill="currentColor" />
+      </motion.div>
 
       {/* =====================================================
           HEADER
-      ===================================================== */}
+      ====================================================== */}
 
       <motion.div
-        className="relative text-center z-20 mt-7"
-        initial={{
-          opacity: 0,
-          y: -25,
-        }}
-        animate={{
-          opacity: 1,
-          y: 0,
-        }}
-        transition={{
-          duration: 0.8,
-          ease: "easeOut",
-        }}
+        className="relative z-40 text-center mt-12"
+        initial={{ opacity: 0, y: -25 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
       >
         <div className="flex items-center justify-center gap-3">
 
           <motion.div
             animate={{
-              rotate: [-8, 8, -8],
-              y: [0, -2, 0],
+              rotate: [-5, 5, -5],
+              scale: [1, 1.08, 1],
             }}
             transition={{
               duration: 3,
@@ -420,19 +336,20 @@ function MemoriesScreen({ onNext }) {
             }}
           >
             <Camera
-              size={21}
+              size={25}
+              strokeWidth={2.2}
               className="text-pink-500"
             />
           </motion.div>
 
-          <h2 className="text-[30px] md:text-5xl font-bold tracking-tight text-slate-700">
+          <h2 className="text-[34px] md:text-5xl font-extrabold tracking-tight text-slate-700">
             Our Memories
           </h2>
 
           <motion.div
             animate={{
-              rotate: [8, -8, 8],
-              y: [0, -2, 0],
+              rotate: [5, -5, 5],
+              scale: [1, 1.08, 1],
             }}
             transition={{
               duration: 3,
@@ -440,7 +357,8 @@ function MemoriesScreen({ onNext }) {
             }}
           >
             <Camera
-              size={21}
+              size={25}
+              strokeWidth={2.2}
               className="text-pink-500"
             />
           </motion.div>
@@ -453,7 +371,7 @@ function MemoriesScreen({ onNext }) {
             opacity: [0.65, 1, 0.65],
           }}
           transition={{
-            duration: 2.8,
+            duration: 2.5,
             repeat: Infinity,
           }}
         >
@@ -462,128 +380,93 @@ function MemoriesScreen({ onNext }) {
       </motion.div>
 
       {/* =====================================================
-          PHOTO DOTS
-      ===================================================== */}
+          DOTS
+      ====================================================== */}
 
-      <div className="flex items-center justify-center gap-2 mt-5 z-20">
+      <div className="relative z-40 flex items-center gap-3 mt-6">
+
         {memories.map((_, index) => (
           <motion.span
             key={index}
             className={`rounded-full ${
               index === currentIndex
-                ? "w-3 h-3 bg-pink-500"
-                : "w-2 h-2 bg-pink-200"
+                ? "w-4 h-4 bg-pink-500 shadow-[0_0_12px_rgba(236,72,153,0.55)]"
+                : "w-3 h-3 bg-pink-300/70"
             }`}
             animate={
               index === currentIndex
                 ? {
-                    scale: [1, 1.35, 1],
+                    scale: [1, 1.25, 1],
                   }
-                : {
-                    scale: 1,
-                  }
+                : {}
             }
             transition={{
-              duration: 1.5,
+              duration: 1.4,
               repeat: Infinity,
             }}
           />
         ))}
+
       </div>
 
       {/* =====================================================
           LUXURY ALBUM AREA
-      ===================================================== */}
+      ====================================================== */}
 
-      <div className="relative w-full max-w-[500px] h-[455px] md:h-[475px] mt-1 flex items-center justify-center z-10">
+      <div className="relative z-40 w-full max-w-[500px] h-[470px] mt-5 flex items-center justify-center">
 
-        {/* Outer luxury halo */}
+        {/* glowing ring */}
         <motion.div
-          className="absolute w-[355px] h-[405px] md:w-[395px] md:h-[425px] rounded-[35px] border border-white/80 pointer-events-none"
+          className="absolute w-[365px] h-[400px] rounded-[40px] border border-white/80"
           animate={{
+            rotate: [0, 1, 0, -1, 0],
             boxShadow: [
-              "0 0 25px rgba(244,114,182,0.12)",
-              "0 0 55px rgba(244,114,182,0.28)",
-              "0 0 25px rgba(244,114,182,0.12)",
+              "0 0 25px rgba(255,255,255,0.35)",
+              "0 0 55px rgba(236,72,153,0.22)",
+              "0 0 25px rgba(255,255,255,0.35)",
             ],
-          }}
-          transition={{
-            duration: 4.5,
-            repeat: Infinity,
-          }}
-        />
-
-        {/* Back album card */}
-        <motion.div
-          className="absolute w-[335px] h-[390px] md:w-[375px] md:h-[410px] rounded-[28px] bg-white/35 backdrop-blur-md border border-white/80"
-          animate={{
-            rotate: [-2, -1, -2],
-            y: [0, -2, 0],
           }}
           transition={{
             duration: 6,
             repeat: Infinity,
-            ease: "easeInOut",
-          }}
-          style={{
-            boxShadow:
-              "0 25px 65px rgba(120,60,100,0.13)",
           }}
         />
 
-        {/* Pink side ribbon */}
+        {/* luxury glass layer */}
         <motion.div
-          className="absolute -left-[3px] top-[48%] w-[65px] h-[145px] pointer-events-none z-10"
+          className="absolute w-[350px] h-[390px] rounded-[35px] bg-white/20 backdrop-blur-[2px] border border-white/70"
           animate={{
-            rotate: [-5, -1, -5],
-            x: [0, -3, 0],
+            rotate: [-1, 1, -1],
           }}
           transition={{
-            duration: 5,
+            duration: 8,
             repeat: Infinity,
-            ease: "easeInOut",
           }}
-        >
-          <div
-            className="w-full h-full rounded-l-full border-y border-pink-200/60"
-            style={{
-              background:
-                "linear-gradient(90deg, rgba(244,114,182,0.16), rgba(244,114,182,0.04))",
-            }}
-          />
-        </motion.div>
+        />
 
-        {/* Right ribbon */}
+        {/* back album */}
         <motion.div
-          className="absolute -right-[3px] top-[42%] w-[65px] h-[150px] pointer-events-none z-10"
-          animate={{
-            rotate: [5, 1, 5],
-            x: [0, 3, 0],
+          className="absolute w-[320px] h-[385px] rounded-[25px] bg-[#fcecf2] border border-white shadow-[0_20px_50px_rgba(130,70,100,0.12)]"
+          style={{
+            rotate: -7,
           }}
-          transition={{
-            duration: 5.5,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        >
-          <div
-            className="w-full h-full rounded-r-full border-y border-pink-200/60"
-            style={{
-              background:
-                "linear-gradient(270deg, rgba(244,114,182,0.16), rgba(244,114,182,0.04))",
-            }}
-          />
-        </motion.div>
+        />
 
-        {/* Main album shadow/glow */}
         <motion.div
-          className="absolute w-[330px] h-[395px] md:w-[365px] md:h-[415px] rounded-[30px] pointer-events-none"
+          className="absolute w-[325px] h-[385px] rounded-[25px] bg-[#fff5f8] border border-white shadow-[0_20px_50px_rgba(130,70,100,0.12)]"
+          style={{
+            rotate: 6,
+          }}
+        />
+
+        {/* ribbon */}
+        <motion.div
+          className="absolute z-50 left-[70px] top-[110px] w-[80px] h-[22px] rounded-full bg-pink-300/80 blur-[0.2px]"
+          style={{
+            rotate: -28,
+          }}
           animate={{
-            boxShadow: [
-              "0 20px 55px rgba(190,80,140,0.12)",
-              "0 25px 75px rgba(190,80,140,0.25)",
-              "0 20px 55px rgba(190,80,140,0.12)",
-            ],
+            x: [-2, 2, -2],
           }}
           transition={{
             duration: 4,
@@ -591,19 +474,31 @@ function MemoriesScreen({ onNext }) {
           }}
         />
 
-        {/* =================================================
-            PHOTO
-        ================================================= */}
+        <motion.div
+          className="absolute z-50 right-[65px] top-[175px] w-[75px] h-[20px] rounded-full bg-pink-300/70"
+          style={{
+            rotate: 30,
+          }}
+          animate={{
+            x: [2, -2, 2],
+          }}
+          transition={{
+            duration: 4,
+            repeat: Infinity,
+          }}
+        />
 
+        {/* MAIN POLAROID */}
         <AnimatePresence mode="wait" custom={direction}>
+
           <motion.div
             key={currentPhoto}
             custom={direction}
             initial={{
               opacity: 0,
-              x: 110,
-              rotate: 5,
-              scale: 0.94,
+              x: direction > 0 ? 100 : -100,
+              rotate: direction > 0 ? 5 : -5,
+              scale: 0.92,
             }}
             animate={{
               opacity: 1,
@@ -613,196 +508,116 @@ function MemoriesScreen({ onNext }) {
             }}
             exit={{
               opacity: 0,
-              x: -110,
-              rotate: -5,
-              scale: 0.94,
+              x: direction > 0 ? -100 : 100,
+              rotate: direction > 0 ? -5 : 5,
+              scale: 0.92,
             }}
             transition={{
-              duration: 0.55,
+              duration: 0.6,
               ease: "easeInOut",
             }}
-            className="absolute top-[24px] left-1/2 -translate-x-1/2 w-[300px] h-[370px] md:w-[325px] md:h-[390px] bg-[#fffdfd] rounded-[20px] p-3 pb-12 shadow-[0_25px_60px_rgba(70,30,60,0.20)] border border-white cursor-pointer z-30"
             onClick={nextPhoto}
-            whileHover={{
-              y: -6,
-              scale: 1.015,
-              rotate: -0.5,
-            }}
-            whileTap={{
-              scale: 0.975,
-            }}
+            className="absolute z-40 w-[305px] h-[385px] bg-[#fffdfd] rounded-[22px] p-3 pb-14 shadow-[0_25px_55px_rgba(90,40,70,0.25)] border border-white cursor-pointer"
           >
 
-            {/* PHOTO INNER FRAME */}
-            <div className="relative w-full h-full rounded-[14px] overflow-hidden bg-slate-100 border border-pink-100">
-
-              <img
-                src={currentPhoto}
-                alt={`Memory ${currentIndex + 1}`}
-                className="w-full h-full object-cover pointer-events-none select-none"
-                draggable="false"
-              />
-
-              {/* Soft photo glow */}
-              <div className="absolute inset-0 bg-gradient-to-t from-pink-600/10 via-transparent to-white/10 pointer-events-none" />
-
-              {/* Moving light reflection */}
-              <motion.div
-                className="absolute top-0 bottom-0 -left-[60%] w-[35%] bg-white/20 skew-x-[-18deg] pointer-events-none"
-                animate={{
-                  left: ["-60%", "140%"],
-                }}
-                transition={{
-                  duration: 4,
-                  repeat: Infinity,
-                  repeatDelay: 2.5,
-                  ease: "easeInOut",
-                }}
-              />
-
-            </div>
-
-            {/* Tape on photo */}
+            {/* washi tape */}
             <motion.div
-              className="absolute -top-[8px] left-1/2 -translate-x-1/2 w-[76px] h-[25px] bg-pink-200/85 rounded-sm z-40"
-              animate={{
-                rotate: [-3, 1, -3],
-              }}
-              transition={{
-                duration: 5,
-                repeat: Infinity,
+              className="absolute -top-5 left-1/2 -translate-x-1/2 w-[100px] h-[30px] bg-pink-200/90 z-50 shadow-sm"
+              style={{
+                rotate: -3,
               }}
             >
-              <div className="flex items-center justify-center h-full">
+              <div className="w-full h-full flex items-center justify-center">
                 <Heart
-                  size={12}
+                  size={18}
                   fill="currentColor"
                   className="text-pink-500"
                 />
               </div>
             </motion.div>
 
-            {/* Caption */}
-            <div className="absolute bottom-2 left-0 right-0 text-center">
-              <span className="font-hand text-sm text-slate-400">
-                a little piece of us ♡
-              </span>
+            {/* photo */}
+            <div className="relative w-full h-full rounded-[15px] overflow-hidden bg-slate-100 border border-pink-100">
+
+              <img
+                src={currentPhoto}
+                alt={`Memory ${currentIndex + 1}`}
+                className="w-full h-full object-cover select-none pointer-events-none"
+                draggable="false"
+              />
+
+              {/* soft photo glow */}
+              <div className="absolute inset-0 bg-gradient-to-t from-pink-500/10 via-transparent to-white/10 pointer-events-none" />
+
+              {/* moving light */}
+              <motion.div
+                className="absolute top-0 bottom-0 w-[70px] bg-white/20 skew-x-[-20deg]"
+                animate={{
+                  left: ["-30%", "130%"],
+                }}
+                transition={{
+                  duration: 4,
+                  repeat: Infinity,
+                  repeatDelay: 2,
+                  ease: "easeInOut",
+                }}
+              />
+
             </div>
 
-            {/* Corner heart */}
+            {/* bottom caption */}
+            <div className="absolute bottom-3 left-0 right-0 flex justify-center">
+
+              <span className="font-hand text-[17px] text-slate-500">
+                a little piece of us ♡
+              </span>
+
+            </div>
+
+            {/* tiny heart */}
             <Heart
-              size={18}
+              size={19}
               fill="currentColor"
-              className="absolute bottom-[13px] right-[15px] text-pink-300 rotate-12"
+              className="absolute bottom-3 right-5 text-pink-400"
             />
 
           </motion.div>
+
         </AnimatePresence>
 
-        {/* =================================================
-            FLOWER DECORATION
-        ================================================= */}
-
+        {/* floating side heart */}
         <motion.div
-          className="absolute bottom-[25px] left-[45px] md:left-[55px] z-40 pointer-events-none"
+          className="absolute left-[42px] top-[210px] z-50"
           animate={{
-            y: [0, -3, 0],
-            rotate: [-2, 1, -2],
+            y: [0, -8, 0],
+            rotate: [-8, 8, -8],
           }}
           transition={{
-            duration: 4,
+            duration: 3,
             repeat: Infinity,
-            ease: "easeInOut",
           }}
         >
-          <div className="relative">
-            <Flower2
-              size={42}
-              className="text-pink-300"
-            />
-            <Flower2
-              size={28}
-              className="absolute -right-4 -top-3 text-purple-300"
-            />
-          </div>
+          <Heart
+            size={19}
+            fill="currentColor"
+            className="text-pink-400"
+          />
         </motion.div>
 
-        {/* =================================================
-            SPARKLES AROUND ALBUM
-        ================================================= */}
-
-        {sparkles.map((star, index) => (
-          <motion.div
-            key={index}
-            className="absolute pointer-events-none z-40"
-            style={{
-              left: star.left,
-              top: star.top,
-            }}
-            animate={{
-              scale: [0.6, 1.25, 0.6],
-              rotate: [0, 90, 180],
-              opacity: [0.2, 0.9, 0.2],
-            }}
-            transition={{
-              duration: 3,
-              repeat: Infinity,
-              delay: star.delay,
-              ease: "easeInOut",
-            }}
-          >
-            <Sparkles
-              size={17}
-              className="text-pink-300"
-            />
-          </motion.div>
-        ))}
-
-        {/* Floating hearts */}
-        {floatingHearts.map((heart, index) => (
-          <motion.div
-            key={index}
-            className="absolute pointer-events-none z-40"
-            style={{
-              left: heart.left,
-              top: heart.top,
-            }}
-            animate={{
-              y: [0, -14, 0],
-              x: [0, index % 2 === 0 ? 5 : -5, 0],
-              opacity: [0.25, 0.85, 0.25],
-              rotate: [-8, 8, -8],
-            }}
-            transition={{
-              duration: heart.duration,
-              repeat: Infinity,
-              delay: heart.delay,
-              ease: "easeInOut",
-            }}
-          >
-            <Heart
-              size={heart.size}
-              fill="currentColor"
-              className="text-pink-300"
-            />
-          </motion.div>
-        ))}
-
-        {/* Next arrow */}
         <motion.div
-          className="absolute right-[18px] md:right-[35px] top-1/2 -translate-y-1/2 z-50 w-9 h-9 rounded-full bg-white/90 backdrop-blur-md shadow-lg border border-pink-100 flex items-center justify-center pointer-events-none"
+          className="absolute right-[45px] top-[115px] z-50"
           animate={{
-            x: [0, 5, 0],
-            opacity: [0.5, 1, 0.5],
+            y: [0, 7, 0],
+            rotate: [8, -8, 8],
           }}
           transition={{
-            duration: 1.8,
+            duration: 3.5,
             repeat: Infinity,
           }}
         >
-          <ChevronRight
-            size={18}
-            className="text-pink-500"
+          <Sparkles
+            size={20}
+            className="text-pink-300"
           />
         </motion.div>
 
@@ -810,10 +625,10 @@ function MemoriesScreen({ onNext }) {
 
       {/* =====================================================
           COUNTER
-      ===================================================== */}
+      ====================================================== */}
 
       <motion.div
-        className="relative z-30 -mt-1 mb-4"
+        className="relative z-50 -mt-1 flex items-center gap-4"
         key={currentIndex}
         initial={{
           opacity: 0,
@@ -824,29 +639,62 @@ function MemoriesScreen({ onNext }) {
           y: 0,
         }}
       >
-        <div className="flex items-center gap-4">
 
-          <span className="w-10 h-px bg-pink-300" />
+        <span className="w-10 h-px bg-pink-300" />
 
-          <span className="tracking-[0.22em] text-sm font-medium text-slate-500">
+        <div className="flex items-center gap-3 px-5 py-2 rounded-full border border-pink-200 bg-white/40 backdrop-blur-sm shadow-sm">
+
+          <Heart
+            size={13}
+            fill="currentColor"
+            className="text-pink-400"
+          />
+
+          <span className="text-[17px] tracking-[0.2em] font-medium text-slate-500">
             {String(currentIndex + 1).padStart(2, "0")}
-            {" "}
-            /
-            {" "}
+            {" / "}
             {String(memories.length).padStart(2, "0")}
           </span>
 
-          <span className="w-10 h-px bg-pink-300" />
+          <Heart
+            size={13}
+            fill="currentColor"
+            className="text-pink-400"
+          />
 
+        </div>
+
+        <span className="w-10 h-px bg-pink-300" />
+
+      </motion.div>
+
+      {/* =====================================================
+          NEXT HINT
+      ====================================================== */}
+
+      <motion.div
+        className="relative z-50 mt-2"
+        animate={{
+          opacity: [0.45, 1, 0.45],
+          y: [0, 3, 0],
+        }}
+        transition={{
+          duration: 2,
+          repeat: Infinity,
+        }}
+      >
+        <div className="flex items-center gap-2 text-xs text-pink-400">
+          <span>tap photo for next</span>
+          <ChevronRight size={13} />
         </div>
       </motion.div>
 
       {/* =====================================================
           LETTER BUTTON
-      ===================================================== */}
+      ====================================================== */}
 
       <motion.div
-        className="relative shrink-0 z-30 mb-6"
+        className="relative z-50 mt-5 mb-8"
         initial={{
           opacity: 0,
           y: 15,
@@ -860,12 +708,40 @@ function MemoriesScreen({ onNext }) {
           duration: 0.6,
         }}
       >
-        <Button
-          onClick={onNext}
-          text="A Letter For You"
-          animateIcon={false}
-          icon={<Mail size={18} />}
-        />
+
+        <motion.div
+          animate={{
+            scale: [1, 1.02, 1],
+          }}
+          transition={{
+            duration: 2.5,
+            repeat: Infinity,
+          }}
+        >
+          <Button
+            onClick={onNext}
+            text="A Letter For You"
+            animateIcon={false}
+            icon={<Mail size={19} />}
+          />
+        </motion.div>
+
+      </motion.div>
+
+      {/* watermark */}
+      <motion.div
+        className="fixed bottom-3 right-4 z-[100] text-xs text-slate-500/40 tracking-wide pointer-events-none"
+        initial={{
+          opacity: 0,
+        }}
+        animate={{
+          opacity: 1,
+        }}
+        transition={{
+          delay: 1,
+        }}
+      >
+        rafee🫶protiva
       </motion.div>
 
     </div>
