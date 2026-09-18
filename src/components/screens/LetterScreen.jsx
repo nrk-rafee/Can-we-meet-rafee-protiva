@@ -1,36 +1,207 @@
 "use client";
 
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
-  Mail,
   Heart,
   Sparkles,
-  Sun,
-  Moon,
+  Mail,
+  LockKeyhole,
+  Feather,
 } from "lucide-react";
 import Button from "../Button";
 
-function LetterScreen({ onNext }) {
-  const [isNight, setIsNight] = useState(false);
+const letterParagraphs = [
+  "My favorite person,",
+
+  "Sometimes I wish I could pause time, just so I could stay a little longer in the moments when I feel closest to you.",
+
+  "Until we meet again, I hope you remember that somewhere in this big world, there’s someone thinking about you, smiling because of you, and waiting for the next beautiful moment we get to share.",
+
+  "Distance may keep us apart for a while, but it can never change the little place you have in my heart.",
+
+  "I miss your smile, your laugh, and simply being next to you. Every little memory of us is something I keep close to my heart.",
+
+  "No matter how many miles are between us, a part of me is always right there with you.",
+];
+
+/* =========================================================
+   LITTLE BUTTERFLY
+   Pure CSS/SVG — no external image required
+========================================================= */
+
+function Butterfly({ className = "", delay = 0, duration = 7, size = 30 }) {
+  return (
+    <motion.div
+      className={`absolute pointer-events-none z-30 ${className}`}
+      initial={{
+        opacity: 0,
+        scale: 0.45,
+      }}
+      animate={{
+        opacity: [0, 0.9, 0.75, 0],
+        x: [0, 28, -15, 35],
+        y: [15, -35, -70, -105],
+        rotate: [-8, 8, -5, 10],
+        scale: [0.45, 0.8, 0.7, 0.5],
+      }}
+      transition={{
+        duration,
+        delay,
+        repeat: Infinity,
+        repeatDelay: 2.5,
+        ease: "easeInOut",
+      }}
+      style={{
+        width: size,
+        height: size,
+      }}
+    >
+      <motion.svg
+        viewBox="0 0 100 100"
+        width={size}
+        height={size}
+        animate={{
+          rotateY: [0, 65, 0, -65, 0],
+        }}
+        transition={{
+          duration: 0.65,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+      >
+        <defs>
+          <linearGradient id="butterflyPink" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="#fbcfe8" />
+            <stop offset="45%" stopColor="#f472b6" />
+            <stop offset="100%" stopColor="#a855f7" />
+          </linearGradient>
+
+          <linearGradient id="butterflyPurple" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="#ddd6fe" />
+            <stop offset="50%" stopColor="#c084fc" />
+            <stop offset="100%" stopColor="#ec4899" />
+          </linearGradient>
+
+          <filter id="butterflyGlow">
+            <feGaussianBlur stdDeviation="1.5" />
+          </filter>
+        </defs>
+
+        {/* soft glow */}
+        <ellipse
+          cx="50"
+          cy="50"
+          rx="30"
+          ry="35"
+          fill="#f9a8d4"
+          opacity="0.18"
+          filter="url(#butterflyGlow)"
+        />
+
+        {/* left upper wing */}
+        <path
+          d="M47 48 C29 8, 2 15, 9 43 C13 60, 30 65, 47 53 Z"
+          fill="url(#butterflyPink)"
+          stroke="#f9a8d4"
+          strokeWidth="2"
+        />
+
+        {/* left lower wing */}
+        <path
+          d="M47 55 C27 52, 10 63, 18 79 C25 91, 40 79, 49 61 Z"
+          fill="url(#butterflyPurple)"
+          stroke="#e9a8d4"
+          strokeWidth="2"
+        />
+
+        {/* right upper wing */}
+        <path
+          d="M53 48 C71 8, 98 15, 91 43 C87 60, 70 65, 53 53 Z"
+          fill="url(#butterflyPink)"
+          stroke="#f9a8d4"
+          strokeWidth="2"
+        />
+
+        {/* right lower wing */}
+        <path
+          d="M53 55 C73 52, 90 63, 82 79 C75 91, 60 79, 51 61 Z"
+          fill="url(#butterflyPurple)"
+          stroke="#e9a8d4"
+          strokeWidth="2"
+        />
+
+        {/* wing details */}
+        <circle cx="27" cy="36" r="5" fill="#fff" opacity="0.45" />
+        <circle cx="73" cy="36" r="5" fill="#fff" opacity="0.45" />
+
+        <circle cx="31" cy="66" r="3" fill="#fff" opacity="0.4" />
+        <circle cx="69" cy="66" r="3" fill="#fff" opacity="0.4" />
+
+        {/* body */}
+        <ellipse
+          cx="50"
+          cy="55"
+          rx="4"
+          ry="19"
+          fill="#6b365c"
+        />
+
+        {/* antenna */}
+        <path
+          d="M48 39 C42 28, 37 28, 34 25"
+          stroke="#6b365c"
+          strokeWidth="2"
+          fill="none"
+          strokeLinecap="round"
+        />
+
+        <path
+          d="M52 39 C58 28, 63 28, 66 25"
+          stroke="#6b365c"
+          strokeWidth="2"
+          fill="none"
+          strokeLinecap="round"
+        />
+
+        <circle cx="34" cy="25" r="2" fill="#6b365c" />
+        <circle cx="66" cy="25" r="2" fill="#6b365c" />
+      </motion.svg>
+    </motion.div>
+  );
+}
+
+export default function LetterScreen({ onNext }) {
+  const [opening, setOpening] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleOpen = () => {
+    if (opening || isOpen) return;
+
+    setOpening(true);
+
+    setTimeout(() => {
+      setIsOpen(true);
+      setOpening(false);
+    }, 1150);
+  };
+
+  useEffect(() => {
+    return () => {};
+  }, []);
 
   return (
-    <div
-      className={`relative w-full min-h-screen flex flex-col items-center overflow-hidden transition-all duration-1000 ${
-        isNight
-          ? "bg-gradient-to-b from-[#11152b] via-[#252044] to-[#171528]"
-          : "bg-gradient-to-b from-[#fff8fb] via-[#fff3f8] to-[#fdeef5]"
-      }`}
-    >
-      {/* ================= BACKGROUND ================= */}
+    <div className="relative flex flex-col items-center justify-center w-full min-h-screen h-full overflow-visible px-4 py-5">
 
-      {/* Day glow */}
+      {/* =========================================================
+          BACKGROUND GLOW
+      ========================================================== */}
+
       <motion.div
-        className={`absolute -top-20 -right-16 w-56 h-56 rounded-full blur-3xl pointer-events-none transition-all duration-1000 ${
-          isNight ? "opacity-0" : "bg-yellow-200/40 opacity-100"
-        }`}
+        className="absolute top-[12%] left-1/2 -translate-x-1/2 w-[360px] h-[360px] rounded-full bg-pink-200/20 blur-3xl pointer-events-none"
         animate={{
           scale: [1, 1.08, 1],
+          opacity: [0.25, 0.45, 0.25],
         }}
         transition={{
           duration: 5,
@@ -39,190 +210,28 @@ function LetterScreen({ onNext }) {
         }}
       />
 
-      {/* Night moon glow */}
       <motion.div
-        className={`absolute -top-10 -right-10 w-52 h-52 rounded-full blur-3xl pointer-events-none transition-all duration-1000 ${
-          isNight ? "bg-purple-500/20 opacity-100" : "opacity-0"
-        }`}
+        className="absolute bottom-[10%] left-1/2 -translate-x-1/2 w-[280px] h-[280px] rounded-full bg-purple-200/15 blur-3xl pointer-events-none"
         animate={{
-          scale: [1, 1.12, 1],
+          scale: [1.08, 1, 1.08],
+          opacity: [0.2, 0.38, 0.2],
         }}
         transition={{
-          duration: 6,
+          duration: 4.5,
           repeat: Infinity,
           ease: "easeInOut",
         }}
       />
 
-      {/* Day sun */}
-      <motion.div
-        className={`absolute top-20 right-8 md:right-16 z-0 transition-all duration-700 ${
-          isNight
-            ? "opacity-0 scale-50"
-            : "opacity-100 scale-100"
-        }`}
-        animate={{
-          rotate: 360,
-        }}
-        transition={{
-          duration: 18,
-          repeat: Infinity,
-          ease: "linear",
-        }}
-      >
-        <div className="w-16 h-16 rounded-full bg-yellow-300/80 shadow-[0_0_45px_rgba(250,204,21,0.45)] flex items-center justify-center">
-          <Sun
-            size={32}
-            className="text-yellow-600"
-          />
-        </div>
-      </motion.div>
-
-      {/* Night moon */}
-      <motion.div
-        className={`absolute top-20 right-8 md:right-16 z-0 transition-all duration-700 ${
-          isNight
-            ? "opacity-100 scale-100"
-            : "opacity-0 scale-50"
-        }`}
-      >
-        <div className="w-16 h-16 rounded-full bg-[#f8f3d6] shadow-[0_0_45px_rgba(248,243,214,0.3)] flex items-center justify-center">
-          <Moon
-            size={30}
-            className="text-[#77739d]"
-          />
-        </div>
-      </motion.div>
-
-      {/* ================= NIGHT STARS ================= */}
-
-      {[
-        { left: "8%", top: "18%", delay: 0 },
-        { left: "24%", top: "11%", delay: 1 },
-        { left: "43%", top: "20%", delay: 1.5 },
-        { left: "67%", top: "13%", delay: 0.7 },
-        { left: "86%", top: "28%", delay: 1.8 },
-        { left: "14%", top: "72%", delay: 1.2 },
-        { left: "88%", top: "67%", delay: 0.5 },
-      ].map((star, index) => (
-        <motion.div
-          key={index}
-          className={`absolute pointer-events-none transition-opacity duration-1000 ${
-            isNight
-              ? "opacity-80"
-              : "opacity-0"
-          }`}
-          style={{
-            left: star.left,
-            top: star.top,
-          }}
-          animate={{
-            scale: [0.7, 1.2, 0.7],
-            opacity: [0.35, 1, 0.35],
-          }}
-          transition={{
-            duration: 2.5,
-            repeat: Infinity,
-            delay: star.delay,
-            ease: "easeInOut",
-          }}
-        >
-          <Sparkles
-            size={13}
-            className="text-purple-200"
-          />
-        </motion.div>
-      ))}
-
-      {/* ================= FLOATING HEARTS ================= */}
-
-      {[1, 2, 3, 4].map((item, index) => (
-        <motion.div
-          key={item}
-          className={`absolute pointer-events-none transition-opacity duration-1000 ${
-            isNight
-              ? "text-pink-300/20"
-              : "text-pink-300/45"
-          }`}
-          style={{
-            left:
-              index % 2 === 0
-                ? `${8 + index * 4}%`
-                : "auto",
-            right:
-              index % 2 !== 0
-                ? `${7 + index * 3}%`
-                : "auto",
-            top: `${28 + index * 13}%`,
-          }}
-          animate={{
-            y: [0, -12, 0],
-            rotate: [-8, 8, -8],
-          }}
-          transition={{
-            duration: 4 + index * 0.4,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: index * 0.5,
-          }}
-        >
-          <Heart
-            size={index % 2 === 0 ? 17 : 13}
-            fill="currentColor"
-          />
-        </motion.div>
-      ))}
-
-      {/* ================= DAY / NIGHT BUTTON ================= */}
-
-      <motion.button
-        type="button"
-        onClick={() => setIsNight((prev) => !prev)}
-        className={`fixed top-4 right-4 z-[100] w-12 h-12 rounded-full flex items-center justify-center shadow-lg border backdrop-blur-md transition-all duration-500 ${
-          isNight
-            ? "bg-[#302b50]/90 border-purple-300/30 text-yellow-200"
-            : "bg-white/85 border-pink-200 text-pink-500"
-        }`}
-        whileHover={{
-          scale: 1.08,
-          rotate: 8,
-        }}
-        whileTap={{
-          scale: 0.9,
-        }}
-        aria-label="Toggle day and night mode"
-      >
-        <motion.div
-          key={isNight ? "moon" : "sun"}
-          initial={{
-            rotate: -90,
-            scale: 0,
-            opacity: 0,
-          }}
-          animate={{
-            rotate: 0,
-            scale: 1,
-            opacity: 1,
-          }}
-          transition={{
-            duration: 0.35,
-          }}
-        >
-          {isNight ? (
-            <Moon size={22} />
-          ) : (
-            <Sun size={22} />
-          )}
-        </motion.div>
-      </motion.button>
-
-      {/* ================= LETTER AREA ================= */}
+      {/* =========================================================
+          HEADER
+      ========================================================== */}
 
       <motion.div
-        className="relative z-10 w-full max-w-[600px] px-4 pt-[82px] pb-2"
+        className="relative z-20 text-center shrink-0"
         initial={{
           opacity: 0,
-          y: 25,
+          y: -20,
         }}
         animate={{
           opacity: 1,
@@ -233,254 +242,630 @@ function LetterScreen({ onNext }) {
           ease: "easeOut",
         }}
       >
-        {/* Letter card */}
-
         <motion.div
-          className={`relative w-full rounded-[30px] border backdrop-blur-xl shadow-2xl transition-all duration-1000 ${
-            isNight
-              ? "bg-[#29263f]/90 border-purple-300/15 shadow-black/30"
-              : "bg-white/90 border-pink-100 shadow-pink-200/30"
-          }`}
+          className="flex items-center justify-center gap-2 mb-1"
           animate={{
-            y: [0, -3, 0],
+            opacity: [0.7, 1, 0.7],
           }}
           transition={{
-            duration: 6,
+            duration: 2.5,
             repeat: Infinity,
-            ease: "easeInOut",
           }}
         >
-          {/* Decorative top sparkle */}
+          <span className="text-rose-400 font-bold tracking-[0.2em] uppercase text-[10px] md:text-xs">
+            {isOpen ? "FROM MY HEART ♡" : "A MESSAGE FOR YOU"}
+          </span>
+        </motion.div>
 
-          <div className="absolute top-5 left-5">
-            <Sparkles
-              size={22}
-              className={
-                isNight
-                  ? "text-purple-300"
-                  : "text-pink-300"
-              }
-            />
-          </div>
+        <h2 className="text-2xl md:text-5xl font-bold text-slate-700">
+          {isOpen ? "A Letter For You" : "From My Heart"}
+        </h2>
 
-          {/* Decorative heart */}
-
-          <motion.div
-            className="absolute top-5 right-5"
+        {!isOpen && (
+          <motion.p
+            className="mt-2 text-xs md:text-sm text-slate-400"
             animate={{
-              scale: [1, 1.12, 1],
+              opacity: [0.55, 1, 0.55],
             }}
             transition={{
               duration: 2,
               repeat: Infinity,
             }}
           >
-            <Heart
-              size={22}
-              fill="currentColor"
-              className={
-                isNight
-                  ? "text-pink-300"
-                  : "text-pink-400"
-              }
-            />
-          </motion.div>
+            There&apos;s something waiting inside ♡
+          </motion.p>
+        )}
+      </motion.div>
 
-          {/* Header */}
+      {/* =========================================================
+          MAIN AREA
+      ========================================================== */}
 
-          <div className="text-center pt-7 px-5">
+      <div className="relative z-20 w-full max-w-[440px] flex items-center justify-center my-4 md:my-6">
+
+        <AnimatePresence mode="wait">
+
+          {/* =====================================================
+              CLOSED ENVELOPE
+          ====================================================== */}
+
+          {!isOpen && (
             <motion.div
-              className={`mx-auto w-16 h-16 rounded-[20px] flex items-center justify-center mb-4 transition-all duration-1000 ${
-                isNight
-                  ? "bg-purple-400/15"
-                  : "bg-pink-100"
-              }`}
+              key="closed-envelope"
+              className="relative w-full max-w-[420px] h-[255px] md:h-[275px] cursor-pointer select-none"
+              initial={{
+                opacity: 0,
+                y: 35,
+                scale: 0.88,
+              }}
               animate={{
-                scale: [1, 1.03, 1],
+                opacity: 1,
+                y: 0,
+                scale: 1,
+              }}
+              exit={{
+                opacity: 0,
+                scale: 0.9,
+                y: 20,
               }}
               transition={{
-                duration: 3,
-                repeat: Infinity,
+                type: "spring",
+                damping: 18,
+                stiffness: 120,
+              }}
+              onClick={handleOpen}
+              whileHover={{
+                y: -5,
+                scale: 1.015,
+              }}
+              whileTap={{
+                scale: 0.975,
               }}
             >
-              <Mail
-                size={30}
-                className={
-                  isNight
-                    ? "text-purple-300"
-                    : "text-pink-400"
-                }
+
+              {/* Envelope glow */}
+
+              <motion.div
+                className="absolute inset-4 rounded-[28px] bg-pink-300/35 blur-2xl"
+                animate={{
+                  opacity: [0.35, 0.65, 0.35],
+                  scale: [0.96, 1.04, 0.96],
+                }}
+                transition={{
+                  duration: 2.8,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
               />
+
+              {/* Envelope */}
+
+              <div className="absolute inset-0 rounded-[25px] overflow-visible">
+
+                <div className="absolute inset-0 rounded-[25px] bg-gradient-to-br from-[#fff8fa] via-[#ffeaf0] to-[#ffdce7] border border-pink-200 shadow-[0_22px_55px_rgba(236,72,153,0.18)] overflow-hidden">
+
+                  <div
+                    className="absolute inset-0 pointer-events-none"
+                    style={{
+                      clipPath:
+                        "polygon(0 0, 50% 54%, 0 100%)",
+                      background:
+                        "linear-gradient(145deg, rgba(255,255,255,0.9), rgba(255,210,223,0.8))",
+                    }}
+                  />
+
+                  <div
+                    className="absolute inset-0 pointer-events-none"
+                    style={{
+                      clipPath:
+                        "polygon(100% 0, 50% 54%, 100% 100%)",
+                      background:
+                        "linear-gradient(215deg, rgba(255,255,255,0.8), rgba(255,205,218,0.78))",
+                    }}
+                  />
+
+                  <div
+                    className="absolute inset-0 pointer-events-none"
+                    style={{
+                      clipPath:
+                        "polygon(0 100%, 50% 52%, 100% 100%)",
+                      background:
+                        "linear-gradient(180deg, rgba(255,224,233,0.75), rgba(255,194,210,0.98))",
+                    }}
+                  />
+
+                  <div className="absolute left-8 right-8 bottom-[62px] h-px bg-white/70" />
+
+                  <motion.div
+                    className="absolute top-4 right-4 w-11 h-11 rounded-lg border border-dashed border-pink-300/80 flex items-center justify-center bg-white/30 z-10"
+                    animate={{
+                      rotate: [0, 3, -3, 0],
+                    }}
+                    transition={{
+                      duration: 3,
+                      repeat: Infinity,
+                    }}
+                  >
+                    <Sparkles
+                      size={20}
+                      className="text-pink-400"
+                    />
+                  </motion.div>
+                </div>
+
+                {/* Letter preview */}
+
+                <motion.div
+                  className="absolute left-[7%] right-[7%] bottom-[15px] h-[195px] rounded-xl bg-[#fffdf9] border border-pink-100 shadow-[0_8px_25px_rgba(0,0,0,0.08)] z-[2]"
+                  animate={
+                    opening
+                      ? {
+                          y: -95,
+                          scale: 1.04,
+                        }
+                      : {
+                          y: 0,
+                          scale: 1,
+                        }
+                  }
+                  transition={{
+                    duration: 0.9,
+                    ease: [0.22, 1, 0.36, 1],
+                  }}
+                >
+                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-pink-200 via-rose-300 to-purple-200" />
+
+                  <div className="p-5 text-center">
+                    <Feather
+                      size={18}
+                      className="mx-auto text-pink-300 mb-3"
+                    />
+
+                    <p className="font-hand text-slate-400 text-sm leading-relaxed">
+                      A little piece of my heart,
+                      <br />
+                      waiting just for you ♡
+                    </p>
+                  </div>
+                </motion.div>
+
+                {/* Flap */}
+
+                <motion.div
+                  className="absolute top-0 left-0 right-0 h-[150px] z-30 origin-top"
+                  style={{
+                    transformStyle: "preserve-3d",
+                  }}
+                  animate={{
+                    rotateX: opening ? -175 : 0,
+                  }}
+                  transition={{
+                    duration: 1,
+                    ease: [0.22, 1, 0.36, 1],
+                  }}
+                >
+                  <div
+                    className="absolute inset-0 rounded-t-[25px]"
+                    style={{
+                      clipPath:
+                        "polygon(0 0, 100% 0, 50% 100%)",
+                      background:
+                        "linear-gradient(180deg, #ffdce7 0%, #ffcbd9 100%)",
+                      boxShadow:
+                        "0 8px 18px rgba(236,72,153,0.12)",
+                      backfaceVisibility: "hidden",
+                    }}
+                  />
+
+                  <div
+                    className="absolute inset-0 pointer-events-none"
+                    style={{
+                      clipPath:
+                        "polygon(0 0, 100% 0, 50% 100%)",
+                      background:
+                        "linear-gradient(145deg, rgba(255,255,255,0.65), rgba(255,255,255,0))",
+                    }}
+                  />
+                </motion.div>
+
+                {/* Heart seal */}
+
+                <motion.div
+                  className="absolute left-1/2 top-[49%] -translate-x-1/2 -translate-y-1/2 z-40"
+                  animate={
+                    opening
+                      ? {
+                          scale: 0.7,
+                          opacity: 0,
+                          y: 15,
+                        }
+                      : {
+                          scale: [1, 1.04, 1],
+                          opacity: 1,
+                          y: [0, -3, 0],
+                        }
+                  }
+                  transition={
+                    opening
+                      ? {
+                          duration: 0.35,
+                        }
+                      : {
+                          duration: 2.2,
+                          repeat: Infinity,
+                          ease: "easeInOut",
+                        }
+                  }
+                >
+                  <div className="relative">
+                    <div className="absolute inset-0 rounded-full bg-pink-400/30 blur-xl" />
+
+                    <div className="relative w-[76px] h-[76px] rounded-full bg-gradient-to-br from-[#ff6b91] to-[#f43f6f] border-[5px] border-white shadow-[0_10px_25px_rgba(244,63,111,0.28)] flex items-center justify-center">
+                      <Heart
+                        size={36}
+                        className="text-white fill-white"
+                      />
+                    </div>
+                  </div>
+                </motion.div>
+
+                {/* Tap */}
+
+                <motion.div
+                  className="absolute left-0 right-0 bottom-[43px] text-center z-40"
+                  animate={{
+                    opacity: opening
+                      ? 0
+                      : [0.65, 1, 0.65],
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                  }}
+                >
+                  <div className="flex items-center justify-center gap-2">
+                    <LockKeyhole
+                      size={15}
+                      className="text-rose-500"
+                    />
+
+                    <span className="text-rose-500 font-bold tracking-wide text-sm">
+                      {opening
+                        ? "OPENING..."
+                        : "TAP TO OPEN"}
+                    </span>
+                  </div>
+                </motion.div>
+
+                <div className="absolute left-0 right-0 bottom-4 text-center z-40">
+                  <span className="text-xs text-slate-400">
+                    A little something from my heart ♡
+                  </span>
+                </div>
+
+              </div>
             </motion.div>
+          )}
 
-            <h2
-              className={`text-3xl md:text-4xl font-bold transition-colors duration-1000 ${
-                isNight
-                  ? "text-white"
-                  : "text-slate-700"
-              }`}
+          {/* =====================================================
+              OPEN LETTER
+          ====================================================== */}
+
+          {isOpen && (
+            <motion.div
+              key="open-letter"
+              className="relative w-full max-w-[430px]"
+              initial={{
+                opacity: 0,
+                scale: 0.9,
+                y: 50,
+              }}
+              animate={{
+                opacity: 1,
+                scale: 1,
+                y: 0,
+              }}
+              transition={{
+                duration: 0.7,
+                ease: [0.22, 1, 0.36, 1],
+              }}
             >
-              A Letter For You
-            </h2>
 
-            <p
-              className={`mt-2 text-sm tracking-[0.35em] font-medium transition-colors duration-1000 ${
-                isNight
-                  ? "text-purple-300"
-                  : "text-purple-400"
-              }`}
-            >
-              FROM MY HEART ♡
-            </p>
+              {/* =================================================
+                  DECORATIVE BACK CARD
+              ================================================== */}
 
-            {/* Divider */}
-
-            <div className="flex items-center justify-center gap-3 mt-4">
-              <span
-                className={`w-16 h-[2px] transition-colors duration-1000 ${
-                  isNight
-                    ? "bg-purple-300/30"
-                    : "bg-pink-200"
-                }`}
+              <motion.div
+                className="absolute left-1/2 -translate-x-1/2 bottom-2 w-[92%] h-[72%] rounded-2xl bg-gradient-to-br from-pink-100/70 to-purple-100/70 shadow-lg"
+                initial={{
+                  opacity: 0,
+                  scale: 0.8,
+                }}
+                animate={{
+                  opacity: 1,
+                  scale: 1,
+                }}
+                transition={{
+                  delay: 0.15,
+                  duration: 0.5,
+                }}
               />
 
-              <Heart
-                size={18}
-                fill="currentColor"
-                className={
-                  isNight
-                    ? "text-pink-300"
-                    : "text-pink-400"
-                }
-              />
+              {/* =================================================
+                  MAIN LETTER BOX
+              ================================================== */}
 
-              <span
-                className={`w-16 h-[2px] transition-colors duration-1000 ${
-                  isNight
-                    ? "bg-purple-300/30"
-                    : "bg-pink-200"
-                }`}
-              />
-            </div>
-          </div>
+              <motion.div
+                className="relative z-10 w-full h-[62vh] max-h-[690px] min-h-[510px] rounded-[28px] bg-[#fffdfc] border border-pink-100 shadow-[0_25px_70px_rgba(236,72,153,0.16)] overflow-hidden"
+                initial={{
+                  y: 80,
+                  scale: 0.82,
+                  rotate: 1.5,
+                }}
+                animate={{
+                  y: 0,
+                  scale: 1,
+                  rotate: 0,
+                }}
+                transition={{
+                  delay: 0.18,
+                  type: "spring",
+                  damping: 18,
+                  stiffness: 100,
+                }}
+              >
 
-          {/* ================= LETTER TEXT ================= */}
+                {/* Top gradient */}
 
-          <div
-            className={`px-7 md:px-10 pt-5 pb-6 font-hand text-[16px] md:text-[17px] leading-[1.75] transition-colors duration-1000 ${
-              isNight
-                ? "text-purple-100/85"
-                : "text-slate-600"
-            }`}
+                <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-pink-200 via-rose-300 to-purple-200 z-40" />
+
+                {/* =================================================
+                    BUTTERFLIES
+                ================================================== */}
+
+                <Butterfly
+                  className="left-[8%] top-[34%]"
+                  delay={0.8}
+                  duration={7}
+                  size={27}
+                />
+
+                <Butterfly
+                  className="right-[9%] top-[48%]"
+                  delay={3.2}
+                  duration={8}
+                  size={24}
+                />
+
+                <Butterfly
+                  className="left-[48%] top-[67%]"
+                  delay={5.5}
+                  duration={7.5}
+                  size={22}
+                />
+
+                {/* =================================================
+                    TOP ICONS
+                ================================================== */}
+
+                <motion.div
+                  className="absolute top-4 left-4 z-40"
+                  animate={{
+                    rotate: [0, 8, -8, 0],
+                  }}
+                  transition={{
+                    duration: 4,
+                    repeat: Infinity,
+                  }}
+                >
+                  <Sparkles
+                    size={19}
+                    className="text-pink-300"
+                  />
+                </motion.div>
+
+                <motion.div
+                  className="absolute top-4 right-4 z-40"
+                  animate={{
+                    scale: [1, 1.12, 1],
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                  }}
+                >
+                  <Heart
+                    size={20}
+                    className="text-pink-400 fill-pink-300"
+                  />
+                </motion.div>
+
+                {/* =================================================
+                    FIXED LETTER HEADER
+                ================================================== */}
+
+                <div className="relative z-20 pt-8 pb-3 px-5 text-center border-b border-pink-100 bg-gradient-to-b from-pink-50/80 to-white">
+
+                  <Mail
+                    size={25}
+                    className="mx-auto text-pink-400 mb-2"
+                  />
+
+                  <h3 className="text-xl md:text-3xl font-bold text-slate-700">
+                    A Letter For You
+                  </h3>
+
+                  <p className="mt-1 text-[10px] md:text-sm tracking-[0.28em] text-purple-400 font-medium">
+                    FROM MY HEART ♡
+                  </p>
+
+                  <div className="flex items-center justify-center gap-3 mt-3">
+                    <span className="w-12 md:w-20 h-px bg-pink-200" />
+
+                    <Heart
+                      size={13}
+                      className="text-pink-400 fill-pink-400"
+                    />
+
+                    <span className="w-12 md:w-20 h-px bg-pink-200" />
+                  </div>
+                </div>
+
+                {/* =================================================
+                    SCROLLABLE LETTER BODY
+
+                    IMPORTANT:
+                    Only this section scrolls.
+                ================================================== */}
+
+                <div
+                  className="relative z-10 px-5 md:px-8 py-4 md:py-5 h-[calc(100%-155px)] overflow-y-auto overscroll-contain"
+                  style={{
+                    scrollbarWidth: "thin",
+                    scrollbarColor: "#f9a8d4 transparent",
+                  }}
+                >
+
+                  {/* subtle inner glow */}
+
+                  <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-white/10 via-transparent to-pink-50/20" />
+
+                  <div className="relative font-hand text-slate-700 text-[15px] md:text-xl leading-[1.75]">
+
+                    {letterParagraphs.map((paragraph, index) => (
+                      <motion.p
+                        key={index}
+                        className="mb-5 last:mb-3"
+                        initial={{
+                          opacity: 0,
+                          y: 12,
+                        }}
+                        animate={{
+                          opacity: 1,
+                          y: 0,
+                        }}
+                        transition={{
+                          delay: 1 + index * 0.25,
+                          duration: 0.55,
+                          ease: "easeOut",
+                        }}
+                      >
+                        {paragraph}
+                      </motion.p>
+                    ))}
+
+                    {/* Signature */}
+
+                    <motion.div
+                      className="text-right pt-1 pb-3"
+                      initial={{
+                        opacity: 0,
+                        x: 20,
+                      }}
+                      animate={{
+                        opacity: 1,
+                        x: 0,
+                      }}
+                      transition={{
+                        delay: 2.7,
+                        duration: 0.7,
+                      }}
+                    >
+                      <p className="font-hand text-pink-400 text-xl md:text-3xl italic">
+                        Always yours,
+                      </p>
+
+                      <p className="font-hand text-purple-400 text-lg md:text-2xl mt-1">
+                        rafee ♡
+                      </p>
+                    </motion.div>
+
+                    <div className="text-center pb-2">
+                      <span className="text-[10px] md:text-xs text-slate-400">
+                        no matter how far, still close to my heart ♡
+                      </span>
+                    </div>
+
+                  </div>
+                </div>
+
+                {/* =================================================
+                    BOTTOM DECORATION
+                ================================================== */}
+
+                <motion.div
+                  className="absolute bottom-4 left-4 z-40"
+                  animate={{
+                    rotate: [0, 8, -8, 0],
+                  }}
+                  transition={{
+                    duration: 4,
+                    repeat: Infinity,
+                  }}
+                >
+                  <Sparkles
+                    size={17}
+                    className="text-purple-300"
+                  />
+                </motion.div>
+
+                {/* scroll hint */}
+
+                <motion.div
+                  className="absolute bottom-3 right-4 z-40 pointer-events-none"
+                  animate={{
+                    opacity: [0.35, 0.8, 0.35],
+                    y: [0, 3, 0],
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                  }}
+                >
+                  <span className="text-[9px] text-pink-300">
+                    scroll ↓
+                  </span>
+                </motion.div>
+
+              </motion.div>
+
+            </motion.div>
+          )}
+
+        </AnimatePresence>
+      </div>
+
+      {/* =========================================================
+          NEXT BUTTON
+      ========================================================== */}
+
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            className="relative z-30 mt-2 mb-2"
+            initial={{
+              opacity: 0,
+              y: 20,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+            transition={{
+              delay: 1.5,
+              duration: 0.7,
+            }}
           >
-            <p className="mb-4">
-              My Dearest,
-            </p>
-
-            <p className="mb-4">
-              Every single day we spend apart only makes me
-              realize how much you truly mean to me. The
-              distance is hard sometimes, but it’s just a test
-              of how far our love can travel.
-            </p>
-
-            <p className="mb-4">
-              I count the days until I can finally hold you in
-              my arms again. You are my home, my favorite
-              person, and my safe place.
-            </p>
-
-            <p className="mb-4">
-              Even when we are miles apart, I carry you in my
-              heart everywhere I go. I miss your smile, your
-              laugh, and just simply being next to you.
-            </p>
-
-            <p className="mb-4">
-              Thank you for being the best part of my life.
-              I promise the wait will be worth it when I
-              finally get to see you again.
-            </p>
-
-            <div
-              className={`text-right mt-4 transition-colors duration-1000 ${
-                isNight
-                  ? "text-pink-300"
-                  : "text-pink-400"
-              }`}
-            >
-              <p>Forever Yours,</p>
-              <p className="text-xl mt-1">
-                Me :)
-              </p>
-            </div>
-          </div>
-
-          {/* Bottom decoration */}
-
-          <div className="absolute bottom-5 left-5">
-            <Sparkles
-              size={18}
-              className={
-                isNight
-                  ? "text-purple-300"
-                  : "text-pink-300"
-              }
+            <Button
+              onClick={onNext}
+              text="One Last Thing"
+              icon={<Heart size={18} />}
+              animateIcon={false}
             />
-          </div>
-        </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-        {/* ================= ONE LAST THING ================= */}
-        {/* IMPORTANT: This is OUTSIDE the letter box */}
-
-        <motion.div
-          className="relative z-30 flex justify-center mt-6 mb-5"
-          initial={{
-            opacity: 0,
-            y: 15,
-          }}
-          animate={{
-            opacity: 1,
-            y: 0,
-          }}
-          transition={{
-            delay: 0.7,
-            duration: 0.6,
-          }}
-        >
-          <Button
-            onClick={onNext}
-            text="One Last Thing"
-            animateIcon={false}
-            icon={<Heart size={18} />}
-          />
-        </motion.div>
-      </motion.div>
-
-      {/* ================= WATERMARK ================= */}
-
-      <motion.div
-        className={`fixed bottom-3 right-4 z-50 text-sm pointer-events-none transition-colors duration-1000 ${
-          isNight
-            ? "text-white/35"
-            : "text-slate-400/60"
-        }`}
-        initial={{
-          opacity: 0,
-          x: 20,
-        }}
-        animate={{
-          opacity: 1,
-          x: 0,
-        }}
-        transition={{
-          delay: 1,
-        }}
-      >
-        rafee🫶protiva
-      </motion.div>
     </div>
   );
 }
-
-export default LetterScreen;
