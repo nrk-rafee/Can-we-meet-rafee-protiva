@@ -218,7 +218,7 @@ function MemoriesScreen({ onNext }) {
             }}
           >
             <motion.img
-              src="/images/butterfly.png"
+              src="/images/butterfly-2. webp"
               alt=""
               aria-hidden="true"
               draggable="false"
