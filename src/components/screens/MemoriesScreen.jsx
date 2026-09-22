@@ -19,48 +19,43 @@ const memories = [
   "/images/IMG-20260329-WA0002.jpg",
 ];
 
-/* ---------------- BUTTERFLIES ---------------- */
+/* =====================================================
+   BUTTERFLIES
+   Things We'll Do section-এর মতো illustrated butterfly
+===================================================== */
 
 const butterflies = [
   {
-    top: "18%",
+    top: "25%",
     startX: "-12vw",
-    endX: "110vw",
-    duration: 18,
+    endX: "112vw",
+    duration: 19,
     delay: 0,
-    size: 1,
-  },
-  {
-    top: "32%",
-    startX: "110vw",
-    endX: "-12vw",
-    duration: 21,
-    delay: 4,
-    size: 0.72,
+    size: 0.82,
   },
   {
     top: "48%",
-    startX: "-12vw",
-    endX: "110vw",
-    duration: 23,
-    delay: 2,
-    size: 0.58,
-  },
-  {
-    top: "65%",
-    startX: "110vw",
+    startX: "112vw",
     endX: "-12vw",
-    duration: 20,
-    delay: 8,
-    size: 0.8,
+    duration: 23,
+    delay: 5,
+    size: 0.62,
   },
   {
-    top: "78%",
+    top: "68%",
     startX: "-12vw",
-    endX: "110vw",
+    endX: "112vw",
+    duration: 21,
+    delay: 10,
+    size: 0.72,
+  },
+  {
+    top: "82%",
+    startX: "112vw",
+    endX: "-12vw",
     duration: 25,
-    delay: 12,
-    size: 0.62,
+    delay: 14,
+    size: 0.55,
   },
 ];
 
@@ -82,24 +77,40 @@ const particles = [
   [54, 91],
 ];
 
-function Butterfly({ data, index }) {
+function FlyingButterfly({ data, index }) {
   return (
     <motion.div
-      className="real-butterfly"
+      className="flying-butterfly"
       style={{
         top: data.top,
         scale: data.size,
       }}
-      initial={{ x: data.startX }}
+      initial={{
+        x: data.startX,
+        y: 0,
+        rotate: 0,
+      }}
       animate={{
         x: [
           data.startX,
-          index % 2 === 0 ? "25vw" : "75vw",
+          index % 2 === 0 ? "22vw" : "78vw",
           index % 2 === 0 ? "72vw" : "30vw",
           data.endX,
         ],
-        y: [0, -45, 35, -20, 0],
-        rotate: [0, 8, -7, 6, 0],
+        y: [
+          0,
+          -35,
+          28,
+          -18,
+          0,
+        ],
+        rotate: [
+          0,
+          index % 2 === 0 ? 7 : -7,
+          index % 2 === 0 ? -5 : 5,
+          index % 2 === 0 ? 6 : -6,
+          0,
+        ],
       }}
       transition={{
         duration: data.duration,
@@ -108,53 +119,60 @@ function Butterfly({ data, index }) {
         ease: "easeInOut",
       }}
     >
-      <div className="butterfly-wing wing-left" />
-      <div className="butterfly-wing wing-right" />
-      <div className="butterfly-body" />
-      <div className="antenna antenna-left" />
-      <div className="antenna antenna-right" />
+      <img
+        src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f98b.svg"
+        alt=""
+        draggable="false"
+      />
     </motion.div>
   );
 }
 
 export default function MemoriesScreen({ onNext }) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isFlipping, setIsFlipping] = useState(false);
+  const [isTurning, setIsTurning] = useState(false);
 
   const nextIndex =
     currentIndex === memories.length - 1
       ? 0
       : currentIndex + 1;
 
-  const previousIndex =
-    currentIndex === 0
-      ? null
-      : currentIndex - 1;
-
-  /* ---------------- PAGE TURN ---------------- */
+  /* =====================================================
+     PAGE TURN
+  ===================================================== */
 
   const nextMemory = () => {
-    if (isFlipping) return;
+    if (isTurning) return;
 
-    setIsFlipping(true);
+    setIsTurning(true);
 
+    /*
+      Animation শেষ হওয়ার সাথে সাথে
+      নতুন complete spread set হবে।
+    */
     setTimeout(() => {
       setCurrentIndex(nextIndex);
-      setIsFlipping(false);
-    }, 850);
+      setIsTurning(false);
+    }, 900);
   };
 
   return (
     <main className="memories-page">
 
-      {/* BACKGROUND */}
+      {/* =================================================
+          BACKGROUND
+      ================================================= */}
+
       <div className="dream-background" />
 
       <div className="pink-glow glow-a" />
       <div className="pink-glow glow-b" />
       <div className="pink-glow glow-c" />
 
-      {/* LIGHT PARTICLES */}
+      {/* =================================================
+          LIGHT PARTICLES
+      ================================================= */}
+
       <div className="particles">
         {particles.map(([left, top], i) => (
           <motion.span
@@ -179,7 +197,10 @@ export default function MemoriesScreen({ onNext }) {
         ))}
       </div>
 
-      {/* SPARKLES */}
+      {/* =================================================
+          SPARKLES
+      ================================================= */}
+
       <div className="sparkles">
         {[...Array(12)].map((_, i) => (
           <motion.div
@@ -205,10 +226,13 @@ export default function MemoriesScreen({ onNext }) {
         ))}
       </div>
 
-      {/* BUTTERFLIES */}
+      {/* =================================================
+          FLYING BUTTERFLIES
+      ================================================= */}
+
       <div className="butterflies">
         {butterflies.map((item, index) => (
-          <Butterfly
+          <FlyingButterfly
             key={index}
             data={item}
             index={index}
@@ -216,7 +240,10 @@ export default function MemoriesScreen({ onNext }) {
         ))}
       </div>
 
-      {/* FLOATING HEARTS */}
+      {/* =================================================
+          FLOATING HEARTS
+      ================================================= */}
+
       {[
         ["7%", "42%", 18],
         ["90%", "34%", 14],
@@ -228,7 +255,10 @@ export default function MemoriesScreen({ onNext }) {
         <motion.div
           key={i}
           className="floating-heart"
-          style={{ left, top }}
+          style={{
+            left,
+            top,
+          }}
           animate={{
             y: [0, -13, 0],
             x: [0, i % 2 ? -6 : 6, 0],
@@ -240,15 +270,27 @@ export default function MemoriesScreen({ onNext }) {
             repeat: Infinity,
           }}
         >
-          <Heart size={size} fill="currentColor" />
+          <Heart
+            size={size}
+            fill="currentColor"
+          />
         </motion.div>
       ))}
 
-      {/* TITLE */}
+      {/* =================================================
+          TITLE
+      ================================================= */}
+
       <motion.header
         className="memory-header"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
+        initial={{
+          opacity: 0,
+          y: -20,
+        }}
+        animate={{
+          opacity: 1,
+          y: 0,
+        }}
       >
         <div className="title-row">
           <Camera />
@@ -256,10 +298,15 @@ export default function MemoriesScreen({ onNext }) {
           <Camera />
         </div>
 
-        <p>Little moments, forever ours ♡</p>
+        <p>
+          Little moments, forever ours ♡
+        </p>
       </motion.header>
 
-      {/* DOTS */}
+      {/* =================================================
+          DOTS
+      ================================================= */}
+
       <div className="memory-dots">
         {memories.map((_, i) => (
           <span
@@ -273,142 +320,108 @@ export default function MemoriesScreen({ onNext }) {
         ))}
       </div>
 
-      {/* ==========================================
-          REAL OPEN BOOK ALBUM
-      ========================================== */}
+      {/* =================================================
+          BOOK AREA
+      ================================================= */}
 
       <section className="album-area">
 
-        {/* BACK SCRAPBOOK CARDS */}
+        {/* Decorative cards behind the book */}
         <div className="back-card back-card-one" />
         <div className="back-card back-card-two" />
 
-        {/* BOOK */}
         <div className="book-scene">
 
-          <div className="book">
+          {/* =================================================
+              BOOK
+          ================================================= */}
 
-            {/* LEFT PAGE */}
-            <div className="book-page book-left-page">
+          <div
+            className="memory-book"
+            onClick={nextMemory}
+          >
 
-              {previousIndex !== null ? (
-                <div className="page-inner">
-                  <img
-                    src={memories[previousIndex]}
-                    alt={`Memory ${previousIndex + 1}`}
-                    draggable="false"
-                  />
+            {/* =================================================
+                NEXT COMPLETE PHOTO
+                এটা পুরো 2-page spread-এর নিচে থাকবে
+            ================================================= */}
 
-                  <div className="page-shine" />
+            <div className="next-spread">
+              <img
+                src={memories[nextIndex]}
+                alt={`Memory ${nextIndex + 1}`}
+                draggable="false"
+              />
 
-                  <div className="page-caption">
-                    a little piece of us ♡
-                  </div>
-                </div>
-              ) : (
-                <div className="first-left-page">
+              <div className="spread-light" />
+            </div>
 
-                  <Heart
-                    size={42}
-                    fill="currentColor"
-                  />
+            {/* =================================================
+                CURRENT LEFT PAGE
+                Current photo-এর left half
+            ================================================= */}
 
-                  <span>our little</span>
-                  <strong>memories</strong>
+            <div className="current-left-page">
 
-                  <small>
-                    forever kept here ♡
-                  </small>
+              <img
+                src={memories[currentIndex]}
+                alt={`Memory ${currentIndex + 1}`}
+                draggable="false"
+              />
 
-                </div>
-              )}
+              <div className="spread-light" />
 
             </div>
 
-            {/* NEXT PHOTO UNDER THE TURNING PAGE */}
-            <div className="book-page book-right-page">
+            {/* =================================================
+                CURRENT RIGHT PAGE
+                এটিই আসল turning page
+            ================================================= */}
 
-              <div className="page-inner">
+            <motion.div
+              className="turning-page"
+              animate={{
+                rotateY: isTurning ? -180 : 0,
+              }}
+              transition={{
+                duration: 0.9,
+                ease: [0.645, 0.045, 0.355, 1],
+              }}
+            >
+
+              {/* FRONT = current image-এর right half */}
+              <div className="turn-front">
 
                 <img
-                  src={memories[nextIndex]}
-                  alt={`Memory ${nextIndex + 1}`}
+                  src={memories[currentIndex]}
+                  alt={`Memory ${currentIndex + 1}`}
                   draggable="false"
                 />
 
-                <div className="page-shine" />
+                <div className="page-gloss" />
 
-                <div className="page-caption">
-                  a little piece of us ♡
-                </div>
-
-              </div>
-
-            </div>
-
-            {/* TURNING PAGE */}
-            <motion.div
-              className={`turning-page ${
-                isFlipping ? "turning" : ""
-              }`}
-              animate={{
-                rotateY: isFlipping ? -180 : 0,
-              }}
-              transition={{
-                duration: 0.85,
-                ease: [0.645, 0.045, 0.355, 1],
-              }}
-              onClick={nextMemory}
-            >
-
-              {/* FRONT = CURRENT PHOTO */}
-              <div className="turn-face turn-front">
-
-                <div className="page-inner">
-
-                  <img
-                    src={memories[currentIndex]}
-                    alt={`Memory ${currentIndex + 1}`}
-                    draggable="false"
+                <div className="page-heart">
+                  <Heart
+                    size={22}
+                    fill="white"
                   />
-
-                  <div className="page-shine" />
-
-                  <motion.div
-                    className="photo-heart"
-                    animate={{
-                      scale: [1, 1.12, 1],
-                    }}
-                    transition={{
-                      duration: 2,
-                      repeat: Infinity,
-                    }}
-                  >
-                    <Heart
-                      size={20}
-                      fill="white"
-                    />
-                  </motion.div>
-
-                  <div className="page-caption">
-                    a little piece of us ♡
-                  </div>
-
                 </div>
 
               </div>
 
               {/* BACK OF TURNING PAGE */}
-              <div className="turn-face turn-back">
+              <div className="turn-back">
 
-                <div className="paper-back">
+                <div className="back-paper">
 
                   <Heart
-                    size={30}
+                    size={32}
                     fill="currentColor"
                   />
 
-                  <span>♡</span>
+                  <span>
+                    ♡
+                  </span>
 
                 </div>
 
@@ -416,18 +429,29 @@ export default function MemoriesScreen({ onNext }) {
 
             </motion.div>
 
-            {/* CENTER SPINE */}
+            {/* =================================================
+                CENTER SPINE
+            ================================================= */}
+
             <div className="book-spine" />
 
-            {/* BOOK SHADOW */}
-            <div className="book-bottom-shadow" />
+            {/* =================================================
+                PAGE EDGE / THICKNESS
+            ================================================= */}
+
+            <div className="page-edge" />
 
           </div>
 
-          {/* TAPE */}
+          {/* =================================================
+              TAPE
+          ================================================= */}
+
           <motion.div
             className="album-tape"
-            animate={{ rotate: [-4, -1, -4] }}
+            animate={{
+              rotate: [-4, -1, -4],
+            }}
             transition={{
               duration: 4,
               repeat: Infinity,
@@ -436,15 +460,24 @@ export default function MemoriesScreen({ onNext }) {
             ♡
           </motion.div>
 
-          {/* RIBBON */}
+          {/* =================================================
+              RIBBONS
+          ================================================= */}
+
           <div className="ribbon ribbon-left" />
           <div className="ribbon ribbon-right" />
 
-          {/* NEXT BUTTON */}
+          {/* =================================================
+              NEXT BUTTON
+          ================================================= */}
+
           <motion.button
             className="next-button"
-            onClick={nextMemory}
-            disabled={isFlipping}
+            onClick={(e) => {
+              e.stopPropagation();
+              nextMemory();
+            }}
+            disabled={isTurning}
             whileTap={{
               scale: 0.88,
             }}
@@ -456,10 +489,13 @@ export default function MemoriesScreen({ onNext }) {
               repeat: Infinity,
             }}
           >
-            <ChevronRight size={20} />
+            <ChevronRight size={21} />
           </motion.button>
 
-          {/* ALBUM HEART */}
+          {/* =================================================
+              HEART
+          ================================================= */}
+
           <motion.div
             className="album-heart"
             animate={{
@@ -476,7 +512,10 @@ export default function MemoriesScreen({ onNext }) {
 
         </div>
 
-        {/* TAP TEXT */}
+        {/* =================================================
+            TAP TEXT
+        ================================================= */}
+
         <motion.div
           className="tap-memory"
           animate={{
@@ -488,21 +527,29 @@ export default function MemoriesScreen({ onNext }) {
             repeat: Infinity,
           }}
         >
-          tap the page for next memory ♡
+          tap the page to turn ♡
         </motion.div>
 
       </section>
 
-      {/* COUNTER */}
+      {/* =================================================
+          COUNTER
+      ================================================= */}
+
       <div className="counter">
         <span />
+
         <b>
           {currentIndex + 1} / {memories.length}
         </b>
+
         <span />
       </div>
 
-      {/* LETTER */}
+      {/* =================================================
+          LETTER
+      ================================================= */}
+
       <motion.div
         className="letter-button"
         initial={{
@@ -525,7 +572,9 @@ export default function MemoriesScreen({ onNext }) {
         />
       </motion.div>
 
-      {/* ================= CSS ================= */}
+      {/* =================================================
+          CSS
+      ================================================= */}
 
       <style jsx global>{`
 
@@ -533,24 +582,37 @@ export default function MemoriesScreen({ onNext }) {
           box-sizing: border-box;
         }
 
+        /* =================================================
+           MAIN
+        ================================================= */
+
         .memories-page {
           position: relative;
+
           width: 100%;
           min-height: 100vh;
+
           overflow: hidden;
+
           display: flex;
           flex-direction: column;
           align-items: center;
+
           background: #fff1f7;
+
           color: #27364e;
+
           isolation: isolate;
         }
 
-        /* ================= BACKGROUND ================= */
+        /* =================================================
+           BACKGROUND
+        ================================================= */
 
         .dream-background {
           position: fixed;
           inset: 0;
+
           z-index: -20;
 
           background:
@@ -565,50 +627,70 @@ export default function MemoriesScreen({ onNext }) {
 
         .pink-glow {
           position: fixed;
+
           border-radius: 50%;
+
           filter: blur(65px);
+
           pointer-events: none;
+
           z-index: -10;
         }
 
         .glow-a {
           width: 280px;
           height: 280px;
+
           left: -120px;
           top: 20%;
-          background: rgba(255,120,190,.25);
+
+          background:
+            rgba(255,120,190,.25);
         }
 
         .glow-b {
           width: 300px;
           height: 300px;
+
           right: -130px;
           top: 48%;
-          background: rgba(255,160,210,.3);
+
+          background:
+            rgba(255,160,210,.3);
         }
 
         .glow-c {
           width: 250px;
           height: 250px;
+
           left: 25%;
           bottom: -130px;
-          background: rgba(255,110,185,.24);
+
+          background:
+            rgba(255,110,185,.24);
         }
 
-        /* ================= PARTICLES ================= */
+        /* =================================================
+           PARTICLES
+        ================================================= */
 
         .particles {
           position: fixed;
           inset: 0;
+
           z-index: 2;
+
           pointer-events: none;
         }
 
         .particle {
           position: absolute;
-          border-radius: 50%;
+
           width: 4px;
           height: 4px;
+
+          border-radius: 50%;
+
           background: white;
 
           box-shadow:
@@ -616,177 +698,118 @@ export default function MemoriesScreen({ onNext }) {
             0 0 15px rgba(255,150,210,.7);
         }
 
-        /* ================= SPARKLES ================= */
+        /* =================================================
+           SPARKLES
+        ================================================= */
 
         .sparkles {
           position: fixed;
           inset: 0;
+
           z-index: 3;
+
           pointer-events: none;
         }
 
         .sparkle {
           position: absolute;
-          color: rgba(255,255,255,.85);
+
+          color:
+            rgba(255,255,255,.85);
 
           filter:
             drop-shadow(
-              0 0 7px rgba(255,255,255,.8)
+              0 0 7px
+              rgba(255,255,255,.8)
             );
         }
 
-        /* ================= BUTTERFLIES ================= */
+        /* =================================================
+           BUTTERFLIES
+        ================================================= */
 
         .butterflies {
           position: fixed;
+
           inset: 0;
+
           overflow: hidden;
+
           pointer-events: none;
+
           z-index: 8;
         }
 
-        .real-butterfly {
+        .flying-butterfly {
           position: absolute;
+
           width: 48px;
-          height: 44px;
-          transform-origin: center;
+          height: 48px;
+
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
           will-change: transform;
-        }
 
-        .butterfly-wing {
-          position: absolute;
-          width: 24px;
-          height: 31px;
-          top: 5px;
-
-          background:
-            radial-gradient(
-              circle at 65% 35%,
-              #fff 0 4%,
-              transparent 5%
-            ),
-            linear-gradient(
-              145deg,
-              #ffb5d7,
-              #ec65a8 48%,
-              #a95fc4
+          filter:
+            drop-shadow(
+              0 4px 7px
+              rgba(80,40,60,.18)
             );
-
-          border: 2px solid rgba(130,61,115,.65);
-
-          box-shadow:
-            inset 0 0 7px rgba(255,255,255,.65),
-            0 3px 8px rgba(100,40,90,.15);
         }
 
-        .wing-left {
-          left: 1px;
-          border-radius: 70% 30% 60% 40%;
-          transform-origin: right bottom;
-          animation:
-            flap-left .38s ease-in-out infinite;
+        .flying-butterfly img {
+          width: 46px;
+          height: 46px;
+
+          display: block;
+
+          user-select: none;
+
+          -webkit-user-drag: none;
         }
 
-        .wing-right {
-          right: 1px;
-          border-radius: 30% 70% 40% 60%;
-          transform-origin: left bottom;
-          animation:
-            flap-right .38s ease-in-out infinite;
-        }
-
-        .butterfly-body {
-          position: absolute;
-          width: 6px;
-          height: 34px;
-          left: 21px;
-          top: 5px;
-          border-radius: 50%;
-
-          background:
-            linear-gradient(
-              90deg,
-              #40263d,
-              #171525,
-              #56324c
-            );
-
-          z-index: 5;
-        }
-
-        .antenna {
-          position: absolute;
-          width: 14px;
-          height: 8px;
-          top: 0;
-          border-top: 1px solid #40263d;
-          z-index: 6;
-        }
-
-        .antenna-left {
-          left: 17px;
-          transform: rotate(-28deg);
-        }
-
-        .antenna-right {
-          left: 23px;
-          transform: rotate(28deg);
-        }
-
-        @keyframes flap-left {
-
-          0%, 100% {
-            transform:
-              rotateY(0deg)
-              rotateZ(-4deg);
-          }
-
-          50% {
-            transform:
-              rotateY(58deg)
-              rotateZ(5deg);
-          }
-        }
-
-        @keyframes flap-right {
-
-          0%, 100% {
-            transform:
-              rotateY(0deg)
-              rotateZ(4deg);
-          }
-
-          50% {
-            transform:
-              rotateY(-58deg)
-              rotateZ(-5deg);
-          }
-        }
-
-        /* ================= HEARTS ================= */
+        /* =================================================
+           FLOATING HEARTS
+        ================================================= */
 
         .floating-heart {
           position: fixed;
+
           z-index: 6;
-          color: rgba(239,83,164,.42);
+
+          color:
+            rgba(239,83,164,.42);
+
           pointer-events: none;
         }
 
-        /* ================= TITLE ================= */
+        /* =================================================
+           HEADER
+        ================================================= */
 
         .memory-header {
           position: relative;
+
           z-index: 20;
+
           text-align: center;
-          margin-top: clamp(68px, 10vh, 100px);
+
+          margin-top:
+            clamp(68px, 10vh, 100px);
+
           padding: 0 15px;
         }
 
         .title-row {
           display: flex;
+
           align-items: center;
           justify-content: center;
+
           gap: 12px;
+
           color: #ef3d98;
         }
 
@@ -797,79 +820,117 @@ export default function MemoriesScreen({ onNext }) {
 
         .title-row h1 {
           margin: 0;
-          font-size: clamp(31px, 8vw, 48px);
+
+          font-size:
+            clamp(31px, 8vw, 48px);
+
           font-weight: 800;
+
           line-height: 1;
+
           color: #27374e;
+
           letter-spacing: -1.5px;
         }
 
         .memory-header p {
           margin: 16px 0 0;
+
           font-family: cursive;
-          font-size: clamp(18px, 5vw, 27px);
+
+          font-size:
+            clamp(18px, 5vw, 27px);
+
           font-style: italic;
+
           color: #a965dc;
         }
 
-        /* ================= DOTS ================= */
+        /* =================================================
+           DOTS
+        ================================================= */
 
         .memory-dots {
           position: relative;
+
           z-index: 25;
+
           display: flex;
+
           gap: 11px;
+
           margin-top: 25px;
         }
 
         .memory-dot {
           width: 9px;
           height: 9px;
+
           border-radius: 50%;
+
           background: #f4acd0;
+
+          transition:
+            .25s ease;
         }
 
         .memory-dot.active {
           width: 14px;
           height: 14px;
+
           margin-top: -2px;
+
           background: #ed3e98;
 
           box-shadow:
-            0 0 13px rgba(237,62,152,.35);
+            0 0 13px
+            rgba(237,62,152,.35);
         }
 
-        /* ================= ALBUM AREA ================= */
+        /* =================================================
+           ALBUM AREA
+        ================================================= */
 
         .album-area {
           position: relative;
-          width: min(96vw, 470px);
+
+          width:
+            min(96vw, 470px);
+
           height: 430px;
+
           margin-top: 17px;
 
           display: flex;
+
           justify-content: center;
           align-items: center;
 
           z-index: 20;
         }
 
-        /* BACK CARDS */
+        /* =================================================
+           BACK CARDS
+        ================================================= */
 
         .back-card {
           position: absolute;
+
           width: 350px;
           height: 400px;
+
           border-radius: 27px;
 
           background:
             rgba(255,255,255,.88);
 
           border:
-            1px solid rgba(255,255,255,.95);
+            1px solid
+            rgba(255,255,255,.95);
 
           box-shadow:
-            0 25px 60px rgba(160,70,125,.13);
+            0 25px 60px
+            rgba(160,70,125,.13);
         }
 
         .back-card-one {
@@ -898,7 +959,9 @@ export default function MemoriesScreen({ onNext }) {
             );
         }
 
-        /* ================= BOOK SCENE ================= */
+        /* =================================================
+           BOOK SCENE
+        ================================================= */
 
         .book-scene {
           position: relative;
@@ -906,239 +969,139 @@ export default function MemoriesScreen({ onNext }) {
           width: 390px;
           height: 350px;
 
-          perspective: 1500px;
-          perspective-origin: 50% 50%;
-
           display: flex;
+
           align-items: center;
           justify-content: center;
+
+          perspective: 1800px;
+
+          perspective-origin:
+            50% 50%;
 
           z-index: 20;
         }
 
-        .book {
+        /* =================================================
+           BOOK
+        ================================================= */
+
+        .memory-book {
           position: relative;
 
           width: 360px;
           height: 330px;
 
-          transform-style: preserve-3d;
+          transform-style:
+            preserve-3d;
+
+          cursor: pointer;
 
           border-radius: 18px;
 
-          background:
-            linear-gradient(
-              90deg,
-              #f8e8ef 0%,
-              #fff 3%,
-              #fff 48%,
-              #f8e8ef 50%,
-              #fff 52%,
-              #fff 97%,
-              #f8e8ef 100%
-            );
-
           box-shadow:
-            0 30px 55px rgba(150,65,120,.2),
-            0 8px 18px rgba(80,40,70,.12);
+            0 30px 65px
+            rgba(150,65,120,.24),
 
-          overflow: visible;
+            0 8px 18px
+            rgba(70,35,65,.12);
+
+          background:
+            #fff;
+
+          isolation: isolate;
         }
 
-        /* BOOK PAGES */
+        /* =================================================
+           NEXT COMPLETE SPREAD
+        ================================================= */
 
-        .book-page {
+        .next-spread {
           position: absolute;
 
-          top: 0;
-          width: 50%;
-          height: 100%;
-
-          background: #fff;
+          inset: 0;
 
           overflow: hidden;
 
-          border-top:
-            1px solid #f0dce6;
+          border-radius: 18px;
 
-          border-bottom:
-            1px solid #f0dce6;
+          background: #fff;
 
-          transform-style: preserve-3d;
+          z-index: 1;
         }
 
-        .book-left-page {
-          left: 0;
+        .next-spread img {
+          position: absolute;
 
-          border-left:
-            1px solid #eed9e4;
-
-          border-radius:
-            18px 0 0 18px;
-
-          box-shadow:
-            inset -10px 0 18px rgba(130,70,105,.07);
-
-          z-index: 5;
-        }
-
-        .book-right-page {
-          right: 0;
-
-          border-right:
-            1px solid #eed9e4;
-
-          border-radius:
-            0 18px 18px 0;
-
-          box-shadow:
-            inset 10px 0 18px rgba(130,70,105,.07);
-
-          z-index: 4;
-        }
-
-        /* PAGE CONTENT */
-
-        .page-inner {
-          position: relative;
+          inset: 0;
 
           width: 100%;
           height: 100%;
-
-          padding: 9px;
-
-          background:
-            linear-gradient(
-              145deg,
-              #ffffff,
-              #fff8fb
-            );
-        }
-
-        .page-inner img {
-          width: 100%;
-          height: 100%;
-
-          display: block;
 
           object-fit: cover;
 
+          object-position: center;
+
+          display: block;
+
           user-select: none;
+
           -webkit-user-drag: none;
-
-          border-radius: 10px;
         }
 
-        /* LEFT PAGE PHOTO */
-        .book-left-page .page-inner img {
-          object-position: center;
-        }
+        /* =================================================
+           CURRENT LEFT PAGE
+           শুধু left half থাকবে
+        ================================================= */
 
-        /* RIGHT PAGE PHOTO */
-        .book-right-page .page-inner img {
-          object-position: center;
-        }
-
-        .page-shine {
-          position: absolute;
-          inset: 9px;
-
-          border-radius: 10px;
-
-          pointer-events: none;
-
-          background:
-            linear-gradient(
-              145deg,
-              rgba(255,255,255,.22),
-              transparent 38%,
-              rgba(245,80,160,.08)
-            );
-        }
-
-        .page-caption {
+        .current-left-page {
           position: absolute;
 
-          left: 8px;
-          right: 8px;
-          bottom: 15px;
+          left: 0;
+          top: 0;
 
-          text-align: center;
-
-          font-family: cursive;
-          font-style: italic;
-
-          font-size: 11px;
-
-          color: rgba(255,255,255,.9);
-
-          text-shadow:
-            0 1px 5px rgba(0,0,0,.45);
-
-          pointer-events: none;
-        }
-
-        /* FIRST LEFT PAGE */
-
-        .first-left-page {
-          width: 100%;
+          width: 50%;
           height: 100%;
 
-          display: flex;
-          flex-direction: column;
-
-          align-items: center;
-          justify-content: center;
-
-          gap: 7px;
-
-          text-align: center;
-
-          color: #e85c9e;
-
-          background:
-            radial-gradient(
-              circle at 50% 40%,
-              #fff,
-              #fff2f8 75%
-            );
+          overflow: hidden;
 
           border-radius:
             18px 0 0 18px;
+
+          z-index: 10;
+
+          background: #fff;
+
+          box-shadow:
+            inset -12px 0 22px
+            rgba(70,30,60,.08);
         }
 
-        .first-left-page svg {
-          margin-bottom: 10px;
+        .current-left-page img {
+          position: absolute;
 
-          filter:
-            drop-shadow(
-              0 4px 10px
-              rgba(230,70,145,.2)
-            );
+          top: 0;
+          left: 0;
+
+          width: 200%;
+          height: 100%;
+
+          max-width: none;
+
+          object-fit: cover;
+
+          object-position: left center;
+
+          display: block;
+
+          user-select: none;
+
+          -webkit-user-drag: none;
         }
 
-        .first-left-page span {
-          font-family: cursive;
-          font-size: 15px;
-          color: #a77a9c;
-        }
-
-        .first-left-page strong {
-          font-family: cursive;
-          font-size: 24px;
-          color: #e24e96;
-        }
-
-        .first-left-page small {
-          margin-top: 8px;
-
-          font-family: cursive;
-          font-size: 11px;
-
-          color: #b493aa;
-        }
-
-        /* ================= TURNING PAGE ================= */
+        /* =================================================
+           TURNING PAGE
+        ================================================= */
 
         .turning-page {
           position: absolute;
@@ -1155,24 +1118,39 @@ export default function MemoriesScreen({ onNext }) {
           transform-style:
             preserve-3d;
 
-          z-index: 50;
+          z-index: 30;
+
+          will-change:
+            transform;
 
           cursor: pointer;
-
-          will-change: transform;
-
-          touch-action: manipulation;
         }
 
-        .turn-face {
+        /* =================================================
+           FRONT OF TURNING PAGE
+        ================================================= */
+
+        .turn-front {
           position: absolute;
 
           inset: 0;
 
-          width: 100%;
-          height: 100%;
-
           overflow: hidden;
+
+          border-radius:
+            0 18px 18px 0;
+
+          border-top:
+            1px solid
+            rgba(255,255,255,.8);
+
+          border-right:
+            1px solid
+            rgba(220,190,205,.55);
+
+          border-bottom:
+            1px solid
+            rgba(220,190,205,.55);
 
           background: #fff;
 
@@ -1184,55 +1162,126 @@ export default function MemoriesScreen({ onNext }) {
 
           transform-style:
             preserve-3d;
-        }
-
-        /* FRONT PAGE */
-
-        .turn-front {
-          border-top:
-            1px solid #eedce5;
-
-          border-bottom:
-            1px solid #eedce5;
-
-          border-right:
-            1px solid #eedce5;
-
-          border-radius:
-            0 18px 18px 0;
 
           box-shadow:
             -8px 0 18px
-            rgba(100,40,80,.08),
+            rgba(70,30,60,.07),
 
-            8px 10px 30px
-            rgba(100,40,80,.13);
+            12px 10px 30px
+            rgba(80,30,70,.14);
         }
 
-        /* BACK OF PAGE */
+        /*
+          Important:
+          Image width 200% কারণ page হলো book-এর
+          অর্ধেক, কিন্তু image পুরো spread-এর।
+        */
+
+        .turn-front img {
+          position: absolute;
+
+          top: 0;
+          right: 0;
+
+          width: 200%;
+          height: 100%;
+
+          max-width: none;
+
+          object-fit: cover;
+
+          object-position: right center;
+
+          display: block;
+
+          user-select: none;
+
+          -webkit-user-drag: none;
+        }
+
+        /* =================================================
+           PAGE GLOSS
+        ================================================= */
+
+        .page-gloss {
+          position: absolute;
+
+          inset: 0;
+
+          pointer-events: none;
+
+          background:
+            linear-gradient(
+              105deg,
+              rgba(255,255,255,.22),
+              transparent 25%,
+              transparent 72%,
+              rgba(255,255,255,.14)
+            );
+
+          z-index: 3;
+        }
+
+        /* =================================================
+           HEART ON PHOTO
+        ================================================= */
+
+        .page-heart {
+          position: absolute;
+
+          right: 13px;
+          top: 13px;
+
+          color: white;
+
+          z-index: 5;
+
+          filter:
+            drop-shadow(
+              0 2px 6px
+              rgba(0,0,0,.35)
+            );
+        }
+
+        /* =================================================
+           BACK OF PAGE
+        ================================================= */
 
         .turn-back {
-          transform:
-            rotateY(180deg);
+          position: absolute;
 
-          border-top:
-            1px solid #ead6e1;
+          inset: 0;
 
-          border-bottom:
-            1px solid #ead6e1;
-
-          border-left:
-            1px solid #ead6e1;
+          overflow: hidden;
 
           border-radius:
             18px 0 0 18px;
 
+          background:
+            linear-gradient(
+              145deg,
+              #fff,
+              #fff0f7
+            );
+
+          backface-visibility:
+            hidden;
+
+          -webkit-backface-visibility:
+            hidden;
+
+          transform:
+            rotateY(180deg);
+
+          transform-style:
+            preserve-3d;
+
           box-shadow:
             inset -12px 0 20px
-            rgba(120,60,100,.08);
+            rgba(100,40,80,.08);
         }
 
-        .paper-back {
+        .back-paper {
           width: 100%;
           height: 100%;
 
@@ -1243,26 +1292,22 @@ export default function MemoriesScreen({ onNext }) {
 
           flex-direction: column;
 
-          gap: 8px;
+          gap: 7px;
 
-          color: #ed6aa9;
-
-          background:
-            linear-gradient(
-              145deg,
-              #fff,
-              #fff0f7
-            );
+          color: #ed69aa;
 
           font-family: cursive;
         }
 
-        .paper-back span {
+        .back-paper span {
+          opacity: .55;
+
           font-size: 18px;
-          opacity: .5;
         }
 
-        /* SPINE */
+        /* =================================================
+           BOOK SPINE
+        ================================================= */
 
         .book-spine {
           position: absolute;
@@ -1275,66 +1320,84 @@ export default function MemoriesScreen({ onNext }) {
 
           transform:
             translateX(-50%)
-            translateZ(3px);
+            translateZ(5px);
 
           background:
             linear-gradient(
               90deg,
-              rgba(180,100,140,.08),
-              rgba(130,60,110,.22),
-              rgba(255,255,255,.5)
+              rgba(130,70,105,.05),
+              rgba(100,45,85,.25),
+              rgba(255,255,255,.6)
             );
 
           box-shadow:
-            0 0 8px
-            rgba(110,50,90,.12);
+            0 0 9px
+            rgba(80,40,70,.16);
 
-          z-index: 65;
+          z-index: 50;
 
           pointer-events: none;
         }
 
-        /* BOOK BOTTOM SHADOW */
+        /* =================================================
+           PAGE EDGE
+        ================================================= */
 
-        .book-bottom-shadow {
+        .page-edge {
+          position: absolute;
+
+          right: -4px;
+          top: 7px;
+
+          width: 5px;
+          height: calc(100% - 14px);
+
+          border-radius:
+            0 8px 8px 0;
+
+          background:
+            repeating-linear-gradient(
+              to bottom,
+              #f6e6ed 0 5px,
+              #fff 5px 8px
+            );
+
+          opacity: .8;
+
+          z-index: 55;
+
+          pointer-events: none;
+        }
+
+        /* =================================================
+           BOOK BOTTOM SHADOW
+        ================================================= */
+
+        .memory-book::after {
+          content: "";
+
           position: absolute;
 
           left: 7%;
           right: 7%;
-          bottom: -13px;
+
+          bottom: -15px;
 
           height: 20px;
 
           border-radius: 50%;
 
           background:
-            rgba(120,50,100,.16);
+            rgba(110,45,90,.18);
 
           filter: blur(10px);
 
           z-index: -5;
         }
 
-        /* PHOTO HEART */
-
-        .photo-heart {
-          position: absolute;
-
-          right: 14px;
-          top: 14px;
-
-          color: white;
-
-          z-index: 10;
-
-          filter:
-            drop-shadow(
-              0 2px 6px
-              rgba(0,0,0,.3)
-            );
-        }
-
-        /* ================= TAPE ================= */
+        /* =================================================
+           TAPE
+        ================================================= */
 
         .album-tape {
           position: absolute;
@@ -1349,6 +1412,7 @@ export default function MemoriesScreen({ onNext }) {
           height: 35px;
 
           display: flex;
+
           justify-content: center;
           align-items: center;
 
@@ -1372,7 +1436,9 @@ export default function MemoriesScreen({ onNext }) {
           pointer-events: none;
         }
 
-        /* ================= RIBBON ================= */
+        /* =================================================
+           RIBBONS
+        ================================================= */
 
         .ribbon {
           position: absolute;
@@ -1393,24 +1459,32 @@ export default function MemoriesScreen({ onNext }) {
             );
 
           z-index: 2;
+
+          pointer-events: none;
         }
 
         .ribbon-left {
           left: -65px;
-          transform: rotate(-27deg);
+
+          transform:
+            rotate(-27deg);
         }
 
         .ribbon-right {
           right: -65px;
-          transform: rotate(27deg);
+
+          transform:
+            rotate(27deg);
         }
 
-        /* ================= NEXT BUTTON ================= */
+        /* =================================================
+           NEXT BUTTON
+        ================================================= */
 
         .next-button {
           position: absolute;
 
-          right: -17px;
+          right: -18px;
           top: 50%;
 
           width: 48px;
@@ -1420,6 +1494,7 @@ export default function MemoriesScreen({ onNext }) {
             translateY(-50%);
 
           border: none;
+
           border-radius: 50%;
 
           background:
@@ -1443,15 +1518,19 @@ export default function MemoriesScreen({ onNext }) {
 
         .next-button:disabled {
           cursor: default;
+
+          opacity: .8;
         }
 
-        /* ================= ALBUM HEART ================= */
+        /* =================================================
+           ALBUM HEART
+        ================================================= */
 
         .album-heart {
           position: absolute;
 
-          right: 21px;
-          bottom: 13px;
+          right: 22px;
+          bottom: 12px;
 
           color: #f158a5;
 
@@ -1460,7 +1539,9 @@ export default function MemoriesScreen({ onNext }) {
           pointer-events: none;
         }
 
-        /* ================= TAP ================= */
+        /* =================================================
+           TAP TEXT
+        ================================================= */
 
         .tap-memory {
           position: absolute;
@@ -1471,7 +1552,8 @@ export default function MemoriesScreen({ onNext }) {
           transform:
             translateX(-50%);
 
-          padding: 7px 23px;
+          padding:
+            7px 23px;
 
           border-radius: 999px;
 
@@ -1491,7 +1573,9 @@ export default function MemoriesScreen({ onNext }) {
           z-index: 100;
         }
 
-        /* ================= COUNTER ================= */
+        /* =================================================
+           COUNTER
+        ================================================= */
 
         .counter {
           position: relative;
@@ -1505,6 +1589,7 @@ export default function MemoriesScreen({ onNext }) {
           gap: 16px;
 
           margin-top: 2px;
+
           margin-bottom: 17px;
         }
 
@@ -1525,7 +1610,9 @@ export default function MemoriesScreen({ onNext }) {
           letter-spacing: 4px;
         }
 
-        /* ================= LETTER ================= */
+        /* =================================================
+           LETTER
+        ================================================= */
 
         .letter-button {
           position: relative;
@@ -1535,7 +1622,9 @@ export default function MemoriesScreen({ onNext }) {
           margin-bottom: 22px;
         }
 
-        /* ================= MOBILE ================= */
+        /* =================================================
+           MOBILE
+        ================================================= */
 
         @media (max-width: 430px) {
 
@@ -1558,6 +1647,7 @@ export default function MemoriesScreen({ onNext }) {
 
           .album-area {
             width: 100vw;
+
             height: 385px;
           }
 
@@ -1566,7 +1656,7 @@ export default function MemoriesScreen({ onNext }) {
             height: 320px;
           }
 
-          .book {
+          .memory-book {
             width: 330px;
             height: 310px;
           }
@@ -1583,7 +1673,21 @@ export default function MemoriesScreen({ onNext }) {
           .album-tape {
             top: 6px;
           }
+
+          .flying-butterfly {
+            width: 43px;
+            height: 43px;
+          }
+
+          .flying-butterfly img {
+            width: 42px;
+            height: 42px;
+          }
         }
+
+        /* =================================================
+           SMALL PHONES
+        ================================================= */
 
         @media (max-width: 360px) {
 
@@ -1592,7 +1696,7 @@ export default function MemoriesScreen({ onNext }) {
             height: 300px;
           }
 
-          .book {
+          .memory-book {
             width: 300px;
             height: 290px;
           }
@@ -1606,10 +1710,15 @@ export default function MemoriesScreen({ onNext }) {
 
           .tap-memory {
             font-size: 11px;
+
             padding:
               6px 16px;
           }
         }
+
+        /* =================================================
+           SHORT HEIGHT
+        ================================================= */
 
         @media (max-height: 760px) {
 
@@ -1623,24 +1732,12 @@ export default function MemoriesScreen({ onNext }) {
 
           .album-area {
             height: 370px;
+
             margin-top: 8px;
           }
 
           .counter {
             margin-bottom: 9px;
-          }
-        }
-
-        /* ================= REDUCED MOTION ================= */
-
-        @media (prefers-reduced-motion: reduce) {
-
-          .turning-page {
-            transition: none !important;
-          }
-
-          .butterfly-wing {
-            animation: none !important;
           }
         }
 
