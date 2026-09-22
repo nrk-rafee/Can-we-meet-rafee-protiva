@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Mail,
   Heart,
@@ -19,43 +19,48 @@ const memories = [
   "/images/IMG-20260329-WA0002.jpg",
 ];
 
-/* =====================================================
-   BUTTERFLIES
-   Things We'll Do section-এর মতো illustrated butterfly
-===================================================== */
+/* ================= BUTTERFLIES ================= */
 
 const butterflies = [
   {
-    top: "25%",
+    top: "18%",
     startX: "-12vw",
-    endX: "112vw",
-    duration: 19,
+    endX: "110vw",
+    duration: 18,
     delay: 0,
-    size: 0.82,
+    size: 1,
   },
   {
-    top: "48%",
-    startX: "112vw",
+    top: "32%",
+    startX: "110vw",
     endX: "-12vw",
-    duration: 23,
-    delay: 5,
-    size: 0.62,
-  },
-  {
-    top: "68%",
-    startX: "-12vw",
-    endX: "112vw",
     duration: 21,
-    delay: 10,
+    delay: 4,
     size: 0.72,
   },
   {
-    top: "82%",
-    startX: "112vw",
+    top: "48%",
+    startX: "-12vw",
+    endX: "110vw",
+    duration: 23,
+    delay: 2,
+    size: 0.58,
+  },
+  {
+    top: "65%",
+    startX: "110vw",
     endX: "-12vw",
+    duration: 20,
+    delay: 8,
+    size: 0.8,
+  },
+  {
+    top: "78%",
+    startX: "-12vw",
+    endX: "110vw",
     duration: 25,
-    delay: 14,
-    size: 0.55,
+    delay: 12,
+    size: 0.62,
   },
 ];
 
@@ -77,40 +82,24 @@ const particles = [
   [54, 91],
 ];
 
-function FlyingButterfly({ data, index }) {
+function Butterfly({ data, index }) {
   return (
     <motion.div
-      className="flying-butterfly"
+      className="real-butterfly"
       style={{
         top: data.top,
         scale: data.size,
       }}
-      initial={{
-        x: data.startX,
-        y: 0,
-        rotate: 0,
-      }}
+      initial={{ x: data.startX }}
       animate={{
         x: [
           data.startX,
-          index % 2 === 0 ? "22vw" : "78vw",
+          index % 2 === 0 ? "25vw" : "75vw",
           index % 2 === 0 ? "72vw" : "30vw",
           data.endX,
         ],
-        y: [
-          0,
-          -35,
-          28,
-          -18,
-          0,
-        ],
-        rotate: [
-          0,
-          index % 2 === 0 ? 7 : -7,
-          index % 2 === 0 ? -5 : 5,
-          index % 2 === 0 ? 6 : -6,
-          0,
-        ],
+        y: [0, -45, 35, -20, 0],
+        rotate: [0, 8, -7, 6, 0],
       }}
       transition={{
         duration: data.duration,
@@ -119,60 +108,38 @@ function FlyingButterfly({ data, index }) {
         ease: "easeInOut",
       }}
     >
-      <img
-        src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f98b.svg"
-        alt=""
-        draggable="false"
-      />
+      <div className="butterfly-wing wing-left" />
+      <div className="butterfly-wing wing-right" />
+      <div className="butterfly-body" />
+      <div className="antenna antenna-left" />
+      <div className="antenna antenna-right" />
     </motion.div>
   );
 }
 
 export default function MemoriesScreen({ onNext }) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isTurning, setIsTurning] = useState(false);
-
-  const nextIndex =
-    currentIndex === memories.length - 1
-      ? 0
-      : currentIndex + 1;
-
-  /* =====================================================
-     PAGE TURN
-  ===================================================== */
+  const [direction, setDirection] = useState(1);
 
   const nextMemory = () => {
-    if (isTurning) return;
+    setDirection(1);
 
-    setIsTurning(true);
-
-    /*
-      Animation শেষ হওয়ার সাথে সাথে
-      নতুন complete spread set হবে।
-    */
-    setTimeout(() => {
-      setCurrentIndex(nextIndex);
-      setIsTurning(false);
-    }, 900);
+    setCurrentIndex((prev) =>
+      prev === memories.length - 1 ? 0 : prev + 1
+    );
   };
 
   return (
     <main className="memories-page">
 
-      {/* =================================================
-          BACKGROUND
-      ================================================= */}
-
+      {/* BACKGROUND */}
       <div className="dream-background" />
 
       <div className="pink-glow glow-a" />
       <div className="pink-glow glow-b" />
       <div className="pink-glow glow-c" />
 
-      {/* =================================================
-          LIGHT PARTICLES
-      ================================================= */}
-
+      {/* LIGHT PARTICLES */}
       <div className="particles">
         {particles.map(([left, top], i) => (
           <motion.span
@@ -197,10 +164,7 @@ export default function MemoriesScreen({ onNext }) {
         ))}
       </div>
 
-      {/* =================================================
-          SPARKLES
-      ================================================= */}
-
+      {/* SPARKLES */}
       <div className="sparkles">
         {[...Array(12)].map((_, i) => (
           <motion.div
@@ -226,13 +190,10 @@ export default function MemoriesScreen({ onNext }) {
         ))}
       </div>
 
-      {/* =================================================
-          FLYING BUTTERFLIES
-      ================================================= */}
-
+      {/* BUTTERFLIES */}
       <div className="butterflies">
         {butterflies.map((item, index) => (
-          <FlyingButterfly
+          <Butterfly
             key={index}
             data={item}
             index={index}
@@ -240,10 +201,7 @@ export default function MemoriesScreen({ onNext }) {
         ))}
       </div>
 
-      {/* =================================================
-          FLOATING HEARTS
-      ================================================= */}
-
+      {/* FLOATING HEARTS */}
       {[
         ["7%", "42%", 18],
         ["90%", "34%", 14],
@@ -255,10 +213,7 @@ export default function MemoriesScreen({ onNext }) {
         <motion.div
           key={i}
           className="floating-heart"
-          style={{
-            left,
-            top,
-          }}
+          style={{ left, top }}
           animate={{
             y: [0, -13, 0],
             x: [0, i % 2 ? -6 : 6, 0],
@@ -270,27 +225,15 @@ export default function MemoriesScreen({ onNext }) {
             repeat: Infinity,
           }}
         >
-          <Heart
-            size={size}
-            fill="currentColor"
-          />
+          <Heart size={size} fill="currentColor" />
         </motion.div>
       ))}
 
-      {/* =================================================
-          TITLE
-      ================================================= */}
-
+      {/* TITLE */}
       <motion.header
         className="memory-header"
-        initial={{
-          opacity: 0,
-          y: -20,
-        }}
-        animate={{
-          opacity: 1,
-          y: 0,
-        }}
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
       >
         <div className="title-row">
           <Camera />
@@ -298,15 +241,10 @@ export default function MemoriesScreen({ onNext }) {
           <Camera />
         </div>
 
-        <p>
-          Little moments, forever ours ♡
-        </p>
+        <p>Little moments, forever ours ♡</p>
       </motion.header>
 
-      {/* =================================================
-          DOTS
-      ================================================= */}
-
+      {/* DOTS */}
       <div className="memory-dots">
         {memories.map((_, i) => (
           <span
@@ -320,138 +258,21 @@ export default function MemoriesScreen({ onNext }) {
         ))}
       </div>
 
-      {/* =================================================
-          BOOK AREA
-      ================================================= */}
+      {/* ================= ALBUM ================= */}
 
       <section className="album-area">
 
-        {/* Decorative cards behind the book */}
+        {/* BACK SCRAPBOOK CARDS */}
         <div className="back-card back-card-one" />
         <div className="back-card back-card-two" />
 
-        <div className="book-scene">
+        {/* MAIN ALBUM */}
+        <div className="album">
 
-          {/* =================================================
-              BOOK
-          ================================================= */}
-
-          <div
-            className="memory-book"
-            onClick={nextMemory}
-          >
-
-            {/* =================================================
-                NEXT COMPLETE PHOTO
-                এটা পুরো 2-page spread-এর নিচে থাকবে
-            ================================================= */}
-
-            <div className="next-spread">
-              <img
-                src={memories[nextIndex]}
-                alt={`Memory ${nextIndex + 1}`}
-                draggable="false"
-              />
-
-              <div className="spread-light" />
-            </div>
-
-            {/* =================================================
-                CURRENT LEFT PAGE
-                Current photo-এর left half
-            ================================================= */}
-
-            <div className="current-left-page">
-
-              <img
-                src={memories[currentIndex]}
-                alt={`Memory ${currentIndex + 1}`}
-                draggable="false"
-              />
-
-              <div className="spread-light" />
-
-            </div>
-
-            {/* =================================================
-                CURRENT RIGHT PAGE
-                এটিই আসল turning page
-            ================================================= */}
-
-            <motion.div
-              className="turning-page"
-              animate={{
-                rotateY: isTurning ? -180 : 0,
-              }}
-              transition={{
-                duration: 0.9,
-                ease: [0.645, 0.045, 0.355, 1],
-              }}
-            >
-
-              {/* FRONT = current image-এর right half */}
-              <div className="turn-front">
-
-                <img
-                  src={memories[currentIndex]}
-                  alt={`Memory ${currentIndex + 1}`}
-                  draggable="false"
-                />
-
-                <div className="page-gloss" />
-
-                <div className="page-heart">
-                  <Heart
-                    size={22}
-                    fill="white"
-                  />
-                </div>
-
-              </div>
-
-              {/* BACK OF TURNING PAGE */}
-              <div className="turn-back">
-
-                <div className="back-paper">
-
-                  <Heart
-                    size={32}
-                    fill="currentColor"
-                  />
-
-                  <span>
-                    ♡
-                  </span>
-
-                </div>
-
-              </div>
-
-            </motion.div>
-
-            {/* =================================================
-                CENTER SPINE
-            ================================================= */}
-
-            <div className="book-spine" />
-
-            {/* =================================================
-                PAGE EDGE / THICKNESS
-            ================================================= */}
-
-            <div className="page-edge" />
-
-          </div>
-
-          {/* =================================================
-              TAPE
-          ================================================= */}
-
+          {/* TAPE */}
           <motion.div
             className="album-tape"
-            animate={{
-              rotate: [-4, -1, -4],
-            }}
+            animate={{ rotate: [-4, -1, -4] }}
             transition={{
               duration: 4,
               repeat: Infinity,
@@ -460,27 +281,79 @@ export default function MemoriesScreen({ onNext }) {
             ♡
           </motion.div>
 
-          {/* =================================================
-              RIBBONS
-          ================================================= */}
-
+          {/* RIBBON */}
           <div className="ribbon ribbon-left" />
           <div className="ribbon ribbon-right" />
 
-          {/* =================================================
-              NEXT BUTTON
-          ================================================= */}
+          {/* ================= ONE PHOTO ONLY ================= */}
 
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentIndex}
+              className="photo-card"
+              initial={{
+                opacity: 0,
+                x: direction > 0 ? 70 : -70,
+                rotate: direction > 0 ? 3 : -3,
+                scale: 0.96,
+              }}
+              animate={{
+                opacity: 1,
+                x: 0,
+                rotate: 0,
+                scale: 1,
+              }}
+              exit={{
+                opacity: 0,
+                x: direction > 0 ? -70 : 70,
+                rotate: direction > 0 ? -3 : 3,
+                scale: 0.96,
+              }}
+              transition={{
+                duration: 0.5,
+                ease: "easeInOut",
+              }}
+              onClick={nextMemory}
+            >
+              <div className="photo-box">
+
+                <img
+                  src={memories[currentIndex]}
+                  alt={`Memory ${currentIndex + 1}`}
+                  draggable="false"
+                />
+
+                <div className="photo-overlay" />
+
+                <motion.div
+                  className="photo-heart"
+                  animate={{
+                    scale: [1, 1.12, 1],
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                  }}
+                >
+                  <Heart
+                    size={20}
+                    fill="white"
+                  />
+                </motion.div>
+
+              </div>
+
+              <div className="caption">
+                a little piece of us ♡
+              </div>
+            </motion.div>
+          </AnimatePresence>
+
+          {/* NEXT BUTTON */}
           <motion.button
             className="next-button"
-            onClick={(e) => {
-              e.stopPropagation();
-              nextMemory();
-            }}
-            disabled={isTurning}
-            whileTap={{
-              scale: 0.88,
-            }}
+            onClick={nextMemory}
+            whileTap={{ scale: 0.88 }}
             animate={{
               x: [0, 3, 0],
             }}
@@ -489,13 +362,10 @@ export default function MemoriesScreen({ onNext }) {
               repeat: Infinity,
             }}
           >
-            <ChevronRight size={21} />
+            <ChevronRight size={20} />
           </motion.button>
 
-          {/* =================================================
-              HEART
-          ================================================= */}
-
+          {/* ALBUM HEART */}
           <motion.div
             className="album-heart"
             animate={{
@@ -509,13 +379,9 @@ export default function MemoriesScreen({ onNext }) {
           >
             <Heart fill="currentColor" />
           </motion.div>
-
         </div>
 
-        {/* =================================================
-            TAP TEXT
-        ================================================= */}
-
+        {/* TAP TEXT */}
         <motion.div
           className="tap-memory"
           animate={{
@@ -527,15 +393,12 @@ export default function MemoriesScreen({ onNext }) {
             repeat: Infinity,
           }}
         >
-          tap the page to turn ♡
+          tap for next memory ♡
         </motion.div>
 
       </section>
 
-      {/* =================================================
-          COUNTER
-      ================================================= */}
-
+      {/* COUNTER */}
       <div className="counter">
         <span />
 
@@ -546,23 +409,12 @@ export default function MemoriesScreen({ onNext }) {
         <span />
       </div>
 
-      {/* =================================================
-          LETTER
-      ================================================= */}
-
+      {/* LETTER */}
       <motion.div
         className="letter-button"
-        initial={{
-          opacity: 0,
-          y: 15,
-        }}
-        animate={{
-          opacity: 1,
-          y: 0,
-        }}
-        transition={{
-          delay: 0.4,
-        }}
+        initial={{ opacity: 0, y: 15 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4 }}
       >
         <Button
           onClick={onNext}
@@ -572,9 +424,7 @@ export default function MemoriesScreen({ onNext }) {
         />
       </motion.div>
 
-      {/* =================================================
-          CSS
-      ================================================= */}
+      {/* ================= CSS ================= */}
 
       <style jsx global>{`
 
@@ -582,37 +432,24 @@ export default function MemoriesScreen({ onNext }) {
           box-sizing: border-box;
         }
 
-        /* =================================================
-           MAIN
-        ================================================= */
-
         .memories-page {
           position: relative;
-
           width: 100%;
           min-height: 100vh;
-
           overflow: hidden;
-
           display: flex;
           flex-direction: column;
           align-items: center;
-
           background: #fff1f7;
-
           color: #27364e;
-
           isolation: isolate;
         }
 
-        /* =================================================
-           BACKGROUND
-        ================================================= */
+        /* ================= BACKGROUND ================= */
 
         .dream-background {
           position: fixed;
           inset: 0;
-
           z-index: -20;
 
           background:
@@ -627,70 +464,50 @@ export default function MemoriesScreen({ onNext }) {
 
         .pink-glow {
           position: fixed;
-
           border-radius: 50%;
-
           filter: blur(65px);
-
           pointer-events: none;
-
           z-index: -10;
         }
 
         .glow-a {
           width: 280px;
           height: 280px;
-
           left: -120px;
           top: 20%;
-
-          background:
-            rgba(255,120,190,.25);
+          background: rgba(255,120,190,.25);
         }
 
         .glow-b {
           width: 300px;
           height: 300px;
-
           right: -130px;
           top: 48%;
-
-          background:
-            rgba(255,160,210,.3);
+          background: rgba(255,160,210,.3);
         }
 
         .glow-c {
           width: 250px;
           height: 250px;
-
           left: 25%;
           bottom: -130px;
-
-          background:
-            rgba(255,110,185,.24);
+          background: rgba(255,110,185,.24);
         }
 
-        /* =================================================
-           PARTICLES
-        ================================================= */
+        /* ================= PARTICLES ================= */
 
         .particles {
           position: fixed;
           inset: 0;
-
           z-index: 2;
-
           pointer-events: none;
         }
 
         .particle {
           position: absolute;
-
+          border-radius: 50%;
           width: 4px;
           height: 4px;
-
-          border-radius: 50%;
-
           background: white;
 
           box-shadow:
@@ -698,102 +515,165 @@ export default function MemoriesScreen({ onNext }) {
             0 0 15px rgba(255,150,210,.7);
         }
 
-        /* =================================================
-           SPARKLES
-        ================================================= */
+        /* ================= SPARKLES ================= */
 
         .sparkles {
           position: fixed;
           inset: 0;
-
           z-index: 3;
-
           pointer-events: none;
         }
 
         .sparkle {
           position: absolute;
-
-          color:
-            rgba(255,255,255,.85);
+          color: rgba(255,255,255,.85);
 
           filter:
             drop-shadow(
-              0 0 7px
-              rgba(255,255,255,.8)
+              0 0 7px rgba(255,255,255,.8)
             );
         }
 
-        /* =================================================
-           BUTTERFLIES
-        ================================================= */
+        /* ================= BUTTERFLIES ================= */
 
         .butterflies {
           position: fixed;
-
           inset: 0;
-
           overflow: hidden;
-
           pointer-events: none;
-
           z-index: 8;
         }
 
-        .flying-butterfly {
+        .real-butterfly {
           position: absolute;
-
           width: 48px;
-          height: 48px;
-
-          display: flex;
-          align-items: center;
-          justify-content: center;
-
+          height: 44px;
+          transform-origin: center;
           will-change: transform;
+        }
 
-          filter:
-            drop-shadow(
-              0 4px 7px
-              rgba(80,40,60,.18)
+        .butterfly-wing {
+          position: absolute;
+          width: 24px;
+          height: 31px;
+          top: 5px;
+
+          background:
+            radial-gradient(
+              circle at 65% 35%,
+              #fff 0 4%,
+              transparent 5%
+            ),
+            linear-gradient(
+              145deg,
+              #ffb5d7,
+              #ec65a8 48%,
+              #a95fc4
             );
+
+          border: 2px solid rgba(130,61,115,.65);
+
+          box-shadow:
+            inset 0 0 7px rgba(255,255,255,.65),
+            0 3px 8px rgba(100,40,90,.15);
         }
 
-        .flying-butterfly img {
-          width: 46px;
-          height: 46px;
-
-          display: block;
-
-          user-select: none;
-
-          -webkit-user-drag: none;
+        .wing-left {
+          left: 1px;
+          border-radius: 70% 30% 60% 40%;
+          transform-origin: right bottom;
+          animation: flap-left .38s ease-in-out infinite;
         }
 
-        /* =================================================
-           FLOATING HEARTS
-        ================================================= */
+        .wing-right {
+          right: 1px;
+          border-radius: 30% 70% 40% 60%;
+          transform-origin: left bottom;
+          animation: flap-right .38s ease-in-out infinite;
+        }
+
+        .butterfly-body {
+          position: absolute;
+          width: 6px;
+          height: 34px;
+          left: 21px;
+          top: 5px;
+          border-radius: 50%;
+
+          background:
+            linear-gradient(
+              90deg,
+              #40263d,
+              #171525,
+              #56324c
+            );
+
+          z-index: 5;
+        }
+
+        .antenna {
+          position: absolute;
+          width: 14px;
+          height: 8px;
+          top: 0;
+          border-top: 1px solid #40263d;
+          z-index: 6;
+        }
+
+        .antenna-left {
+          left: 17px;
+          transform: rotate(-28deg);
+        }
+
+        .antenna-right {
+          left: 23px;
+          transform: rotate(28deg);
+        }
+
+        @keyframes flap-left {
+
+          0%, 100% {
+            transform:
+              rotateY(0deg)
+              rotateZ(-4deg);
+          }
+
+          50% {
+            transform:
+              rotateY(58deg)
+              rotateZ(5deg);
+          }
+        }
+
+        @keyframes flap-right {
+
+          0%, 100% {
+            transform:
+              rotateY(0deg)
+              rotateZ(4deg);
+          }
+
+          50% {
+            transform:
+              rotateY(-58deg)
+              rotateZ(-5deg);
+          }
+        }
+
+        /* ================= FLOATING HEARTS ================= */
 
         .floating-heart {
           position: fixed;
-
           z-index: 6;
-
-          color:
-            rgba(239,83,164,.42);
-
+          color: rgba(239,83,164,.42);
           pointer-events: none;
         }
 
-        /* =================================================
-           HEADER
-        ================================================= */
+        /* ================= TITLE ================= */
 
         .memory-header {
           position: relative;
-
           z-index: 20;
-
           text-align: center;
 
           margin-top:
@@ -804,12 +684,9 @@ export default function MemoriesScreen({ onNext }) {
 
         .title-row {
           display: flex;
-
           align-items: center;
           justify-content: center;
-
           gap: 12px;
-
           color: #ef3d98;
         }
 
@@ -825,7 +702,6 @@ export default function MemoriesScreen({ onNext }) {
             clamp(31px, 8vw, 48px);
 
           font-weight: 800;
-
           line-height: 1;
 
           color: #27374e;
@@ -837,26 +713,20 @@ export default function MemoriesScreen({ onNext }) {
           margin: 16px 0 0;
 
           font-family: cursive;
-
           font-size:
             clamp(18px, 5vw, 27px);
 
           font-style: italic;
-
           color: #a965dc;
         }
 
-        /* =================================================
-           DOTS
-        ================================================= */
+        /* ================= DOTS ================= */
 
         .memory-dots {
           position: relative;
-
           z-index: 25;
 
           display: flex;
-
           gap: 11px;
 
           margin-top: 25px;
@@ -865,53 +735,37 @@ export default function MemoriesScreen({ onNext }) {
         .memory-dot {
           width: 9px;
           height: 9px;
-
           border-radius: 50%;
-
           background: #f4acd0;
-
-          transition:
-            .25s ease;
         }
 
         .memory-dot.active {
           width: 14px;
           height: 14px;
-
           margin-top: -2px;
 
           background: #ed3e98;
 
           box-shadow:
-            0 0 13px
-            rgba(237,62,152,.35);
+            0 0 13px rgba(237,62,152,.35);
         }
 
-        /* =================================================
-           ALBUM AREA
-        ================================================= */
+        /* ================= ALBUM ================= */
 
         .album-area {
           position: relative;
 
-          width:
-            min(96vw, 470px);
-
+          width: min(94vw, 430px);
           height: 430px;
 
           margin-top: 17px;
 
           display: flex;
-
           justify-content: center;
           align-items: center;
 
           z-index: 20;
         }
-
-        /* =================================================
-           BACK CARDS
-        ================================================= */
 
         .back-card {
           position: absolute;
@@ -921,16 +775,13 @@ export default function MemoriesScreen({ onNext }) {
 
           border-radius: 27px;
 
-          background:
-            rgba(255,255,255,.88);
+          background: rgba(255,255,255,.88);
 
           border:
-            1px solid
-            rgba(255,255,255,.95);
+            1px solid rgba(255,255,255,.95);
 
           box-shadow:
-            0 25px 60px
-            rgba(160,70,125,.13);
+            0 25px 60px rgba(160,70,125,.13);
         }
 
         .back-card-one {
@@ -959,465 +810,65 @@ export default function MemoriesScreen({ onNext }) {
             );
         }
 
-        /* =================================================
-           BOOK SCENE
-        ================================================= */
-
-        .book-scene {
+        .album {
           position: relative;
 
-          width: 390px;
-          height: 350px;
+          width: 350px;
+          height: 400px;
 
-          display: flex;
+          border-radius: 28px;
 
-          align-items: center;
-          justify-content: center;
-
-          perspective: 1800px;
-
-          perspective-origin:
-            50% 50%;
-
-          z-index: 20;
-        }
-
-        /* =================================================
-           BOOK
-        ================================================= */
-
-        .memory-book {
-          position: relative;
-
-          width: 360px;
-          height: 330px;
-
-          transform-style:
-            preserve-3d;
-
-          cursor: pointer;
-
-          border-radius: 18px;
-
-          box-shadow:
-            0 30px 65px
-            rgba(150,65,120,.24),
-
-            0 8px 18px
-            rgba(70,35,65,.12);
-
-          background:
-            #fff;
-
-          isolation: isolate;
-        }
-
-        /* =================================================
-           NEXT COMPLETE SPREAD
-        ================================================= */
-
-        .next-spread {
-          position: absolute;
-
-          inset: 0;
-
-          overflow: hidden;
-
-          border-radius: 18px;
-
-          background: #fff;
-
-          z-index: 1;
-        }
-
-        .next-spread img {
-          position: absolute;
-
-          inset: 0;
-
-          width: 100%;
-          height: 100%;
-
-          object-fit: cover;
-
-          object-position: center;
-
-          display: block;
-
-          user-select: none;
-
-          -webkit-user-drag: none;
-        }
-
-        /* =================================================
-           CURRENT LEFT PAGE
-           শুধু left half থাকবে
-        ================================================= */
-
-        .current-left-page {
-          position: absolute;
-
-          left: 0;
-          top: 0;
-
-          width: 50%;
-          height: 100%;
-
-          overflow: hidden;
-
-          border-radius:
-            18px 0 0 18px;
-
-          z-index: 10;
-
-          background: #fff;
-
-          box-shadow:
-            inset -12px 0 22px
-            rgba(70,30,60,.08);
-        }
-
-        .current-left-page img {
-          position: absolute;
-
-          top: 0;
-          left: 0;
-
-          width: 200%;
-          height: 100%;
-
-          max-width: none;
-
-          object-fit: cover;
-
-          object-position: left center;
-
-          display: block;
-
-          user-select: none;
-
-          -webkit-user-drag: none;
-        }
-
-        /* =================================================
-           TURNING PAGE
-        ================================================= */
-
-        .turning-page {
-          position: absolute;
-
-          left: 50%;
-          top: 0;
-
-          width: 50%;
-          height: 100%;
-
-          transform-origin:
-            left center;
-
-          transform-style:
-            preserve-3d;
-
-          z-index: 30;
-
-          will-change:
-            transform;
-
-          cursor: pointer;
-        }
-
-        /* =================================================
-           FRONT OF TURNING PAGE
-        ================================================= */
-
-        .turn-front {
-          position: absolute;
-
-          inset: 0;
-
-          overflow: hidden;
-
-          border-radius:
-            0 18px 18px 0;
-
-          border-top:
-            1px solid
-            rgba(255,255,255,.8);
-
-          border-right:
-            1px solid
-            rgba(220,190,205,.55);
-
-          border-bottom:
-            1px solid
-            rgba(220,190,205,.55);
-
-          background: #fff;
-
-          backface-visibility:
-            hidden;
-
-          -webkit-backface-visibility:
-            hidden;
-
-          transform-style:
-            preserve-3d;
-
-          box-shadow:
-            -8px 0 18px
-            rgba(70,30,60,.07),
-
-            12px 10px 30px
-            rgba(80,30,70,.14);
-        }
-
-        /*
-          Important:
-          Image width 200% কারণ page হলো book-এর
-          অর্ধেক, কিন্তু image পুরো spread-এর।
-        */
-
-        .turn-front img {
-          position: absolute;
-
-          top: 0;
-          right: 0;
-
-          width: 200%;
-          height: 100%;
-
-          max-width: none;
-
-          object-fit: cover;
-
-          object-position: right center;
-
-          display: block;
-
-          user-select: none;
-
-          -webkit-user-drag: none;
-        }
-
-        /* =================================================
-           PAGE GLOSS
-        ================================================= */
-
-        .page-gloss {
-          position: absolute;
-
-          inset: 0;
-
-          pointer-events: none;
-
-          background:
-            linear-gradient(
-              105deg,
-              rgba(255,255,255,.22),
-              transparent 25%,
-              transparent 72%,
-              rgba(255,255,255,.14)
-            );
-
-          z-index: 3;
-        }
-
-        /* =================================================
-           HEART ON PHOTO
-        ================================================= */
-
-        .page-heart {
-          position: absolute;
-
-          right: 13px;
-          top: 13px;
-
-          color: white;
-
-          z-index: 5;
-
-          filter:
-            drop-shadow(
-              0 2px 6px
-              rgba(0,0,0,.35)
-            );
-        }
-
-        /* =================================================
-           BACK OF PAGE
-        ================================================= */
-
-        .turn-back {
-          position: absolute;
-
-          inset: 0;
-
-          overflow: hidden;
-
-          border-radius:
-            18px 0 0 18px;
+          padding: 20px;
 
           background:
             linear-gradient(
               145deg,
-              #fff,
-              #fff0f7
+              rgba(255,255,255,.98),
+              rgba(255,249,252,.97)
             );
 
-          backface-visibility:
-            hidden;
-
-          -webkit-backface-visibility:
-            hidden;
-
-          transform:
-            rotateY(180deg);
-
-          transform-style:
-            preserve-3d;
+          border:
+            1px solid white;
 
           box-shadow:
-            inset -12px 0 20px
-            rgba(100,40,80,.08);
+            0 30px 65px rgba(170,70,130,.2),
+            inset 0 0 25px rgba(255,255,255,.8);
+
+          z-index: 10;
         }
 
-        .back-paper {
-          width: 100%;
-          height: 100%;
-
-          display: flex;
-
-          align-items: center;
-          justify-content: center;
-
-          flex-direction: column;
-
-          gap: 7px;
-
-          color: #ed69aa;
-
-          font-family: cursive;
-        }
-
-        .back-paper span {
-          opacity: .55;
-
-          font-size: 18px;
-        }
-
-        /* =================================================
-           BOOK SPINE
-        ================================================= */
-
-        .book-spine {
-          position: absolute;
-
-          left: 50%;
-          top: 0;
-
-          width: 4px;
-          height: 100%;
-
-          transform:
-            translateX(-50%)
-            translateZ(5px);
-
-          background:
-            linear-gradient(
-              90deg,
-              rgba(130,70,105,.05),
-              rgba(100,45,85,.25),
-              rgba(255,255,255,.6)
-            );
-
-          box-shadow:
-            0 0 9px
-            rgba(80,40,70,.16);
-
-          z-index: 50;
-
-          pointer-events: none;
-        }
-
-        /* =================================================
-           PAGE EDGE
-        ================================================= */
-
-        .page-edge {
-          position: absolute;
-
-          right: -4px;
-          top: 7px;
-
-          width: 5px;
-          height: calc(100% - 14px);
-
-          border-radius:
-            0 8px 8px 0;
-
-          background:
-            repeating-linear-gradient(
-              to bottom,
-              #f6e6ed 0 5px,
-              #fff 5px 8px
-            );
-
-          opacity: .8;
-
-          z-index: 55;
-
-          pointer-events: none;
-        }
-
-        /* =================================================
-           BOOK BOTTOM SHADOW
-        ================================================= */
-
-        .memory-book::after {
+        .album::after {
           content: "";
 
           position: absolute;
+          inset: -7px;
 
-          left: 7%;
-          right: 7%;
+          border-radius: 32px;
 
-          bottom: -15px;
+          border:
+            1px solid rgba(247,145,200,.35);
 
-          height: 20px;
-
-          border-radius: 50%;
-
-          background:
-            rgba(110,45,90,.18);
-
-          filter: blur(10px);
-
-          z-index: -5;
+          pointer-events: none;
         }
 
-        /* =================================================
-           TAPE
-        ================================================= */
+        /* ================= TAPE ================= */
 
         .album-tape {
           position: absolute;
 
-          top: 7px;
+          top: -13px;
           left: 50%;
 
-          transform:
-            translateX(-50%);
+          transform: translateX(-50%);
 
           width: 88px;
           height: 35px;
 
           display: flex;
-
           justify-content: center;
           align-items: center;
 
           color: #d84e91;
-
           font-size: 23px;
 
           background:
@@ -1428,17 +879,12 @@ export default function MemoriesScreen({ onNext }) {
             );
 
           box-shadow:
-            0 5px 12px
-            rgba(180,60,120,.13);
+            0 5px 12px rgba(180,60,120,.13);
 
-          z-index: 100;
-
-          pointer-events: none;
+          z-index: 50;
         }
 
-        /* =================================================
-           RIBBONS
-        ================================================= */
+        /* ================= RIBBON ================= */
 
         .ribbon {
           position: absolute;
@@ -1458,28 +904,122 @@ export default function MemoriesScreen({ onNext }) {
               transparent
             );
 
-          z-index: 2;
-
-          pointer-events: none;
+          z-index: -1;
         }
 
         .ribbon-left {
           left: -65px;
-
-          transform:
-            rotate(-27deg);
+          transform: rotate(-27deg);
         }
 
         .ribbon-right {
           right: -65px;
-
-          transform:
-            rotate(27deg);
+          transform: rotate(27deg);
         }
 
-        /* =================================================
-           NEXT BUTTON
-        ================================================= */
+        /* ================= SINGLE PHOTO ================= */
+
+        .photo-card {
+          position: absolute;
+
+          left: 20px;
+          top: 20px;
+
+          width: 310px;
+          height: 360px;
+
+          padding:
+            10px
+            10px
+            43px;
+
+          background: white;
+
+          border-radius: 20px;
+
+          border:
+            1px solid #f2dce7;
+
+          box-shadow:
+            0 18px 42px rgba(65,35,60,.18);
+
+          cursor: pointer;
+
+          z-index: 30;
+        }
+
+        .photo-box {
+          position: relative;
+
+          width: 100%;
+          height: 295px;
+
+          overflow: hidden;
+
+          border-radius: 14px;
+
+          background: #f7eaf0;
+        }
+
+        .photo-box img {
+          width: 100%;
+          height: 100%;
+
+          display: block;
+
+          object-fit: cover;
+
+          user-select: none;
+          -webkit-user-drag: none;
+        }
+
+        .photo-overlay {
+          position: absolute;
+          inset: 0;
+
+          pointer-events: none;
+
+          background:
+            linear-gradient(
+              145deg,
+              rgba(255,255,255,.18),
+              transparent 40%,
+              rgba(245,80,160,.08)
+            );
+        }
+
+        .photo-heart {
+          position: absolute;
+
+          right: 12px;
+          top: 12px;
+
+          color: white;
+
+          filter:
+            drop-shadow(
+              0 2px 6px rgba(0,0,0,.3)
+            );
+        }
+
+        .caption {
+          position: absolute;
+
+          left: 0;
+          right: 0;
+          bottom: 11px;
+
+          text-align: center;
+
+          font-family: cursive;
+          font-style: italic;
+
+          font-size: 15px;
+
+          color: #7f899c;
+        }
+
+        /* ================= NEXT BUTTON ================= */
 
         .next-button {
           position: absolute;
@@ -1490,58 +1030,42 @@ export default function MemoriesScreen({ onNext }) {
           width: 48px;
           height: 48px;
 
-          transform:
-            translateY(-50%);
+          transform: translateY(-50%);
 
           border: none;
-
           border-radius: 50%;
 
           background:
-            rgba(255,255,255,.97);
+            rgba(255,255,255,.95);
 
           color: #ed5ca7;
 
           display: flex;
-
           align-items: center;
           justify-content: center;
 
           box-shadow:
-            0 8px 22px
-            rgba(180,70,135,.2);
+            0 8px 22px rgba(180,70,135,.2);
 
-          z-index: 120;
+          z-index: 70;
 
           cursor: pointer;
         }
 
-        .next-button:disabled {
-          cursor: default;
-
-          opacity: .8;
-        }
-
-        /* =================================================
-           ALBUM HEART
-        ================================================= */
+        /* ================= ALBUM HEART ================= */
 
         .album-heart {
           position: absolute;
 
-          right: 22px;
-          bottom: 12px;
+          right: 25px;
+          bottom: 13px;
 
           color: #f158a5;
 
-          z-index: 110;
-
-          pointer-events: none;
+          z-index: 80;
         }
 
-        /* =================================================
-           TAP TEXT
-        ================================================= */
+        /* ================= TAP ================= */
 
         .tap-memory {
           position: absolute;
@@ -1549,11 +1073,9 @@ export default function MemoriesScreen({ onNext }) {
           bottom: -2px;
           left: 50%;
 
-          transform:
-            translateX(-50%);
+          transform: translateX(-50%);
 
-          padding:
-            7px 23px;
+          padding: 7px 23px;
 
           border-radius: 999px;
 
@@ -1567,29 +1089,23 @@ export default function MemoriesScreen({ onNext }) {
           font-size: 12px;
 
           border:
-            1px solid
-            rgba(240,160,205,.35);
+            1px solid rgba(240,160,205,.35);
 
           z-index: 100;
         }
 
-        /* =================================================
-           COUNTER
-        ================================================= */
+        /* ================= COUNTER ================= */
 
         .counter {
           position: relative;
-
           z-index: 30;
 
           display: flex;
-
           align-items: center;
 
           gap: 16px;
 
           margin-top: 2px;
-
           margin-bottom: 17px;
         }
 
@@ -1610,23 +1126,18 @@ export default function MemoriesScreen({ onNext }) {
           letter-spacing: 4px;
         }
 
-        /* =================================================
-           LETTER
-        ================================================= */
+        /* ================= LETTER ================= */
 
         .letter-button {
           position: relative;
-
           z-index: 100;
 
           margin-bottom: 22px;
         }
 
-        /* =================================================
-           MOBILE
-        ================================================= */
+        /* ================= MOBILE ================= */
 
-        @media (max-width: 430px) {
+        @media (max-width: 390px) {
 
           .memory-header {
             margin-top: 60px;
@@ -1646,23 +1157,12 @@ export default function MemoriesScreen({ onNext }) {
           }
 
           .album-area {
-            width: 100vw;
-
             height: 385px;
           }
 
-          .book-scene {
-            width: 350px;
-            height: 320px;
-          }
-
-          .memory-book {
-            width: 330px;
-            height: 310px;
-          }
-
-          .next-button {
-            right: -10px;
+          .album {
+            width: 320px;
+            height: 365px;
           }
 
           .back-card {
@@ -1670,55 +1170,21 @@ export default function MemoriesScreen({ onNext }) {
             height: 365px;
           }
 
-          .album-tape {
-            top: 6px;
+          .photo-card {
+            width: 280px;
+            height: 325px;
           }
 
-          .flying-butterfly {
-            width: 43px;
-            height: 43px;
-          }
-
-          .flying-butterfly img {
-            width: 42px;
-            height: 42px;
-          }
-        }
-
-        /* =================================================
-           SMALL PHONES
-        ================================================= */
-
-        @media (max-width: 360px) {
-
-          .book-scene {
-            width: 320px;
-            height: 300px;
-          }
-
-          .memory-book {
-            width: 300px;
-            height: 290px;
+          .photo-box {
+            height: 262px;
           }
 
           .next-button {
-            right: -8px;
-
-            width: 44px;
-            height: 44px;
-          }
-
-          .tap-memory {
-            font-size: 11px;
-
-            padding:
-              6px 16px;
+            right: -12px;
           }
         }
 
-        /* =================================================
-           SHORT HEIGHT
-        ================================================= */
+        /* ================= SHORT SCREEN ================= */
 
         @media (max-height: 760px) {
 
@@ -1732,7 +1198,6 @@ export default function MemoriesScreen({ onNext }) {
 
           .album-area {
             height: 370px;
-
             margin-top: 8px;
           }
 
