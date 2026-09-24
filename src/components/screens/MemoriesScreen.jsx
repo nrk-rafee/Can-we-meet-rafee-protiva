@@ -8,8 +8,13 @@ import {
   Sparkles,
   Camera,
   ChevronRight,
+  Flower2,
 } from "lucide-react";
 import Button from "../Button";
+
+/* =========================================================
+   YOUR 5 MEMORIES
+========================================================= */
 
 const memories = [
   "/images/file_0000000016dc82078b236eaa37f91e05.png",
@@ -19,109 +24,136 @@ const memories = [
   "/images/IMG-20260329-WA0002.jpg",
 ];
 
-/* ================= BUTTERFLIES ================= */
+/* =========================================================
+   REAL BUTTERFLY ASSET
+   CC0 Wikimedia Commons
+========================================================= */
+
+const butterflyImage =
+  "https://upload.wikimedia.org/wikipedia/commons/e/ea/Carterocephalus_silvicola_transparent.png";
+
+/* =========================================================
+   BUTTERFLIES
+========================================================= */
 
 const butterflies = [
   {
-    top: "18%",
-    startX: "-12vw",
-    endX: "110vw",
-    duration: 18,
+    size: 82,
+    left: "3%",
+    top: "20%",
+    duration: 15,
     delay: 0,
-    size: 1,
+    x: [0, 70, 25, 95, 0],
+    y: [0, -35, 30, -20, 0],
+    rotate: [-8, 10, -5, 12, -8],
+    opacity: 0.92,
+    blur: 0,
+    scaleX: [1, 0.72, 1, 0.7, 1],
   },
   {
-    top: "32%",
-    startX: "110vw",
-    endX: "-12vw",
-    duration: 21,
-    delay: 4,
-    size: 0.72,
-  },
-  {
-    top: "48%",
-    startX: "-12vw",
-    endX: "110vw",
-    duration: 23,
+    size: 55,
+    left: "78%",
+    top: "24%",
+    duration: 13,
     delay: 2,
-    size: 0.58,
+    x: [0, -55, -20, -75, 0],
+    y: [0, 30, -25, 35, 0],
+    rotate: [8, -12, 5, -10, 8],
+    opacity: 0.78,
+    blur: 0.2,
+    scaleX: [1, 0.75, 1, 0.7, 1],
   },
   {
-    top: "65%",
-    startX: "110vw",
-    endX: "-12vw",
-    duration: 20,
-    delay: 8,
-    size: 0.8,
+    size: 105,
+    left: "74%",
+    top: "62%",
+    duration: 18,
+    delay: 1,
+    x: [0, -85, -30, -110, 0],
+    y: [0, -40, 25, -55, 0],
+    rotate: [5, -8, 7, -12, 5],
+    opacity: 0.88,
+    blur: 0,
+    scaleX: [1, 0.7, 1, 0.72, 1],
   },
   {
-    top: "78%",
-    startX: "-12vw",
-    endX: "110vw",
-    duration: 25,
-    delay: 12,
-    size: 0.62,
+    size: 48,
+    left: "12%",
+    top: "69%",
+    duration: 12,
+    delay: 4,
+    x: [0, 60, 20, 75, 0],
+    y: [0, -25, 30, -15, 0],
+    rotate: [-6, 12, -8, 10, -6],
+    opacity: 0.62,
+    blur: 1.2,
+    scaleX: [1, 0.78, 1, 0.72, 1],
+  },
+  {
+    size: 68,
+    left: "87%",
+    top: "43%",
+    duration: 16,
+    delay: 5,
+    x: [0, -45, -90, -40, 0],
+    y: [0, -35, 10, 40, 0],
+    rotate: [10, -5, 12, -8, 10],
+    opacity: 0.7,
+    blur: 0.8,
+    scaleX: [1, 0.75, 1, 0.7, 1],
+  },
+  {
+    size: 38,
+    left: "1%",
+    top: "48%",
+    duration: 14,
+    delay: 3,
+    x: [0, 45, 75, 25, 0],
+    y: [0, 20, -35, 15, 0],
+    rotate: [-5, 9, -8, 6, -5],
+    opacity: 0.48,
+    blur: 1.8,
+    scaleX: [1, 0.8, 1, 0.75, 1],
   },
 ];
 
-const particles = [
-  [6, 13],
-  [15, 27],
-  [25, 9],
-  [37, 20],
-  [50, 11],
-  [64, 18],
-  [78, 10],
-  [91, 22],
-  [8, 57],
-  [19, 71],
-  [31, 83],
-  [69, 79],
-  [83, 57],
-  [94, 73],
-  [54, 91],
+/* =========================================================
+   FLOATING PETALS
+========================================================= */
+
+const petals = Array.from({ length: 18 }, (_, index) => ({
+  left: `${(index * 37) % 100}%`,
+  top: `${(index * 53) % 100}%`,
+  size: 5 + (index % 4) * 2,
+  delay: (index % 7) * 0.7,
+  duration: 7 + (index % 5),
+  rotate: index % 2 === 0 ? 35 : -35,
+}));
+
+/* =========================================================
+   BACKGROUND SPARKLES
+========================================================= */
+
+const sparkles = [
+  { left: "8%", top: "14%", size: 14, delay: 0 },
+  { left: "91%", top: "14%", size: 11, delay: 1 },
+  { left: "6%", top: "83%", size: 12, delay: 1.8 },
+  { left: "93%", top: "79%", size: 15, delay: 0.6 },
+  { left: "17%", top: "38%", size: 8, delay: 2 },
+  { left: "84%", top: "51%", size: 9, delay: 1.2 },
 ];
 
-function Butterfly({ data, index }) {
-  return (
-    <motion.div
-      className="real-butterfly"
-      style={{
-        top: data.top,
-        scale: data.size,
-      }}
-      initial={{ x: data.startX }}
-      animate={{
-        x: [
-          data.startX,
-          index % 2 === 0 ? "25vw" : "75vw",
-          index % 2 === 0 ? "72vw" : "30vw",
-          data.endX,
-        ],
-        y: [0, -45, 35, -20, 0],
-        rotate: [0, 8, -7, 6, 0],
-      }}
-      transition={{
-        duration: data.duration,
-        delay: data.delay,
-        repeat: Infinity,
-        ease: "easeInOut",
-      }}
-    >
-      <div className="butterfly-wing wing-left" />
-      <div className="butterfly-wing wing-right" />
-      <div className="butterfly-body" />
-      <div className="antenna antenna-left" />
-      <div className="antenna antenna-right" />
-    </motion.div>
-  );
-}
+/* =========================================================
+   COMPONENT
+========================================================= */
 
-export default function MemoriesScreen({ onNext }) {
+function MemoriesScreen({ onNext }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(1);
 
-  const nextMemory = () => {
+  const currentPhoto = memories[currentIndex];
+
+  const nextPhoto = () => {
     setDirection(1);
 
     setCurrentIndex((prev) =>
@@ -130,1083 +162,902 @@ export default function MemoriesScreen({ onNext }) {
   };
 
   return (
-    <main className="memories-page">
+    <div
+      className="
+        relative
+        flex flex-col
+        justify-center
+        items-center
+        w-screen
+        min-h-screen
+        left-1/2
+        -translate-x-1/2
+        overflow-hidden
+        bg-[radial-gradient(circle_at_50%_20%,rgba(255,255,255,0.96)_0%,rgba(255,235,245,0.92)_34%,rgba(250,218,235,0.9)_68%,rgba(246,207,230,0.95)_100%)]
+      "
+    >
 
-      {/* BACKGROUND */}
-      <div className="dream-background" />
+      {/* =====================================================
+          DREAMY BACKGROUND GLOW
+      ===================================================== */}
 
-      <div className="pink-glow glow-a" />
-      <div className="pink-glow glow-b" />
-      <div className="pink-glow glow-c" />
+      <motion.div
+        className="
+          absolute
+          -top-32
+          left-1/2
+          -translate-x-1/2
+          w-[520px]
+          h-[520px]
+          rounded-full
+          bg-pink-200/30
+          blur-[100px]
+          pointer-events-none
+        "
+        animate={{
+          scale: [1, 1.08, 1],
+          opacity: [0.35, 0.6, 0.35],
+        }}
+        transition={{
+          duration: 7,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+      />
 
-      {/* LIGHT PARTICLES */}
-      <div className="particles">
-        {particles.map(([left, top], i) => (
-          <motion.span
-            key={i}
-            className="particle"
-            style={{
-              left: `${left}%`,
-              top: `${top}%`,
-            }}
-            animate={{
-              opacity: [0.15, 0.9, 0.15],
-              scale: [0.6, 1.25, 0.6],
-              y: [0, -12, 0],
-            }}
-            transition={{
-              duration: 3 + (i % 3),
-              delay: i * 0.18,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          />
-        ))}
-      </div>
+      <motion.div
+        className="
+          absolute
+          bottom-[-160px]
+          right-[-120px]
+          w-[430px]
+          h-[430px]
+          rounded-full
+          bg-purple-200/25
+          blur-[100px]
+          pointer-events-none
+        "
+        animate={{
+          scale: [1.05, 1, 1.05],
+          opacity: [0.25, 0.5, 0.25],
+        }}
+        transition={{
+          duration: 8,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+      />
 
-      {/* SPARKLES */}
-      <div className="sparkles">
-        {[...Array(12)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="sparkle"
-            style={{
-              left: `${5 + ((i * 17) % 90)}%`,
-              top: `${8 + ((i * 23) % 82)}%`,
-            }}
-            animate={{
-              opacity: [0.15, 1, 0.15],
-              scale: [0.7, 1.2, 0.7],
-              rotate: [0, 90, 180],
-            }}
-            transition={{
-              duration: 2.5 + (i % 3),
-              delay: i * 0.25,
-              repeat: Infinity,
-            }}
-          >
-            <Sparkles size={15 + (i % 2) * 5} />
-          </motion.div>
-        ))}
-      </div>
+      {/* =====================================================
+          SOFT BOKEH
+      ===================================================== */}
 
-      {/* BUTTERFLIES */}
-      <div className="butterflies">
-        {butterflies.map((item, index) => (
-          <Butterfly
-            key={index}
-            data={item}
-            index={index}
-          />
-        ))}
-      </div>
-
-      {/* FLOATING HEARTS */}
-      {[
-        ["7%", "42%", 18],
-        ["90%", "34%", 14],
-        ["10%", "70%", 12],
-        ["88%", "67%", 18],
-        ["17%", "84%", 12],
-        ["82%", "82%", 13],
-      ].map(([left, top, size], i) => (
+      {[...Array(12)].map((_, index) => (
         <motion.div
-          key={i}
-          className="floating-heart"
-          style={{ left, top }}
+          key={index}
+          className="
+            absolute
+            rounded-full
+            bg-white/45
+            blur-sm
+            pointer-events-none
+          "
+          style={{
+            width: `${8 + (index % 4) * 5}px`,
+            height: `${8 + (index % 4) * 5}px`,
+            left: `${(index * 31) % 100}%`,
+            top: `${(index * 47) % 100}%`,
+          }}
           animate={{
-            y: [0, -13, 0],
-            x: [0, i % 2 ? -6 : 6, 0],
-            opacity: [0.2, 0.75, 0.2],
+            y: [0, -15, 0],
+            opacity: [0.2, 0.7, 0.2],
+            scale: [0.8, 1.15, 0.8],
           }}
           transition={{
-            duration: 4 + i * 0.3,
-            delay: i * 0.4,
+            duration: 4 + (index % 4),
             repeat: Infinity,
+            delay: index * 0.4,
+            ease: "easeInOut",
+          }}
+        />
+      ))}
+
+      {/* =====================================================
+          REAL BUTTERFLIES
+      ===================================================== */}
+
+      {butterflies.map((butterfly, index) => (
+        <motion.div
+          key={index}
+          className="
+            absolute
+            pointer-events-none
+            z-[4]
+          "
+          style={{
+            left: butterfly.left,
+            top: butterfly.top,
+          }}
+          animate={{
+            x: butterfly.x,
+            y: butterfly.y,
+            rotate: butterfly.rotate,
+            scaleX: butterfly.scaleX,
+          }}
+          transition={{
+            duration: butterfly.duration,
+            delay: butterfly.delay,
+            repeat: Infinity,
+            ease: "easeInOut",
           }}
         >
-          <Heart size={size} fill="currentColor" />
+          <motion.img
+            src={butterflyImage}
+            alt=""
+            draggable="false"
+            className="select-none"
+            style={{
+              width: butterfly.size,
+              height: "auto",
+              opacity: butterfly.opacity,
+              filter: `blur(${butterfly.blur}px) drop-shadow(0 7px 12px rgba(95,55,75,0.18))`,
+            }}
+            animate={{
+              y: [0, -5, 0, 5, 0],
+            }}
+            transition={{
+              duration: 2.2,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: butterfly.delay,
+            }}
+          />
         </motion.div>
       ))}
 
-      {/* TITLE */}
-      <motion.header
-        className="memory-header"
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-      >
-        <div className="title-row">
-          <Camera />
-          <h1>Our Memories</h1>
-          <Camera />
-        </div>
+      {/* =====================================================
+          FLOATING PETALS
+      ===================================================== */}
 
-        <p>Little moments, forever ours ♡</p>
-      </motion.header>
+      {petals.map((petal, index) => (
+        <motion.div
+          key={index}
+          className="
+            absolute
+            pointer-events-none
+            z-[2]
+            rounded-full
+            bg-pink-300/45
+          "
+          style={{
+            left: petal.left,
+            top: petal.top,
+            width: petal.size,
+            height: petal.size * 1.6,
+            borderRadius: "70% 30% 70% 30%",
+          }}
+          animate={{
+            y: [0, -30, 10, -15, 0],
+            x: [0, 12, -10, 8, 0],
+            rotate: [
+              petal.rotate,
+              petal.rotate + 80,
+              petal.rotate - 20,
+              petal.rotate + 110,
+              petal.rotate,
+            ],
+            opacity: [0.15, 0.55, 0.25, 0.5, 0.15],
+          }}
+          transition={{
+            duration: petal.duration,
+            delay: petal.delay,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+      ))}
 
-      {/* DOTS */}
-      <div className="memory-dots">
-        {memories.map((_, i) => (
-          <span
-            key={i}
-            className={
-              i === currentIndex
-                ? "memory-dot active"
-                : "memory-dot"
-            }
+      {/* =====================================================
+          SPARKLES
+      ===================================================== */}
+
+      {sparkles.map((star, index) => (
+        <motion.div
+          key={index}
+          className="absolute pointer-events-none z-[3]"
+          style={{
+            left: star.left,
+            top: star.top,
+          }}
+          animate={{
+            scale: [0.6, 1.25, 0.6],
+            opacity: [0.2, 0.9, 0.2],
+            rotate: [0, 90, 180],
+          }}
+          transition={{
+            duration: 3,
+            delay: star.delay,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        >
+          <Sparkles
+            size={star.size}
+            className="text-white drop-shadow-[0_0_5px_rgba(255,255,255,0.9)]"
           />
-        ))}
-      </div>
+        </motion.div>
+      ))}
 
-      {/* ================= ALBUM ================= */}
+      {/* =====================================================
+          HEADER
+      ===================================================== */}
 
-      <section className="album-area">
+      <motion.div
+        className="
+          relative
+          z-20
+          text-center
+          mt-2
+          px-5
+        "
+        initial={{
+          opacity: 0,
+          y: -20,
+        }}
+        animate={{
+          opacity: 1,
+          y: 0,
+        }}
+        transition={{
+          duration: 0.8,
+        }}
+      >
+        <div className="flex items-center justify-center gap-3">
 
-        {/* BACK SCRAPBOOK CARDS */}
-        <div className="back-card back-card-one" />
-        <div className="back-card back-card-two" />
-
-        {/* MAIN ALBUM */}
-        <div className="album">
-
-          {/* TAPE */}
           <motion.div
-            className="album-tape"
-            animate={{ rotate: [-4, -1, -4] }}
-            transition={{
-              duration: 4,
-              repeat: Infinity,
-            }}
-          >
-            ♡
-          </motion.div>
-
-          {/* RIBBON */}
-          <div className="ribbon ribbon-left" />
-          <div className="ribbon ribbon-right" />
-
-          {/* ================= ONE PHOTO ONLY ================= */}
-
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={currentIndex}
-              className="photo-card"
-              initial={{
-                opacity: 0,
-                x: direction > 0 ? 70 : -70,
-                rotate: direction > 0 ? 3 : -3,
-                scale: 0.96,
-              }}
-              animate={{
-                opacity: 1,
-                x: 0,
-                rotate: 0,
-                scale: 1,
-              }}
-              exit={{
-                opacity: 0,
-                x: direction > 0 ? -70 : 70,
-                rotate: direction > 0 ? -3 : 3,
-                scale: 0.96,
-              }}
-              transition={{
-                duration: 0.5,
-                ease: "easeInOut",
-              }}
-              onClick={nextMemory}
-            >
-              <div className="photo-box">
-
-                <img
-                  src={memories[currentIndex]}
-                  alt={`Memory ${currentIndex + 1}`}
-                  draggable="false"
-                />
-
-                <div className="photo-overlay" />
-
-                <motion.div
-                  className="photo-heart"
-                  animate={{
-                    scale: [1, 1.12, 1],
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                  }}
-                >
-                  <Heart
-                    size={20}
-                    fill="white"
-                  />
-                </motion.div>
-
-              </div>
-
-              <div className="caption">
-                a little piece of us ♡
-              </div>
-            </motion.div>
-          </AnimatePresence>
-
-          {/* NEXT BUTTON */}
-          <motion.button
-            className="next-button"
-            onClick={nextMemory}
-            whileTap={{ scale: 0.88 }}
             animate={{
-              x: [0, 3, 0],
-            }}
-            transition={{
-              duration: 1.7,
-              repeat: Infinity,
-            }}
-          >
-            <ChevronRight size={20} />
-          </motion.button>
-
-          {/* ALBUM HEART */}
-          <motion.div
-            className="album-heart"
-            animate={{
-              scale: [1, 1.13, 1],
-              rotate: [-5, 5, -5],
+              rotate: [-6, 6, -6],
+              scale: [1, 1.08, 1],
             }}
             transition={{
               duration: 3,
               repeat: Infinity,
             }}
           >
-            <Heart fill="currentColor" />
+            <Camera
+              size={20}
+              className="text-pink-500"
+            />
+          </motion.div>
+
+          <h2
+            className="
+              text-[32px]
+              md:text-5xl
+              font-black
+              tracking-tight
+              text-slate-700
+              drop-shadow-[0_3px_0_rgba(255,255,255,0.7)]
+            "
+          >
+            Our Memories
+          </h2>
+
+          <motion.div
+            animate={{
+              rotate: [6, -6, 6],
+              scale: [1, 1.08, 1],
+            }}
+            transition={{
+              duration: 3,
+              repeat: Infinity,
+            }}
+          >
+            <Camera
+              size={20}
+              className="text-pink-500"
+            />
           </motion.div>
         </div>
 
-        {/* TAP TEXT */}
-        <motion.div
-          className="tap-memory"
+        <motion.p
+          className="
+            text-xl
+            md:text-2xl
+            font-hand
+            text-purple-500
+            mt-2
+          "
           animate={{
-            y: [0, 4, 0],
-            opacity: [0.45, 1, 0.45],
+            opacity: [0.65, 1, 0.65],
           }}
           transition={{
-            duration: 2,
+            duration: 2.5,
             repeat: Infinity,
           }}
         >
-          tap for next memory ♡
+          Little moments, forever ours ♡
+        </motion.p>
+      </motion.div>
+
+      {/* =====================================================
+          PHOTO DOTS
+      ===================================================== */}
+
+      <motion.div
+        className="
+          relative
+          z-20
+          flex
+          items-center
+          justify-center
+          gap-3
+          mt-4
+        "
+        initial={{
+          opacity: 0,
+        }}
+        animate={{
+          opacity: 1,
+        }}
+      >
+        {memories.map((_, index) => (
+          <motion.span
+            key={index}
+            className={`
+              rounded-full
+              ${
+                index === currentIndex
+                  ? "w-3.5 h-3.5 bg-pink-500 shadow-[0_0_12px_rgba(236,72,153,0.55)]"
+                  : "w-2.5 h-2.5 bg-pink-200"
+              }
+            `}
+            animate={
+              index === currentIndex
+                ? {
+                    scale: [1, 1.3, 1],
+                  }
+                : {
+                    scale: 1,
+                  }
+            }
+            transition={{
+              duration: 1.5,
+              repeat: Infinity,
+            }}
+          />
+        ))}
+      </motion.div>
+
+      {/* =====================================================
+          LUXURY ALBUM AREA
+      ===================================================== */}
+
+      <div
+        className="
+          relative
+          z-10
+          w-full
+          max-w-[480px]
+          h-[440px]
+          md:h-[465px]
+          mt-1
+          flex
+          items-center
+          justify-center
+        "
+      >
+
+        {/* Golden outer halo */}
+
+        <motion.div
+          className="
+            absolute
+            w-[345px]
+            h-[390px]
+            md:w-[370px]
+            md:h-[410px]
+            rounded-[30px]
+            border
+            border-amber-200/50
+            pointer-events-none
+          "
+          animate={{
+            boxShadow: [
+              "0 0 20px rgba(244,190,70,0.08)",
+              "0 0 45px rgba(244,190,70,0.2)",
+              "0 0 20px rgba(244,190,70,0.08)",
+            ],
+            rotate: [0, 0.5, 0, -0.5, 0],
+          }}
+          transition={{
+            duration: 5,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+
+        {/* Back album layer */}
+
+        <motion.div
+          className="
+            absolute
+            w-[335px]
+            h-[390px]
+            md:w-[360px]
+            md:h-[410px]
+            rounded-[28px]
+            bg-white/40
+            backdrop-blur-md
+            border
+            border-white/70
+            shadow-[0_25px_60px_rgba(126,74,110,0.12)]
+          "
+          animate={{
+            rotate: [-2, -1, -2],
+          }}
+          transition={{
+            duration: 6,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+
+        {/* Decorative pink layer */}
+
+        <motion.div
+          className="
+            absolute
+            w-[325px]
+            h-[385px]
+            md:w-[350px]
+            md:h-[405px]
+            rounded-[27px]
+            border
+            border-pink-200/70
+            bg-pink-50/25
+          "
+          animate={{
+            rotate: [2, 1, 2],
+          }}
+          transition={{
+            duration: 7,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+
+        {/* Ribbon behind album */}
+
+        <motion.div
+          className="
+            absolute
+            left-[48px]
+            right-[48px]
+            top-[48%]
+            h-[24px]
+            rounded-full
+            bg-gradient-to-r
+            from-pink-300/70
+            via-pink-200/90
+            to-pink-300/70
+            shadow-[0_5px_12px_rgba(236,72,153,0.16)]
+            -rotate-6
+          "
+          animate={{
+            rotate: [-6, -5, -6],
+          }}
+          transition={{
+            duration: 5,
+            repeat: Infinity,
+          }}
+        />
+
+        {/* =================================================
+            ACTUAL PHOTO CARD
+        ================================================= */}
+
+        <AnimatePresence mode="wait" custom={direction}>
+          <motion.div
+            key={currentPhoto}
+            custom={direction}
+            initial={{
+              opacity: 0,
+              x: direction > 0 ? 100 : -100,
+              rotate: direction > 0 ? 5 : -5,
+              scale: 0.94,
+            }}
+            animate={{
+              opacity: 1,
+              x: 0,
+              rotate: 0,
+              scale: 1,
+            }}
+            exit={{
+              opacity: 0,
+              x: direction > 0 ? -100 : 100,
+              rotate: direction > 0 ? -5 : 5,
+              scale: 0.94,
+            }}
+            transition={{
+              duration: 0.55,
+              ease: "easeInOut",
+            }}
+            className="
+              absolute
+              top-[18px]
+              left-1/2
+              -translate-x-1/2
+              w-[295px]
+              h-[370px]
+              md:w-[315px]
+              md:h-[390px]
+              bg-[#fffdfb]
+              rounded-[22px]
+              p-3
+              pb-12
+              cursor-pointer
+              shadow-[0_25px_55px_rgba(83,45,72,0.22)]
+              border
+              border-white
+              z-20
+            "
+            onClick={nextPhoto}
+            whileHover={{
+              y: -5,
+              scale: 1.015,
+            }}
+            whileTap={{
+              scale: 0.975,
+            }}
+          >
+
+            {/* PHOTO */}
+
+            <div
+              className="
+                relative
+                w-full
+                h-full
+                rounded-[15px]
+                overflow-hidden
+                bg-slate-100
+                border
+                border-pink-100
+              "
+            >
+              <img
+                src={currentPhoto}
+                alt={`Memory ${currentIndex + 1}`}
+                draggable="false"
+                className="
+                  w-full
+                  h-full
+                  object-cover
+                  pointer-events-none
+                  select-none
+                "
+              />
+
+              {/* photo soft overlay */}
+
+              <div
+                className="
+                  absolute
+                  inset-0
+                  bg-gradient-to-t
+                  from-pink-500/10
+                  via-transparent
+                  to-white/10
+                  pointer-events-none
+                "
+              />
+
+              {/* moving shine */}
+
+              <motion.div
+                className="
+                  absolute
+                  inset-y-0
+                  -left-1/2
+                  w-1/3
+                  bg-white/25
+                  skew-x-[-20deg]
+                  pointer-events-none
+                "
+                animate={{
+                  left: ["-50%", "140%"],
+                }}
+                transition={{
+                  duration: 3.8,
+                  repeat: Infinity,
+                  repeatDelay: 2.5,
+                  ease: "easeInOut",
+                }}
+              />
+            </div>
+
+            {/* PHOTO CAPTION */}
+
+            <div
+              className="
+                absolute
+                bottom-2
+                left-0
+                right-0
+                text-center
+              "
+            >
+              <span
+                className="
+                  font-hand
+                  text-[15px]
+                  text-slate-500
+                "
+              >
+                a little piece of us ♡
+              </span>
+            </div>
+
+            {/* small heart */}
+
+            <motion.div
+              className="
+                absolute
+                right-4
+                bottom-3
+              "
+              animate={{
+                scale: [1, 1.12, 1],
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+              }}
+            >
+              <Heart
+                size={15}
+                fill="currentColor"
+                className="text-pink-400"
+              />
+            </motion.div>
+          </motion.div>
+        </AnimatePresence>
+
+        {/* =================================================
+            TOP LUXURY TAPE
+        ================================================= */}
+
+        <motion.div
+          className="
+            absolute
+            top-[2px]
+            left-1/2
+            -translate-x-1/2
+            w-[92px]
+            h-[25px]
+            rounded-sm
+            bg-gradient-to-r
+            from-pink-200
+            via-pink-100
+            to-pink-200
+            shadow-sm
+            z-30
+          "
+          animate={{
+            rotate: [-3, 1, -3],
+          }}
+          transition={{
+            duration: 5,
+            repeat: Infinity,
+          }}
+        >
+          <div className="flex items-center justify-center h-full">
+            <Heart
+              size={13}
+              fill="currentColor"
+              className="text-pink-500"
+            />
+          </div>
         </motion.div>
 
-      </section>
+        {/* =================================================
+            FLOWER DECORATION
+        ================================================= */}
 
-      {/* COUNTER */}
-      <div className="counter">
-        <span />
+        <motion.div
+          className="
+            absolute
+            left-[34px]
+            bottom-[42px]
+            z-30
+          "
+          animate={{
+            rotate: [-3, 2, -3],
+            y: [0, -2, 0],
+          }}
+          transition={{
+            duration: 4,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        >
+          <div className="relative">
+            <Flower2
+              size={48}
+              strokeWidth={1.3}
+              className="text-pink-300"
+            />
 
-        <b>
-          {currentIndex + 1} / {memories.length}
-        </b>
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+              <Sparkles
+                size={13}
+                className="text-amber-300"
+              />
+            </div>
+          </div>
+        </motion.div>
 
-        <span />
+        {/* =================================================
+            SIDE ARROW
+        ================================================= */}
+
+        <motion.div
+          className="
+            absolute
+            right-[18px]
+            top-1/2
+            -translate-y-1/2
+            z-40
+            w-9
+            h-9
+            rounded-full
+            bg-white/85
+            backdrop-blur-sm
+            shadow-[0_5px_18px_rgba(236,72,153,0.12)]
+            border
+            border-pink-100
+            flex
+            items-center
+            justify-center
+          "
+          animate={{
+            x: [0, 4, 0],
+            opacity: [0.55, 1, 0.55],
+          }}
+          transition={{
+            duration: 1.8,
+            repeat: Infinity,
+          }}
+        >
+          <ChevronRight
+            size={18}
+            className="text-pink-400"
+          />
+        </motion.div>
       </div>
 
-      {/* LETTER */}
+      {/* =====================================================
+          COUNTER
+      ===================================================== */}
+
       <motion.div
-        className="letter-button"
-        initial={{ opacity: 0, y: 15 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4 }}
+        className="
+          relative
+          z-20
+          -mt-1
+          mb-3
+        "
+        key={currentIndex}
+        initial={{
+          opacity: 0,
+          y: 5,
+        }}
+        animate={{
+          opacity: 1,
+          y: 0,
+        }}
+      >
+        <div className="flex items-center gap-4">
+
+          <span
+            className="
+              w-10
+              h-px
+              bg-gradient-to-r
+              from-transparent
+              to-pink-300
+            "
+          />
+
+          <span
+            className="
+              tracking-[0.22em]
+              text-sm
+              font-semibold
+              text-purple-500
+            "
+          >
+            {currentIndex + 1} / {memories.length}
+          </span>
+
+          <span
+            className="
+              w-10
+              h-px
+              bg-gradient-to-l
+              from-transparent
+              to-pink-300
+            "
+          />
+
+        </div>
+      </motion.div>
+
+      {/* =====================================================
+          NEXT BUTTON
+      ===================================================== */}
+
+      <motion.div
+        className="
+          relative
+          z-30
+          mb-4
+        "
+        initial={{
+          opacity: 0,
+          y: 15,
+        }}
+        animate={{
+          opacity: 1,
+          y: 0,
+        }}
+        transition={{
+          delay: 0.5,
+          duration: 0.6,
+        }}
       >
         <Button
           onClick={onNext}
           text="A Letter For You"
           animateIcon={false}
-          icon={<Mail size={20} />}
+          icon={<Mail size={18} />}
         />
       </motion.div>
 
-      {/* ================= CSS ================= */}
-
-      <style jsx global>{`
-
-        * {
-          box-sizing: border-box;
-        }
-
-        .memories-page {
-          position: relative;
-          width: 100%;
-          min-height: 100vh;
-          overflow: hidden;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          background: #fff1f7;
-          color: #27364e;
-          isolation: isolate;
-        }
-
-        /* ================= BACKGROUND ================= */
-
-        .dream-background {
-          position: fixed;
-          inset: 0;
-          z-index: -20;
-
-          background:
-            radial-gradient(
-              circle at 50% 28%,
-              #fffdfd 0%,
-              #fff0f7 27%,
-              #fbdcec 58%,
-              #f5c5df 100%
-            );
-        }
-
-        .pink-glow {
-          position: fixed;
-          border-radius: 50%;
-          filter: blur(65px);
-          pointer-events: none;
-          z-index: -10;
-        }
-
-        .glow-a {
-          width: 280px;
-          height: 280px;
-          left: -120px;
-          top: 20%;
-          background: rgba(255,120,190,.25);
-        }
-
-        .glow-b {
-          width: 300px;
-          height: 300px;
-          right: -130px;
-          top: 48%;
-          background: rgba(255,160,210,.3);
-        }
-
-        .glow-c {
-          width: 250px;
-          height: 250px;
-          left: 25%;
-          bottom: -130px;
-          background: rgba(255,110,185,.24);
-        }
-
-        /* ================= PARTICLES ================= */
-
-        .particles {
-          position: fixed;
-          inset: 0;
-          z-index: 2;
-          pointer-events: none;
-        }
-
-        .particle {
-          position: absolute;
-          border-radius: 50%;
-          width: 4px;
-          height: 4px;
-          background: white;
-
-          box-shadow:
-            0 0 8px white,
-            0 0 15px rgba(255,150,210,.7);
-        }
-
-        /* ================= SPARKLES ================= */
-
-        .sparkles {
-          position: fixed;
-          inset: 0;
-          z-index: 3;
-          pointer-events: none;
-        }
-
-        .sparkle {
-          position: absolute;
-          color: rgba(255,255,255,.85);
-
-          filter:
-            drop-shadow(
-              0 0 7px rgba(255,255,255,.8)
-            );
-        }
-
-        /* ================= BUTTERFLIES ================= */
-
-        .butterflies {
-          position: fixed;
-          inset: 0;
-          overflow: hidden;
-          pointer-events: none;
-          z-index: 8;
-        }
-
-        .real-butterfly {
-          position: absolute;
-          width: 48px;
-          height: 44px;
-          transform-origin: center;
-          will-change: transform;
-        }
-
-        .butterfly-wing {
-          position: absolute;
-          width: 24px;
-          height: 31px;
-          top: 5px;
-
-          background:
-            radial-gradient(
-              circle at 65% 35%,
-              #fff 0 4%,
-              transparent 5%
-            ),
-            linear-gradient(
-              145deg,
-              #ffb5d7,
-              #ec65a8 48%,
-              #a95fc4
-            );
-
-          border: 2px solid rgba(130,61,115,.65);
-
-          box-shadow:
-            inset 0 0 7px rgba(255,255,255,.65),
-            0 3px 8px rgba(100,40,90,.15);
-        }
-
-        .wing-left {
-          left: 1px;
-          border-radius: 70% 30% 60% 40%;
-          transform-origin: right bottom;
-          animation: flap-left .38s ease-in-out infinite;
-        }
-
-        .wing-right {
-          right: 1px;
-          border-radius: 30% 70% 40% 60%;
-          transform-origin: left bottom;
-          animation: flap-right .38s ease-in-out infinite;
-        }
-
-        .butterfly-body {
-          position: absolute;
-          width: 6px;
-          height: 34px;
-          left: 21px;
-          top: 5px;
-          border-radius: 50%;
-
-          background:
-            linear-gradient(
-              90deg,
-              #40263d,
-              #171525,
-              #56324c
-            );
-
-          z-index: 5;
-        }
-
-        .antenna {
-          position: absolute;
-          width: 14px;
-          height: 8px;
-          top: 0;
-          border-top: 1px solid #40263d;
-          z-index: 6;
-        }
-
-        .antenna-left {
-          left: 17px;
-          transform: rotate(-28deg);
-        }
-
-        .antenna-right {
-          left: 23px;
-          transform: rotate(28deg);
-        }
-
-        @keyframes flap-left {
-
-          0%, 100% {
-            transform:
-              rotateY(0deg)
-              rotateZ(-4deg);
-          }
-
-          50% {
-            transform:
-              rotateY(58deg)
-              rotateZ(5deg);
-          }
-        }
-
-        @keyframes flap-right {
-
-          0%, 100% {
-            transform:
-              rotateY(0deg)
-              rotateZ(4deg);
-          }
-
-          50% {
-            transform:
-              rotateY(-58deg)
-              rotateZ(-5deg);
-          }
-        }
-
-        /* ================= FLOATING HEARTS ================= */
-
-        .floating-heart {
-          position: fixed;
-          z-index: 6;
-          color: rgba(239,83,164,.42);
-          pointer-events: none;
-        }
-
-        /* ================= TITLE ================= */
-
-        .memory-header {
-          position: relative;
-          z-index: 20;
-          text-align: center;
-
-          margin-top:
-            clamp(68px, 10vh, 100px);
-
-          padding: 0 15px;
-        }
-
-        .title-row {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 12px;
-          color: #ef3d98;
-        }
-
-        .title-row svg {
-          width: 27px;
-          height: 27px;
-        }
-
-        .title-row h1 {
-          margin: 0;
-
-          font-size:
-            clamp(31px, 8vw, 48px);
-
-          font-weight: 800;
-          line-height: 1;
-
-          color: #27374e;
-
-          letter-spacing: -1.5px;
-        }
-
-        .memory-header p {
-          margin: 16px 0 0;
-
-          font-family: cursive;
-          font-size:
-            clamp(18px, 5vw, 27px);
-
-          font-style: italic;
-          color: #a965dc;
-        }
-
-        /* ================= DOTS ================= */
-
-        .memory-dots {
-          position: relative;
-          z-index: 25;
-
-          display: flex;
-          gap: 11px;
-
-          margin-top: 25px;
-        }
-
-        .memory-dot {
-          width: 9px;
-          height: 9px;
-          border-radius: 50%;
-          background: #f4acd0;
-        }
-
-        .memory-dot.active {
-          width: 14px;
-          height: 14px;
-          margin-top: -2px;
-
-          background: #ed3e98;
-
-          box-shadow:
-            0 0 13px rgba(237,62,152,.35);
-        }
-
-        /* ================= ALBUM ================= */
-
-        .album-area {
-          position: relative;
-
-          width: min(94vw, 430px);
-          height: 430px;
-
-          margin-top: 17px;
-
-          display: flex;
-          justify-content: center;
-          align-items: center;
-
-          z-index: 20;
-        }
-
-        .back-card {
-          position: absolute;
-
-          width: 350px;
-          height: 400px;
-
-          border-radius: 27px;
-
-          background: rgba(255,255,255,.88);
-
-          border:
-            1px solid rgba(255,255,255,.95);
-
-          box-shadow:
-            0 25px 60px rgba(160,70,125,.13);
-        }
-
-        .back-card-one {
-          transform:
-            rotate(-5deg)
-            translate(-8px, 3px);
-
-          background:
-            linear-gradient(
-              145deg,
-              #fff,
-              #fff1f7
-            );
-        }
-
-        .back-card-two {
-          transform:
-            rotate(5deg)
-            translate(8px, 0);
-
-          background:
-            linear-gradient(
-              145deg,
-              #fff,
-              #ffeaf4
-            );
-        }
-
-        .album {
-          position: relative;
-
-          width: 350px;
-          height: 400px;
-
-          border-radius: 28px;
-
-          padding: 20px;
-
-          background:
-            linear-gradient(
-              145deg,
-              rgba(255,255,255,.98),
-              rgba(255,249,252,.97)
-            );
-
-          border:
-            1px solid white;
-
-          box-shadow:
-            0 30px 65px rgba(170,70,130,.2),
-            inset 0 0 25px rgba(255,255,255,.8);
-
-          z-index: 10;
-        }
-
-        .album::after {
-          content: "";
-
-          position: absolute;
-          inset: -7px;
-
-          border-radius: 32px;
-
-          border:
-            1px solid rgba(247,145,200,.35);
-
-          pointer-events: none;
-        }
-
-        /* ================= TAPE ================= */
-
-        .album-tape {
-          position: absolute;
-
-          top: -13px;
-          left: 50%;
-
-          transform: translateX(-50%);
-
-          width: 88px;
-          height: 35px;
-
-          display: flex;
-          justify-content: center;
-          align-items: center;
-
-          color: #d84e91;
-          font-size: 23px;
-
-          background:
-            repeating-linear-gradient(
-              -45deg,
-              #ffc2df 0 6px,
-              #ffd3e8 6px 12px
-            );
-
-          box-shadow:
-            0 5px 12px rgba(180,60,120,.13);
-
-          z-index: 50;
-        }
-
-        /* ================= RIBBON ================= */
-
-        .ribbon {
-          position: absolute;
-
-          width: 85px;
-          height: 24px;
-
-          top: 48%;
-
-          opacity: .42;
-
-          background:
-            linear-gradient(
-              90deg,
-              transparent,
-              #ef91bd,
-              transparent
-            );
-
-          z-index: -1;
-        }
-
-        .ribbon-left {
-          left: -65px;
-          transform: rotate(-27deg);
-        }
-
-        .ribbon-right {
-          right: -65px;
-          transform: rotate(27deg);
-        }
-
-        /* ================= SINGLE PHOTO ================= */
-
-        .photo-card {
-          position: absolute;
-
-          left: 20px;
-          top: 20px;
-
-          width: 310px;
-          height: 360px;
-
-          padding:
-            10px
-            10px
-            43px;
-
-          background: white;
-
-          border-radius: 20px;
-
-          border:
-            1px solid #f2dce7;
-
-          box-shadow:
-            0 18px 42px rgba(65,35,60,.18);
-
-          cursor: pointer;
-
-          z-index: 30;
-        }
-
-        .photo-box {
-          position: relative;
-
-          width: 100%;
-          height: 295px;
-
-          overflow: hidden;
-
-          border-radius: 14px;
-
-          background: #f7eaf0;
-        }
-
-        .photo-box img {
-          width: 100%;
-          height: 100%;
-
-          display: block;
-
-          object-fit: cover;
-
-          user-select: none;
-          -webkit-user-drag: none;
-        }
-
-        .photo-overlay {
-          position: absolute;
-          inset: 0;
-
-          pointer-events: none;
-
-          background:
-            linear-gradient(
-              145deg,
-              rgba(255,255,255,.18),
-              transparent 40%,
-              rgba(245,80,160,.08)
-            );
-        }
-
-        .photo-heart {
-          position: absolute;
-
-          right: 12px;
-          top: 12px;
-
-          color: white;
-
-          filter:
-            drop-shadow(
-              0 2px 6px rgba(0,0,0,.3)
-            );
-        }
-
-        .caption {
-          position: absolute;
-
-          left: 0;
-          right: 0;
-          bottom: 11px;
-
-          text-align: center;
-
-          font-family: cursive;
-          font-style: italic;
-
-          font-size: 15px;
-
-          color: #7f899c;
-        }
-
-        /* ================= NEXT BUTTON ================= */
-
-        .next-button {
-          position: absolute;
-
-          right: -18px;
-          top: 50%;
-
-          width: 48px;
-          height: 48px;
-
-          transform: translateY(-50%);
-
-          border: none;
-          border-radius: 50%;
-
-          background:
-            rgba(255,255,255,.95);
-
-          color: #ed5ca7;
-
-          display: flex;
-          align-items: center;
-          justify-content: center;
-
-          box-shadow:
-            0 8px 22px rgba(180,70,135,.2);
-
-          z-index: 70;
-
-          cursor: pointer;
-        }
-
-        /* ================= ALBUM HEART ================= */
-
-        .album-heart {
-          position: absolute;
-
-          right: 25px;
-          bottom: 13px;
-
-          color: #f158a5;
-
-          z-index: 80;
-        }
-
-        /* ================= TAP ================= */
-
-        .tap-memory {
-          position: absolute;
-
-          bottom: -2px;
-          left: 50%;
-
-          transform: translateX(-50%);
-
-          padding: 7px 23px;
-
-          border-radius: 999px;
-
-          white-space: nowrap;
-
-          background:
-            rgba(255,255,255,.8);
-
-          color: #df88b5;
-
-          font-size: 12px;
-
-          border:
-            1px solid rgba(240,160,205,.35);
-
-          z-index: 100;
-        }
-
-        /* ================= COUNTER ================= */
-
-        .counter {
-          position: relative;
-          z-index: 30;
-
-          display: flex;
-          align-items: center;
-
-          gap: 16px;
-
-          margin-top: 2px;
-          margin-bottom: 17px;
-        }
-
-        .counter span {
-          width: 43px;
-          height: 2px;
-
-          background: #eea2c8;
-        }
-
-        .counter b {
-          color: #8d79a0;
-
-          font-size: 18px;
-
-          font-weight: 500;
-
-          letter-spacing: 4px;
-        }
-
-        /* ================= LETTER ================= */
-
-        .letter-button {
-          position: relative;
-          z-index: 100;
-
-          margin-bottom: 22px;
-        }
-
-        /* ================= MOBILE ================= */
-
-        @media (max-width: 390px) {
-
-          .memory-header {
-            margin-top: 60px;
-          }
-
-          .title-row {
-            gap: 7px;
-          }
-
-          .title-row h1 {
-            font-size: 29px;
-          }
-
-          .title-row svg {
-            width: 22px;
-            height: 22px;
-          }
-
-          .album-area {
-            height: 385px;
-          }
-
-          .album {
-            width: 320px;
-            height: 365px;
-          }
-
-          .back-card {
-            width: 320px;
-            height: 365px;
-          }
-
-          .photo-card {
-            width: 280px;
-            height: 325px;
-          }
-
-          .photo-box {
-            height: 262px;
-          }
-
-          .next-button {
-            right: -12px;
-          }
-        }
-
-        /* ================= SHORT SCREEN ================= */
-
-        @media (max-height: 760px) {
-
-          .memory-header {
-            margin-top: 55px;
-          }
-
-          .memory-dots {
-            margin-top: 17px;
-          }
-
-          .album-area {
-            height: 370px;
-            margin-top: 8px;
-          }
-
-          .counter {
-            margin-bottom: 9px;
-          }
-        }
-
-      `}</style>
-    </main>
+      {/* =====================================================
+          BOTTOM LITTLE DECORATION
+      ===================================================== */}
+
+      <motion.div
+        className="
+          absolute
+          bottom-1
+          left-1/2
+          -translate-x-1/2
+          flex
+          items-center
+          gap-2
+          text-pink-300/70
+          z-10
+        "
+        animate={{
+          opacity: [0.35, 0.8, 0.35],
+        }}
+        transition={{
+          duration: 3,
+          repeat: Infinity,
+        }}
+      >
+        <Heart size={10} fill="currentColor" />
+        <span className="text-[10px] tracking-[0.25em]">
+          FOREVER & ALWAYS
+        </span>
+        <Heart size={10} fill="currentColor" />
+      </motion.div>
+
+    </div>
   );
 }
+
+export default MemoriesScreen;
