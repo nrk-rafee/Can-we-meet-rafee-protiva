@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Mail,
@@ -20,8 +20,36 @@ const memories = [
 ];
 
 /* =========================================================
+   PRELOAD ALL MEMORY PHOTOS
+   ========================================================= */
+
+function usePreloadImages(images) {
+  useEffect(() => {
+    const imageObjects = [];
+
+    images.forEach((src) => {
+      const img = new Image();
+      img.decoding = "async";
+      img.src = src;
+      imageObjects.push(img);
+
+      if (typeof img.decode === "function") {
+        img.decode().catch(() => {});
+      }
+    });
+
+    return () => {
+      imageObjects.forEach((img) => {
+        img.onload = null;
+        img.onerror = null;
+      });
+    };
+  }, [images]);
+}
+
+/* =========================================================
    BUTTERFLY
-   DO NOT CHANGE — stays outside the album
+   OUTSIDE THE ALBUM
 ========================================================= */
 
 function Butterfly({
@@ -176,6 +204,7 @@ function Butterfly({
         fontSize: `${size}px`,
         filter:
           "drop-shadow(0 5px 8px rgba(120,50,90,0.22))",
+        willChange: "transform, opacity",
       }}
     >
       <motion.span
@@ -217,30 +246,30 @@ function Butterfly({
 
 /* =========================================================
    FALLING PETALS
-   Starts from the bottom edge of the photo
+   ONLY PETALS — NO FLOWER TREE
 ========================================================= */
 
 function FallingPetals({ burst }) {
-  const petals = Array.from({ length: 24 });
+  const petals = Array.from({ length: 30 });
 
   return (
     <AnimatePresence>
       {burst > 0 && (
         <motion.div
           key={burst}
-          className="absolute inset-0 pointer-events-none z-[80] overflow-visible"
+          className="absolute inset-0 pointer-events-none z-[100] overflow-visible"
         >
           {petals.map((_, index) => {
             const startX =
-              24 + ((index * 11) % 53);
+              25 + ((index * 9) % 50);
 
             const drift =
               index % 2 === 0
-                ? 18 + (index % 6) * 7
-                : -(18 + (index % 6) * 7);
+                ? 18 + (index % 7) * 8
+                : -(18 + (index % 7) * 8);
 
             const delay =
-              (index % 8) * 0.045;
+              (index % 10) * 0.035;
 
             const size =
               5 + (index % 4) * 2;
@@ -248,58 +277,60 @@ function FallingPetals({ burst }) {
             return (
               <motion.span
                 key={`${burst}-${index}`}
-                className="absolute rounded-[80%_20%_80%_20%] bg-gradient-to-br from-pink-200 via-pink-400 to-rose-300 shadow-[0_2px_5px_rgba(236,72,153,0.18)]"
+                className="absolute rounded-[75%_25%_75%_25%] bg-gradient-to-br from-pink-100 via-pink-400 to-rose-300 shadow-[0_2px_7px_rgba(236,72,153,0.18)]"
                 style={{
                   left: `${startX}%`,
-                  top: "70%",
+                  top: "61%",
                   width: `${size}px`,
-                  height: `${size * 1.55}px`,
+                  height: `${size * 1.65}px`,
+                  willChange:
+                    "transform, opacity",
                 }}
                 initial={{
                   opacity: 0,
                   y: 0,
                   x: 0,
-                  rotate: index * 25,
-                  scale: 0.4,
+                  rotate: index * 24,
+                  scale: 0.3,
                 }}
                 animate={{
                   opacity: [
                     0,
                     1,
-                    0.95,
-                    0.7,
+                    0.9,
+                    0.65,
                     0,
                   ],
                   y: [
                     0,
-                    30,
-                    90,
-                    180,
-                    300,
+                    35,
+                    105,
+                    200,
+                    330,
                   ],
                   x: [
                     0,
-                    drift * 0.2,
-                    drift * 0.65,
+                    drift * 0.18,
+                    drift * 0.55,
                     drift,
-                    drift * 1.3,
+                    drift * 1.45,
                   ],
                   rotate: [
-                    index * 25,
-                    index * 25 + 100,
-                    index * 25 + 210,
-                    index * 25 + 340,
+                    index * 24,
+                    index * 24 + 110,
+                    index * 24 + 220,
+                    index * 24 + 380,
                   ],
                   scale: [
-                    0.4,
+                    0.3,
                     1,
-                    1.05,
+                    1.08,
                     0.85,
                   ],
                 }}
                 transition={{
                   duration:
-                    1.8 + (index % 5) * 0.14,
+                    1.7 + (index % 6) * 0.13,
                   delay,
                   ease: "easeOut",
                 }}
@@ -313,41 +344,20 @@ function FallingPetals({ burst }) {
 }
 
 /* =========================================================
-   LUXURY FLOWER BOUQUET
-   TOP-LEFT / BOTTOM-RIGHT OF ALBUM
+   CSS ROSE
 ========================================================= */
 
-function FlowerPetal({
-  className = "",
-  color = "pink",
-}) {
-  const colors =
-    color === "light"
-      ? "from-white via-pink-100 to-pink-300"
-      : "from-pink-100 via-pink-300 to-pink-500";
-
-  return (
-    <span
-      className={`absolute rounded-[70%_30%_70%_30%] bg-gradient-to-br ${colors} shadow-[0_2px_5px_rgba(236,72,153,0.16)] ${className}`}
-    />
-  );
-}
-
-function LuxuryFlower({
-  size = "large",
-}) {
-  const large = size === "large";
-
+function Rose({ size = 76 }) {
   return (
     <motion.div
-      className={`relative ${
-        large
-          ? "w-[72px] h-[72px]"
-          : "w-[48px] h-[48px]"
-      }`}
+      className="relative shrink-0"
+      style={{
+        width: size,
+        height: size,
+      }}
       animate={{
         rotate: [-2, 2, -2],
-        y: [0, -2, 0],
+        y: [0, -1.5, 0],
       }}
       transition={{
         duration: 5,
@@ -355,168 +365,402 @@ function LuxuryFlower({
         ease: "easeInOut",
       }}
     >
-      <FlowerPetal
-        className={
-          large
-            ? "left-[25px] top-0 w-[23px] h-[38px] rotate-[8deg]"
-            : "left-[17px] top-0 w-[16px] h-[27px]"
-        }
-      />
+      {/* outer petals */}
 
-      <FlowerPetal
-        className={
-          large
-            ? "left-[2px] top-[22px] w-[36px] h-[24px] rotate-[-25deg]"
-            : "left-0 top-[16px] w-[25px] h-[17px] rotate-[-20deg]"
-        }
-        color="light"
-      />
-
-      <FlowerPetal
-        className={
-          large
-            ? "right-[2px] top-[22px] w-[36px] h-[24px] rotate-[25deg]"
-            : "right-0 top-[16px] w-[25px] h-[17px] rotate-[20deg]"
-        }
-      />
-
-      <FlowerPetal
-        className={
-          large
-            ? "left-[25px] bottom-0 w-[23px] h-[38px] rotate-[-8deg]"
-            : "left-[17px] bottom-0 w-[16px] h-[27px]"
-        }
-        color="light"
+      <span
+        className="absolute rounded-full bg-gradient-to-br from-pink-100 via-pink-300 to-rose-500 shadow-[0_4px_12px_rgba(190,24,93,0.2)]"
+        style={{
+          width: size * 0.46,
+          height: size * 0.62,
+          left: size * 0.27,
+          top: 0,
+          transform: "rotate(18deg)",
+        }}
       />
 
       <span
-        className={`absolute rounded-full bg-gradient-to-br from-yellow-100 via-yellow-300 to-orange-300 shadow-[0_2px_8px_rgba(245,158,11,0.3)] ${
-          large
-            ? "left-[25px] top-[25px] w-[22px] h-[22px]"
-            : "left-[17px] top-[17px] w-[15px] h-[15px]"
-        }`}
+        className="absolute rounded-full bg-gradient-to-br from-pink-50 via-pink-300 to-rose-400"
+        style={{
+          width: size * 0.56,
+          height: size * 0.46,
+          left: 0,
+          top: size * 0.24,
+          transform: "rotate(-24deg)",
+        }}
+      />
+
+      <span
+        className="absolute rounded-full bg-gradient-to-br from-pink-100 via-pink-300 to-rose-500"
+        style={{
+          width: size * 0.56,
+          height: size * 0.46,
+          right: 0,
+          top: size * 0.24,
+          transform: "rotate(24deg)",
+        }}
+      />
+
+      <span
+        className="absolute rounded-full bg-gradient-to-br from-pink-100 via-pink-400 to-rose-600"
+        style={{
+          width: size * 0.44,
+          height: size * 0.56,
+          left: size * 0.28,
+          bottom: 0,
+          transform: "rotate(-15deg)",
+        }}
+      />
+
+      {/* inner rose */}
+
+      <span
+        className="absolute rounded-full bg-gradient-to-br from-rose-300 via-pink-400 to-rose-600 shadow-inner"
+        style={{
+          width: size * 0.46,
+          height: size * 0.46,
+          left: size * 0.27,
+          top: size * 0.27,
+        }}
+      />
+
+      <span
+        className="absolute rounded-full bg-gradient-to-br from-pink-200 to-rose-500"
+        style={{
+          width: size * 0.25,
+          height: size * 0.32,
+          left: size * 0.37,
+          top: size * 0.32,
+          transform: "rotate(28deg)",
+        }}
+      />
+
+      <span
+        className="absolute rounded-full bg-pink-100/80"
+        style={{
+          width: size * 0.12,
+          height: size * 0.18,
+          left: size * 0.43,
+          top: size * 0.38,
+          transform: "rotate(-20deg)",
+        }}
+      />
+
+      {/* tiny highlight */}
+
+      <span
+        className="absolute rounded-full bg-white/80"
+        style={{
+          width: size * 0.08,
+          height: size * 0.08,
+          left: size * 0.31,
+          top: size * 0.25,
+        }}
       />
     </motion.div>
   );
 }
 
-function LuxuryFlowerCorner({ position = "topLeft" }) {
+/* =========================================================
+   SMALL DAISY
+========================================================= */
+
+function Daisy({ size = 36 }) {
+  return (
+    <motion.div
+      className="relative shrink-0"
+      style={{
+        width: size,
+        height: size,
+      }}
+      animate={{
+        rotate: [0, 4, 0, -4, 0],
+      }}
+      transition={{
+        duration: 4,
+        repeat: Infinity,
+      }}
+    >
+      {[
+        "top-0 left-1/2 -translate-x-1/2",
+        "left-0 top-1/2 -translate-y-1/2",
+        "right-0 top-1/2 -translate-y-1/2",
+        "bottom-0 left-1/2 -translate-x-1/2",
+      ].map((position, index) => (
+        <span
+          key={index}
+          className={`absolute ${position} rounded-full bg-gradient-to-br from-white via-pink-50 to-pink-200`}
+          style={{
+            width: size * 0.34,
+            height: size * 0.48,
+          }}
+        />
+      ))}
+
+      <span
+        className="absolute rounded-full bg-gradient-to-br from-yellow-100 to-amber-300 shadow-[0_2px_7px_rgba(245,158,11,0.25)]"
+        style={{
+          width: size * 0.28,
+          height: size * 0.28,
+          left: size * 0.36,
+          top: size * 0.36,
+        }}
+      />
+    </motion.div>
+  );
+}
+
+/* =========================================================
+   LEAF
+========================================================= */
+
+function Leaf({
+  className = "",
+  rotate = 0,
+}) {
+  return (
+    <span
+      className={`absolute w-[34px] h-[14px] rounded-[100%_0_100%_0] bg-gradient-to-br from-green-100 via-emerald-300 to-green-500 shadow-[0_2px_6px_rgba(34,197,94,0.15)] ${className}`}
+      style={{
+        transform: `rotate(${rotate}deg)`,
+      }}
+    />
+  );
+}
+
+/* =========================================================
+   LUXURY BOUQUET
+========================================================= */
+
+function LuxuryBouquet({ position = "topLeft" }) {
   const topLeft = position === "topLeft";
 
   return (
     <motion.div
-      className={`absolute z-[55] pointer-events-none ${
+      className={`absolute pointer-events-none z-[70] ${
         topLeft
-          ? "left-[-30px] md:left-[-45px] top-[2px]"
-          : "right-[-30px] md:right-[-45px] bottom-[0px]"
-      } w-[135px] h-[135px]`}
+          ? "left-[-48px] md:left-[-68px] top-[-20px] md:top-[-28px]"
+          : "right-[-48px] md:right-[-68px] bottom-[-22px] md:bottom-[-30px]"
+      } w-[175px] h-[155px]`}
       initial={{
         opacity: 0,
-        scale: 0.75,
-        rotate: topLeft ? -8 : 8,
+        scale: 0.82,
+        rotate: topLeft ? -7 : 7,
       }}
       animate={{
         opacity: 1,
         scale: 1,
-        rotate: topLeft ? [-8, -5, -8] : [8, 5, 8],
+        rotate: topLeft
+          ? [-7, -4, -7]
+          : [7, 4, 7],
       }}
       transition={{
         opacity: {
-          duration: 0.8,
-          delay: 0.25,
+          duration: 0.7,
+          delay: 0.2,
         },
         scale: {
-          duration: 0.8,
-          delay: 0.25,
+          duration: 0.7,
+          delay: 0.2,
         },
         rotate: {
-          duration: 6,
+          duration: 7,
           repeat: Infinity,
           ease: "easeInOut",
         },
       }}
     >
-      {/* soft glow behind bouquet */}
+      {/* luxury glow */}
 
-      <div className="absolute inset-2 rounded-full bg-pink-300/20 blur-2xl" />
+      <div className="absolute inset-0 rounded-full bg-pink-300/20 blur-3xl" />
 
-      {/* small leaves — decorative, NOT a plant */}
+      {/* trailing leaves */}
+
+      <Leaf
+        className={
+          topLeft
+            ? "left-[18px] top-[70px]"
+            : "right-[18px] bottom-[70px]"
+        }
+        rotate={topLeft ? -35 : 35}
+      />
+
+      <Leaf
+        className={
+          topLeft
+            ? "left-[50px] top-[96px]"
+            : "right-[50px] bottom-[96px]"
+        }
+        rotate={topLeft ? 25 : -25}
+      />
+
+      <Leaf
+        className={
+          topLeft
+            ? "left-[96px] top-[62px]"
+            : "right-[96px] bottom-[62px]"
+        }
+        rotate={topLeft ? -55 : 55}
+      />
+
+      <Leaf
+        className={
+          topLeft
+            ? "left-[112px] top-[88px]"
+            : "right-[112px] bottom-[88px]"
+        }
+        rotate={topLeft ? 40 : -40}
+      />
+
+      {/* thin golden stems */}
 
       <span
-        className={`absolute ${
+        className={`absolute w-[2px] h-[82px] bg-gradient-to-b from-amber-200 to-transparent ${
           topLeft
-            ? "left-[48px] top-[70px] rotate-[-35deg]"
-            : "right-[48px] bottom-[55px] rotate-[35deg]"
-        } w-[36px] h-[14px] rounded-[100%_0] bg-gradient-to-br from-emerald-200 to-green-400`}
+            ? "left-[88px] top-[45px] rotate-[28deg]"
+            : "right-[88px] bottom-[45px] rotate-[-28deg]"
+        }`}
       />
 
       <span
-        className={`absolute ${
+        className={`absolute w-[2px] h-[70px] bg-gradient-to-b from-green-300 to-transparent ${
           topLeft
-            ? "left-[73px] top-[48px] rotate-[25deg]"
-            : "right-[73px] bottom-[78px] rotate-[-25deg]"
-        } w-[31px] h-[12px] rounded-[0_100%] bg-gradient-to-br from-green-100 to-green-400`}
+            ? "left-[66px] top-[54px] rotate-[-24deg]"
+            : "right-[66px] bottom-[54px] rotate-[24deg]"
+        }`}
       />
 
-      {/* ribbon */}
+      {/* main rose */}
 
       <div
         className={`absolute ${
           topLeft
-            ? "left-[35px] top-[88px]"
-            : "right-[35px] bottom-[22px]"
+            ? "left-[16px] top-[6px]"
+            : "right-[16px] bottom-[6px]"
         }`}
       >
-        <span className="absolute w-[28px] h-[42px] rounded-b-[50%] bg-gradient-to-b from-pink-200 to-pink-400 rotate-[25deg] opacity-80" />
-        <span className="absolute w-[28px] h-[42px] rounded-b-[50%] bg-gradient-to-b from-pink-200 to-pink-400 rotate-[-25deg] opacity-80" />
+        <Rose size={82} />
       </div>
 
-      {/* large main flower */}
+      {/* second rose */}
 
       <div
         className={`absolute ${
           topLeft
-            ? "left-[5px] top-[5px]"
-            : "right-[5px] bottom-[5px]"
+            ? "left-[83px] top-[42px]"
+            : "right-[83px] bottom-[42px]"
         }`}
       >
-        <LuxuryFlower size="large" />
+        <Rose size={57} />
       </div>
 
-      {/* second flower */}
+      {/* daisies */}
 
       <div
         className={`absolute ${
           topLeft
-            ? "left-[70px] top-[58px]"
-            : "right-[70px] bottom-[58px]"
+            ? "left-[80px] top-[2px]"
+            : "right-[80px] bottom-[2px]"
         }`}
       >
-        <LuxuryFlower size="small" />
+        <Daisy size={38} />
       </div>
 
-      {/* tiny flower */}
-
-      <motion.div
+      <div
         className={`absolute ${
           topLeft
-            ? "left-[82px] top-[10px]"
-            : "right-[82px] bottom-[10px]"
-        } w-[25px] h-[25px]`}
-        animate={{
-          scale: [1, 1.12, 1],
-        }}
-        transition={{
-          duration: 3,
-          repeat: Infinity,
-        }}
+            ? "left-[113px] top-[70px]"
+            : "right-[113px] bottom-[70px]"
+        }`}
       >
-        <span className="absolute left-[8px] top-0 w-[9px] h-[13px] rounded-full bg-pink-200" />
-        <span className="absolute left-0 top-[7px] w-[13px] h-[9px] rounded-full bg-pink-300" />
-        <span className="absolute right-0 top-[7px] w-[13px] h-[9px] rounded-full bg-pink-300" />
-        <span className="absolute left-[8px] bottom-0 w-[9px] h-[13px] rounded-full bg-pink-200" />
-        <span className="absolute left-[8px] top-[8px] w-[9px] h-[9px] rounded-full bg-yellow-200" />
-      </motion.div>
+        <Daisy size={31} />
+      </div>
+
+      {/* tiny white flowers */}
+
+      <div
+        className={`absolute ${
+          topLeft
+            ? "left-[48px] top-[18px]"
+            : "right-[48px] bottom-[18px]"
+        }`}
+      >
+        <Daisy size={24} />
+      </div>
+
+      {/* pearl drops */}
+
+      <span
+        className={`absolute w-[7px] h-[7px] rounded-full bg-gradient-to-br from-white to-pink-200 shadow-[0_2px_7px_rgba(255,255,255,0.8)] ${
+          topLeft
+            ? "left-[129px] top-[41px]"
+            : "right-[129px] bottom-[41px]"
+        }`}
+      />
+
+      <span
+        className={`absolute w-[5px] h-[5px] rounded-full bg-gradient-to-br from-white to-pink-200 ${
+          topLeft
+            ? "left-[142px] top-[58px]"
+            : "right-[142px] bottom-[58px]"
+        }`}
+      />
+
+      {/* satin ribbon */}
+
+      <div
+        className={`absolute ${
+          topLeft
+            ? "left-[38px] top-[103px]"
+            : "right-[38px] bottom-[103px]"
+        }`}
+      >
+        <span
+          className="absolute w-[35px] h-[58px] rounded-b-[70%] bg-gradient-to-br from-pink-100 via-pink-300 to-pink-500 opacity-80 shadow-sm"
+          style={{
+            transform: "rotate(23deg)",
+          }}
+        />
+
+        <span
+          className="absolute w-[35px] h-[58px] rounded-b-[70%] bg-gradient-to-br from-pink-100 via-pink-300 to-pink-500 opacity-75"
+          style={{
+            transform: "rotate(-23deg)",
+          }}
+        />
+
+        <span className="absolute w-[15px] h-[15px] rounded-full bg-pink-300 border border-pink-100 shadow-sm left-[10px] top-[10px]" />
+      </div>
+
+      {/* little berries */}
+
+      {[0, 1, 2, 3].map((item) => (
+        <motion.span
+          key={item}
+          className={`absolute w-[6px] h-[6px] rounded-full bg-gradient-to-br from-pink-200 to-rose-500 ${
+            topLeft
+              ? [
+                  "left-[27px] top-[97px]",
+                  "left-[116px] top-[24px]",
+                  "left-[134px] top-[86px]",
+                  "left-[71px] top-[118px]",
+                ][item]
+              : [
+                  "right-[27px] bottom-[97px]",
+                  "right-[116px] bottom-[24px]",
+                  "right-[134px] bottom-[86px]",
+                  "right-[71px] bottom-[118px]",
+                ][item]
+          }`}
+          animate={{
+            scale: [1, 1.18, 1],
+          }}
+          transition={{
+            duration: 2.5,
+            delay: item * 0.3,
+            repeat: Infinity,
+          }}
+        />
+      ))}
     </motion.div>
   );
 }
@@ -527,29 +771,29 @@ function LuxuryFlowerCorner({ position = "topLeft" }) {
 
 const floatingHearts = [
   {
-    left: "7%",
-    top: "29%",
+    left: "6%",
+    top: "28%",
     size: 14,
     delay: 0,
     duration: 4,
   },
   {
-    left: "88%",
-    top: "31%",
+    left: "90%",
+    top: "30%",
     size: 17,
     delay: 1,
     duration: 4.5,
   },
   {
-    left: "8%",
-    top: "67%",
+    left: "7%",
+    top: "69%",
     size: 12,
     delay: 1.8,
     duration: 3.8,
   },
   {
-    left: "89%",
-    top: "69%",
+    left: "91%",
+    top: "70%",
     size: 14,
     delay: 0.7,
     duration: 4.2,
@@ -562,23 +806,23 @@ const floatingHearts = [
 
 const sparkles = [
   {
-    left: "12%",
-    top: "39%",
+    left: "11%",
+    top: "38%",
     delay: 0,
   },
   {
-    left: "87%",
-    top: "47%",
+    left: "89%",
+    top: "46%",
     delay: 0.8,
   },
   {
-    left: "14%",
-    top: "76%",
+    left: "13%",
+    top: "77%",
     delay: 1.5,
   },
   {
-    left: "84%",
-    top: "75%",
+    left: "86%",
+    top: "76%",
     delay: 0.4,
   },
 ];
@@ -592,12 +836,13 @@ function MemoriesScreen({ onNext }) {
   const [direction, setDirection] = useState(1);
   const [petalBurst, setPetalBurst] = useState(0);
 
+  usePreloadImages(memories);
+
   const currentPhoto = memories[currentIndex];
 
   const nextPhoto = () => {
     setDirection(1);
 
-    // Petal animation starts exactly when photo changes
     setPetalBurst((prev) => prev + 1);
 
     setCurrentIndex((prev) =>
@@ -612,38 +857,23 @@ function MemoriesScreen({ onNext }) {
           DREAMY BACKGROUND
       ===================================================== */}
 
-      <motion.div
-        className="fixed inset-0 pointer-events-none z-[-10] bg-gradient-to-b from-[#fff7fb] via-[#ffeaf5] to-[#fce0f0]"
-        animate={{
-          backgroundPosition: [
-            "0% 0%",
-            "100% 100%",
-            "0% 0%",
-          ],
-        }}
-        transition={{
-          duration: 18,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-      />
+      <div className="fixed inset-0 pointer-events-none z-[-20] bg-gradient-to-b from-[#fff8fc] via-[#ffeaf5] to-[#fbddec]" />
 
       <motion.div
-        className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[430px] h-[430px] rounded-full bg-pink-300/20 blur-[90px] pointer-events-none z-[-5]"
+        className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[460px] h-[460px] rounded-full bg-pink-300/20 blur-[100px] pointer-events-none z-[-10]"
         animate={{
-          scale: [1, 1.12, 1],
-          opacity: [0.3, 0.55, 0.3],
+          scale: [1, 1.08, 1],
+          opacity: [0.25, 0.42, 0.25],
         }}
         transition={{
-          duration: 6,
+          duration: 7,
           repeat: Infinity,
           ease: "easeInOut",
         }}
       />
 
       {/* =====================================================
-          BUTTERFLIES
-          EXACTLY AS BEFORE
+          BUTTERFLIES — OUTSIDE ALBUM
       ===================================================== */}
 
       <Butterfly
@@ -700,7 +930,7 @@ function MemoriesScreen({ onNext }) {
               index % 2 === 0 ? 5 : -5,
               0,
             ],
-            opacity: [0.25, 0.75, 0.25],
+            opacity: [0.2, 0.65, 0.2],
             rotate: [-8, 8, -8],
           }}
           transition={{
@@ -731,12 +961,12 @@ function MemoriesScreen({ onNext }) {
             top: star.top,
           }}
           animate={{
-            scale: [0.65, 1.2, 0.65],
+            scale: [0.65, 1.15, 0.65],
             rotate: [0, 90, 180],
-            opacity: [0.2, 0.85, 0.2],
+            opacity: [0.15, 0.7, 0.15],
           }}
           transition={{
-            duration: 3,
+            duration: 3.2,
             repeat: Infinity,
             delay: star.delay,
             ease: "easeInOut",
@@ -754,55 +984,35 @@ function MemoriesScreen({ onNext }) {
       ===================================================== */}
 
       <motion.div
-        className="text-center z-20 mt-4"
+        className="text-center z-20 mt-3"
         initial={{
           opacity: 0,
-          y: -20,
+          y: -18,
         }}
         animate={{
           opacity: 1,
           y: 0,
         }}
         transition={{
-          duration: 0.8,
+          duration: 0.7,
           ease: "easeOut",
         }}
       >
         <div className="flex items-center justify-center gap-2">
 
-          <motion.div
-            animate={{
-              rotate: [-5, 5, -5],
-            }}
-            transition={{
-              duration: 3,
-              repeat: Infinity,
-            }}
-          >
-            <Camera
-              size={19}
-              className="text-pink-400"
-            />
-          </motion.div>
+          <Camera
+            size={19}
+            className="text-pink-400"
+          />
 
           <h2 className="text-3xl md:text-5xl font-bold text-slate-700">
             Our Memories
           </h2>
 
-          <motion.div
-            animate={{
-              rotate: [5, -5, 5],
-            }}
-            transition={{
-              duration: 3,
-              repeat: Infinity,
-            }}
-          >
-            <Camera
-              size={19}
-              className="text-pink-400"
-            />
-          </motion.div>
+          <Camera
+            size={19}
+            className="text-pink-400"
+          />
 
         </div>
 
@@ -836,7 +1046,7 @@ function MemoriesScreen({ onNext }) {
             animate={
               index === currentIndex
                 ? {
-                    scale: [1, 1.25, 1],
+                    scale: [1, 1.2, 1],
                   }
                 : {
                     scale: 1,
@@ -851,22 +1061,20 @@ function MemoriesScreen({ onNext }) {
       </div>
 
       {/* =====================================================
-          ALBUM AREA
+          BIGGER ALBUM AREA
       ===================================================== */}
 
-      <div className="relative w-full max-w-[440px] h-[425px] md:h-[450px] my-2 flex items-center justify-center z-10">
+      <div className="relative w-[calc(100vw-30px)] max-w-[470px] h-[480px] md:h-[520px] my-2 flex items-center justify-center z-10">
 
         {/* =================================================
-            LUXURY FLOWERS
-            TOP-LEFT + BOTTOM-RIGHT
+            LUXURY BOUQUETS
         ================================================= */}
 
-        <LuxuryFlowerCorner position="topLeft" />
-        <LuxuryFlowerCorner position="bottomRight" />
+        <LuxuryBouquet position="topLeft" />
+        <LuxuryBouquet position="bottomRight" />
 
         {/* =================================================
-            PETALS
-            ONLY WHEN PHOTO CHANGES
+            FALLING PETALS
         ================================================= */}
 
         <FallingPetals burst={petalBurst} />
@@ -876,16 +1084,16 @@ function MemoriesScreen({ onNext }) {
         ================================================= */}
 
         <motion.div
-          className="absolute w-[350px] h-[405px] md:w-[385px] md:h-[420px] rounded-[32px] border border-white/80 bg-white/20 backdrop-blur-[2px]"
+          className="absolute w-[390px] h-[455px] md:w-[425px] md:h-[490px] rounded-[38px] border border-white/90 bg-white/20 backdrop-blur-[2px]"
           animate={{
             boxShadow: [
-              "0 20px 55px rgba(236,72,153,0.08)",
-              "0 25px 75px rgba(168,85,247,0.18)",
-              "0 20px 55px rgba(236,72,153,0.08)",
+              "0 22px 65px rgba(236,72,153,0.08)",
+              "0 28px 85px rgba(168,85,247,0.14)",
+              "0 22px 65px rgba(236,72,153,0.08)",
             ],
           }}
           transition={{
-            duration: 5,
+            duration: 6,
             repeat: Infinity,
             ease: "easeInOut",
           }}
@@ -896,9 +1104,9 @@ function MemoriesScreen({ onNext }) {
         ================================================= */}
 
         <motion.div
-          className="absolute w-[335px] h-[390px] md:w-[370px] md:h-[405px] rounded-[30px] border-2 border-dashed border-pink-200/70"
+          className="absolute w-[375px] h-[440px] md:w-[410px] md:h-[475px] rounded-[36px] border-2 border-dashed border-pink-200/75"
           animate={{
-            rotate: [0, 0.6, 0, -0.6, 0],
+            rotate: [0, 0.35, 0, -0.35, 0],
           }}
           transition={{
             duration: 8,
@@ -908,20 +1116,20 @@ function MemoriesScreen({ onNext }) {
         />
 
         {/* =================================================
-            GLASS PANEL
+            INNER GLASS
         ================================================= */}
 
         <motion.div
-          className="absolute w-[320px] h-[375px] md:w-[355px] md:h-[390px] rounded-[28px] bg-white/40 backdrop-blur-md border border-white/80"
+          className="absolute w-[360px] h-[425px] md:w-[395px] md:h-[460px] rounded-[32px] bg-white/35 backdrop-blur-sm border border-white/80"
           animate={{
             boxShadow: [
-              "0 15px 45px rgba(236,72,153,0.05)",
-              "0 20px 60px rgba(168,85,247,0.12)",
-              "0 15px 45px rgba(236,72,153,0.05)",
+              "0 18px 50px rgba(236,72,153,0.05)",
+              "0 24px 65px rgba(168,85,247,0.10)",
+              "0 18px 50px rgba(236,72,153,0.05)",
             ],
           }}
           transition={{
-            duration: 4,
+            duration: 5,
             repeat: Infinity,
           }}
         />
@@ -931,24 +1139,24 @@ function MemoriesScreen({ onNext }) {
         ================================================= */}
 
         <motion.div
-          className="absolute top-[35px] left-1/2 -translate-x-1/2 w-[285px] h-[350px] md:w-[310px] md:h-[375px] bg-[#fffafa] rounded-2xl shadow-[0_15px_35px_rgba(0,0,0,0.08)] border border-pink-100"
+          className="absolute top-[38px] left-1/2 -translate-x-1/2 w-[315px] h-[390px] md:w-[345px] md:h-[420px] bg-[#fffafa] rounded-[22px] shadow-[0_16px_40px_rgba(0,0,0,0.08)] border border-pink-100"
           animate={{
-            rotate: [-4, -3, -4],
+            rotate: [-3.5, -2.8, -3.5],
           }}
           transition={{
-            duration: 6,
+            duration: 7,
             repeat: Infinity,
             ease: "easeInOut",
           }}
         />
 
         <motion.div
-          className="absolute top-[30px] left-1/2 -translate-x-1/2 w-[290px] h-[355px] md:w-[315px] md:h-[380px] bg-[#fffdfd] rounded-2xl shadow-[0_18px_40px_rgba(0,0,0,0.1)] border border-pink-100"
+          className="absolute top-[33px] left-1/2 -translate-x-1/2 w-[320px] h-[395px] md:w-[350px] md:h-[425px] bg-[#fffdfd] rounded-[22px] shadow-[0_18px_45px_rgba(0,0,0,0.10)] border border-pink-100"
           animate={{
-            rotate: [3, 2, 3],
+            rotate: [3, 2.4, 3],
           }}
           transition={{
-            duration: 7,
+            duration: 8,
             repeat: Infinity,
             ease: "easeInOut",
           }}
@@ -959,7 +1167,7 @@ function MemoriesScreen({ onNext }) {
         ================================================= */}
 
         <motion.div
-          className="absolute -top-1 left-1/2 -translate-x-1/2 w-[82px] h-[26px] bg-pink-200/90 rounded-sm rotate-[-2deg] z-50 shadow-sm border border-pink-300/40"
+          className="absolute top-[5px] left-1/2 -translate-x-1/2 w-[88px] h-[27px] bg-pink-200/90 rounded-sm rotate-[-2deg] z-[90] shadow-sm border border-pink-300/40"
           animate={{
             rotate: [-2, 1, -2],
             y: [0, -1, 0],
@@ -980,75 +1188,62 @@ function MemoriesScreen({ onNext }) {
 
         {/* =================================================
             MAIN PHOTO
+            FAST TRANSITION
         ================================================= */}
 
-        <AnimatePresence mode="wait" custom={direction}>
+        <AnimatePresence
+          mode="sync"
+          initial={false}
+        >
           <motion.div
             key={currentPhoto}
-            custom={direction}
             initial={{
               opacity: 0,
-              x: direction > 0 ? 120 : -120,
-              rotate: direction > 0 ? 5 : -5,
-              scale: 0.94,
+              scale: 0.985,
             }}
             animate={{
               opacity: 1,
-              x: 0,
-              rotate: 0,
               scale: 1,
             }}
             exit={{
               opacity: 0,
-              x: direction > 0 ? -120 : 120,
-              rotate: direction > 0 ? -5 : 5,
-              scale: 0.94,
+              scale: 0.985,
             }}
             transition={{
-              duration: 0.55,
-              ease: "easeInOut",
+              duration: 0.22,
+              ease: "easeOut",
             }}
-            className="absolute top-7 left-1/2 -translate-x-1/2 w-[275px] h-[340px] md:w-[300px] md:h-[365px] bg-[#fffdfd] rounded-2xl p-3 pb-12 shadow-[0_22px_55px_rgba(0,0,0,0.15)] border border-pink-100 cursor-pointer z-40"
+            className="absolute top-[30px] left-1/2 -translate-x-1/2 w-[310px] h-[385px] md:w-[340px] md:h-[415px] bg-[#fffdfd] rounded-[22px] p-3 pb-12 shadow-[0_22px_55px_rgba(0,0,0,0.14)] border border-pink-100 cursor-pointer z-[80]"
             onClick={nextPhoto}
-            whileHover={{
-              y: -5,
-              scale: 1.015,
-            }}
             whileTap={{
-              scale: 0.975,
+              scale: 0.985,
+            }}
+            style={{
+              willChange: "transform, opacity",
             }}
           >
 
             {/* PHOTO */}
 
-            <div className="relative w-full h-full rounded-xl overflow-hidden bg-slate-100 border border-pink-50">
+            <div className="relative w-full h-full rounded-[15px] overflow-hidden bg-slate-100 border border-pink-50">
 
               <img
                 src={currentPhoto}
                 alt={`Memory ${currentIndex + 1}`}
+                width="680"
+                height="850"
+                decoding="async"
+                loading="eager"
+                fetchPriority={
+                  currentIndex === 0
+                    ? "high"
+                    : "auto"
+                }
                 className="w-full h-full object-cover pointer-events-none select-none"
                 draggable="false"
               />
 
-              <div className="absolute inset-0 bg-gradient-to-t from-pink-500/10 via-transparent to-white/10 pointer-events-none" />
-
-              {/* Moving shine */}
-
-              <motion.div
-                className="absolute inset-y-0 -left-1/2 w-1/3 bg-white/20 skew-x-[-20deg] pointer-events-none"
-                animate={{
-                  left: [
-                    "-50%",
-                    "130%",
-                  ],
-                }}
-                transition={{
-                  duration: 3.5,
-                  repeat: Infinity,
-                  repeatDelay: 2,
-                  ease: "easeInOut",
-                }}
-              />
+              <div className="absolute inset-0 bg-gradient-to-t from-pink-500/10 via-transparent to-white/5 pointer-events-none" />
 
             </div>
 
@@ -1068,10 +1263,10 @@ function MemoriesScreen({ onNext }) {
         ================================================= */}
 
         <motion.div
-          className="absolute right-[14px] md:right-[20px] top-1/2 -translate-y-1/2 z-50 w-9 h-9 rounded-full bg-white/90 shadow-[0_5px_20px_rgba(236,72,153,0.15)] border border-pink-100 flex items-center justify-center pointer-events-none"
+          className="absolute right-[18px] md:right-[25px] top-1/2 -translate-y-1/2 z-[95] w-10 h-10 rounded-full bg-white/90 shadow-[0_6px_22px_rgba(236,72,153,0.16)] border border-pink-100 flex items-center justify-center pointer-events-none"
           animate={{
-            x: [0, 4, 0],
-            opacity: [0.5, 1, 0.5],
+            x: [0, 3, 0],
+            opacity: [0.55, 1, 0.55],
           }}
           transition={{
             duration: 1.8,
@@ -1079,7 +1274,7 @@ function MemoriesScreen({ onNext }) {
           }}
         >
           <ChevronRight
-            size={18}
+            size={19}
             className="text-pink-400"
           />
         </motion.div>
@@ -1095,7 +1290,7 @@ function MemoriesScreen({ onNext }) {
         key={currentIndex}
         initial={{
           opacity: 0,
-          y: 5,
+          y: 4,
         }}
         animate={{
           opacity: 1,
@@ -1127,15 +1322,15 @@ function MemoriesScreen({ onNext }) {
         className="shrink-0 z-20 mb-5"
         initial={{
           opacity: 0,
-          y: 15,
+          y: 12,
         }}
         animate={{
           opacity: 1,
           y: 0,
         }}
         transition={{
-          delay: 0.7,
-          duration: 0.6,
+          delay: 0.55,
+          duration: 0.5,
         }}
       >
         <Button
